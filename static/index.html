@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Dungeon Master Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 1200px; margin: 0 auto; padding: 20px; background: #f4f4f9; color: #333; }
+        .container { display: flex; gap: 20px; }
+        .sidebar { width: 300px; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); height: fit-content; }
+        .main-content { flex: 1; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); min-height: 80vh; }
+        h2 { border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        h3 { margin-top: 0; }
+        
+        /* Form Styles */
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 0.9em; }
+        input[type="text"], textarea, input[type="file"] { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; font-family: inherit; }
+        button { background: #007bff; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; transition: background 0.2s; font-weight: 500;}
+        button:hover { background: #0056b3; }
+        button.secondary { background: #6c757d; }
+        button.secondary:hover { background: #5a6268; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+
+        /* List Styles */
+        .story-item { padding: 12px; border-bottom: 1px solid #eee; cursor: pointer; transition: background 0.2s; border-radius: 4px;}
+        .story-item:hover { background: #f0f8ff; }
+        .card { border: 1px solid #e0e0e0; padding: 15px; margin-bottom: 15px; border-radius: 6px; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        
+        /* Card Types */
+        .enemy-card { display: flex; align-items: center; gap: 15px; background: #fff5f5; border-color: #ffcccc;}
+        .enemy-img { width: 80px; height: 80px; object-fit: cover; border-radius: 4px; background: #ddd; flex-shrink: 0; border: 1px solid #eba8a8; }
+        
+        .scene-card { background: #f9fbe7; border-color: #dce775; }
+        .scene-img { width: 120px; height: 80px; object-fit: cover; border-radius: 4px; background: #e0e0e0; flex-shrink: 0; border: 1px solid #ccc; cursor: pointer; }
+
+        /* Utility */
+        .tag { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 0.75em; font-weight: 600; margin-right: 5px; }
+        .tag-green { background: #e8f5e9; color: #2e7d32; }
+        .tag-orange { background: #fff3e0; color: #ef6c00; }
+        .tag-red { background: #ffebee; color: #c62828; }
+        .tag-blue { background: #e3f2fd; color: #1565c0; }
+        
+        .hidden { display: none; }
+        .loading { color: #666; font-style: italic; font-size: 0.9em; margin-top: 5px; }
+        
+        /* Tab Buttons */
+        .tab-btn { margin-right: 10px; padding: 8px 16px; font-size: 1em; }
+        .tab-btn.active { background: #007bff; color: white; }
+        
+        .upload-label { cursor: pointer; display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 0.85em; background: #fff; border: 1px solid #ccc; margin-top: 4px;}
+        .upload-label:hover { background: #f0f0f0; }
+
+        /* Graph Container */
+        #tab-graph { overflow: auto; text-align: center; padding: 20px 0; }
+
+        /* --- MODAL STYLES --- */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(2px); }
+        .modal-content { background-color: #fff; margin: 10% auto; padding: 25px; border-radius: 12px; width: 500px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); animation: fadeIn 0.3s; }
+        .close { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .close:hover { color: #000; }
+        @keyframes fadeIn { from {opacity: 0; transform: translateY(-20px);} to {opacity: 1; transform: translateY(0);} }
+
+        /* Lobby Character Grid */
+        .char-select-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; max-height: 300px; overflow-y: auto; }
+        .char-option { border: 2px solid #eee; border-radius: 8px; padding: 10px; cursor: pointer; text-align: center; transition: 0.2s; display:flex; flex-direction:column; align-items:center;}
+        .char-option:hover { border-color: #bbdefb; background: #f0f8ff; }
+        .char-option.selected { border-color: #007bff; background: #e3f2fd; box-shadow: 0 0 0 2px rgba(0,123,255,0.2); }
+        .char-option img { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; margin-bottom: 5px; border: 2px solid #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+
+    </style>
+</head>
+<body>
+
+<h1>🐉 AI Dungeon Master Workshop</h1>
+
+<div class="container">
+    <div class="sidebar">
+        <h3>My Stories</h3>
+        <div id="storyList">Loading...</div>
+        <hr>
+        <h3>Create New Story</h3>
+        <div class="form-group">
+            <label>Title</label>
+            <input type="text" id="newStoryTitle" placeholder="The Dark Cave...">
+        </div>
+        <div class="form-group">
+            <label>Adventure Script</label>
+            <textarea id="newStoryScript" rows="6" placeholder="Paste your adventure text here..."></textarea>
+        </div>
+        <button onclick="createStory()" style="width: 100%;">Generate Story Graph</button>
+        <p id="createStatus" class="loading"></p>
+    </div>
+
+    <div class="main-content hidden" id="detailPanel">
+        
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 20px;">
+            <h2 style="margin:0; border:none;" id="currentStoryTitle">Story Details</h2>
+            <button onclick="openLobby()" style="background:#2e7d32; font-weight:bold; padding: 10px 20px; font-size: 1em;">🎮 Play Story</button>
+        </div>
+        
+        <div style="margin-bottom: 20px; border-bottom: 1px solid #ddd; padding-bottom: 10px;">
+            <button onclick="showTab('scenes')" class="secondary tab-btn" id="btn-scenes">🎬 Scenes</button>
+            <button onclick="showTab('enemies')" class="secondary tab-btn" id="btn-enemies">👿 Enemies</button>
+            <button onclick="showTab('characters')" class="secondary tab-btn" id="btn-characters">🛡️ PCs</button>
+            <button onclick="showTab('graph')" class="secondary tab-btn" id="btn-graph">🗺️ Graph</button>
+        </div>
+
+        <div id="tab-scenes">
+            <h3>Story Scenes & Backgrounds</h3>
+            <div id="sceneList"></div>
+        </div>
+
+        <div id="tab-enemies" class="hidden">
+            <h3>Enemies in Story</h3>
+            <div id="enemyList"></div>
+            
+            <div class="card" style="background: #fff8e1; border-color: #ffe0b2; margin-top: 20px;">
+                <h4 style="margin-top:0; color:#f57c00;">➕ Register Custom Monster</h4>
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" id="customEnemyName" placeholder="e.g. Ancient Red Dragon">
+                </div>
+                <div style="display:flex; gap:10px;">
+                    <div style="flex:1">
+                        <label>Avatar</label>
+                        <input type="file" id="customEnemyAvatar" accept="image/*">
+                    </div>
+                    <div style="flex:1">
+                        <label>Stat Block</label>
+                        <input type="file" id="customEnemyStat" accept="image/*">
+                    </div>
+                </div>
+                <br>
+                <button onclick="uploadCustomEnemy()" style="background:#f57c00;">Parse & Save</button>
+                <p id="customEnemyStatus" class="loading"></p>
+            </div>
+        </div>
+
+        <div id="tab-characters" class="hidden">
+            <h3>Party Members</h3>
+            <div class="card" style="background: #e3f2fd; border-color: #bbdefb;">
+                <h4 style="margin-top:0; color:#1976d2;">➕ Add New Character</h4>
+                <div class="form-group">
+                    <label>1. Stats Images (PDF/Screenshots)</label>
+                    <input type="file" id="charPdf" accept="image/*" multiple>
+                </div>
+                <div class="form-group">
+                    <label>2. Avatar (Optional)</label>
+                    <input type="file" id="charAvatar" accept="image/*">
+                </div>
+                <div class="form-group">
+                    <label>3. Context</label>
+                    <textarea id="charBackground" rows="2" placeholder="Background info..."></textarea>
+                </div>
+                <button onclick="uploadCharacter()">Parse & Add Character</button>
+                <p id="charStatus" class="loading"></p>
+            </div>
+            <div id="characterList"></div>
+        </div>
+
+        <div id="tab-graph" class="hidden mermaid">Loading graph...</div>
+    </div>
+</div>
+
+<div id="lobbyModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeLobby()">&times;</span>
+        <h2 style="margin-top:0; color:#2e7d32; border:none;">🎮 Start Adventure</h2>
+        <p style="color:#666;">Select your origin character to begin the session.</p>
+        
+        <div id="lobbyCharList" class="char-select-grid"></div>
+        
+        <div class="form-group" style="margin-top:20px;">
+            <label>Name Your Hero</label>
+            <input type="text" id="lobbyPlayerName" placeholder="e.g. Thorin Oakenshield">
+        </div>
+        
+        <button id="btnLaunch" onclick="launchSession()" style="width:100%; font-size:1.1em; margin-top:10px; background:#2e7d32;">🚀 Launch Game</button>
+    </div>
+</div>
+
+<script>
+    // --- Initialization ---
+    mermaid.initialize({ 
+        startOnLoad: false, 
+        securityLevel: 'loose', // Allow HTML
+        theme: 'base',
+        flowchart: { 
+            htmlLabels: true,   // Must be true
+            useMaxWidth: true,
+            curve: 'basis'
+        },
+        themeVariables: { primaryColor: '#e3f2fd', edgeLabelBackground:'#ffffff', tertiaryColor: '#fff' }
+    });
+
+    let currentStoryId = null;
+    let currentStoryData = null; // Cache for Lobby
+    let selectedCharIndex = null;
+
+    // --- Load Stories ---
+    async function loadStories() {
+        const res = await fetch('/stories');
+        const stories = await res.json();
+        const list = document.getElementById('storyList');
+        list.innerHTML = stories.map(s => 
+            `<div class="story-item" onclick="loadStoryDetail('${s.id}')">
+                <strong>${s.title}</strong><br><small style="color:#888">ID: ${s.id}</small>
+            </div>`
+        ).join('');
+    }
+    loadStories();
+
+    async function createStory() {
+        const title = document.getElementById('newStoryTitle').value;
+        const script = document.getElementById('newStoryScript').value;
+        const status = document.getElementById('createStatus');
+        if (!title || !script) return alert("Please fill in title and script");
+        status.innerText = "Generating...";
+        try {
+            const res = await fetch('/stories/create', {
+                method: 'POST', headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ title: title, raw_script: script })
+            });
+            if (!res.ok) throw new Error(await res.text());
+            status.innerText = "Done!";
+            loadStories();
+        } catch (e) { status.innerText = "Error: " + e.message; }
+    }
+
+    // --- Main Detail Loader ---
+    async function loadStoryDetail(id) {
+        currentStoryId = id;
+        document.getElementById('detailPanel').classList.remove('hidden');
+        const res = await fetch(`/stories/${id}`);
+        const data = await res.json();
+        
+        currentStoryData = data; // Save for Lobby usage
+        document.getElementById('currentStoryTitle').innerText = data.title;
+        
+        renderScenes(data);
+        renderEnemies(data);
+        renderCharacters(data);
+        
+        // Don't render graph here yet, wait for tab switch
+        
+        showTab('scenes');
+    }
+
+    // ================== LOBBY LOGIC ==================
+    function openLobby() {
+        if (!currentStoryId) return;
+        const modal = document.getElementById('lobbyModal');
+        const list = document.getElementById('lobbyCharList');
+        list.innerHTML = "";
+        selectedCharIndex = null;
+        document.getElementById('lobbyPlayerName').value = "";
+        document.getElementById('btnLaunch').innerText = "🚀 Launch Game";
+        document.getElementById('btnLaunch').disabled = false;
+
+        if (!currentStoryData || !currentStoryData.characters || currentStoryData.characters.length === 0) {
+            list.innerHTML = "<p style='grid-column:span 2; text-align:center;'>No characters found. Please add a character in the 'PCs' tab first.</p>";
+        } else {
+            currentStoryData.characters.forEach((char, index) => {
+                const avatar = char.avatar_path || "https://placehold.co/60x60?text=PC";
+                list.innerHTML += `
+                <div class="char-option" onclick="selectLobbyChar(this, ${index})">
+                    <img src="${avatar}">
+                    <div style="font-weight:bold; font-size:0.9em;">${char.name}</div>
+                    <div style="font-size:0.8em; color:#666;">Lvl ${char.level} ${char.class}</div>
+                </div>`;
+            });
+        }
+        modal.style.display = "block";
+    }
+
+    function selectLobbyChar(el, index) {
+        document.querySelectorAll('.char-option').forEach(d => d.classList.remove('selected'));
+        el.classList.add('selected');
+        selectedCharIndex = index;
+        const charName = currentStoryData.characters[index].name;
+        if (charName && charName !== "Unknown") {
+            document.getElementById('lobbyPlayerName').value = charName;
+        }
+    }
+
+    function closeLobby() {
+        document.getElementById('lobbyModal').style.display = "none";
+    }
+
+    async function launchSession() {
+        const name = document.getElementById('lobbyPlayerName').value;
+        if (selectedCharIndex === null) return alert("Please select a character class.");
+        if (!name) return alert("Please name your character.");
+
+        const btn = document.getElementById('btnLaunch');
+        btn.innerText = "Initializing World...";
+        btn.disabled = true;
+
+        try {
+            const res = await fetch('/sessions/create', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    story_id: currentStoryId,
+                    character_idx: selectedCharIndex,
+                    player_name: name
+                })
+            });
+            if (!res.ok) throw new Error(await res.text());
+            const session = await res.json();
+            window.location.href = `/static/game.html?session_id=${session.session_id}`;
+        } catch (e) {
+            alert("Error creating session: " + e.message);
+            btn.innerText = "🚀 Launch Game";
+            btn.disabled = false;
+        }
+    }
+    
+    window.onclick = function(event) {
+        const modal = document.getElementById('lobbyModal');
+        if (event.target == modal) closeLobby();
+    }
+
+    // ================== SCENES LOGIC ==================
+    function renderScenes(data) {
+        const container = document.getElementById('sceneList');
+        container.innerHTML = "";
+        const nodes = data.nodes || {};
+
+        Object.values(nodes).forEach(node => {
+            let imgSrc = node.image_path ? node.image_path.replace("/static/stories", "/static/data/stories") : "";
+            const html = `
+            <div class="card scene-card" style="display:flex; gap:15px; align-items:flex-start;">
+                <div class="scene-img">
+                    ${imgSrc ? `<img src="${imgSrc}" style="width:100%; height:100%; object-fit:cover;" onclick="window.open('${imgSrc}')">` : '<div style="padding:10px; text-align:center; font-size:0.8em; color:#888; margin-top:25px;">No Bg</div>'}
+                </div>
+                <div style="flex:1;">
+                    <h4 style="margin:0;">${node.title} <span class="tag tag-blue">${node.type}</span></h4>
+                    <p style="font-size:0.9em; color:#555; margin:5px 0; font-style:italic;">
+                        "${node.read_aloud ? node.read_aloud.substring(0, 100) + '...' : 'No read aloud text.'}"
+                    </p>
+                    <div style="font-size:0.8em; color:#777;">
+                        Lighting: <b>${node.environment?.light || '-'}</b> | Sound: <b>${node.environment?.sound || '-'}</b>
+                    </div>
+                </div>
+                <div>
+                    <label class="upload-label" style="border-color:#9ccc65; color:#558b2f;">
+                        🖼️ Background
+                        <input type="file" style="display:none" onchange="uploadSceneBg('${node.id}', this)">
+                    </label>
+                </div>
+            </div>`;
+            container.innerHTML += html;
+        });
+    }
+
+    async function uploadSceneBg(nodeId, input) {
+        if (!input.files[0]) return;
+        const formData = new FormData();
+        formData.append('file', input.files[0]);
+        const label = input.parentElement;
+        const originalText = label.innerText;
+        label.innerText = "Uploading...";
+
+        try {
+            const res = await fetch(`/stories/${currentStoryId}/scenes/${nodeId}/upload-background`, { method: 'POST', body: formData });
+            if (!res.ok) throw new Error("Failed");
+            loadStoryDetail(currentStoryId); 
+        } catch (e) { alert("Upload failed: " + e.message); label.innerText = originalText; }
+    }
+
+    // ================== ENEMIES & CHARS ==================
+    function renderEnemies(data) {
+        const container = document.getElementById('enemyList');
+        container.innerHTML = "";
+        const enemiesMap = new Map();
+        const nodes = Array.isArray(data.nodes) ? data.nodes : Object.values(data.nodes || {});
+        
+        nodes.forEach(node => {
+            (node.entities || []).forEach(ent => {
+                if (ent.type === 'monster' || ent.type === 'enemy') {
+                    if (!enemiesMap.has(ent.name) || (ent.image_path && !enemiesMap.get(ent.name).image_path)) {
+                        enemiesMap.set(ent.name, ent);
+                    }
+                }
+            });
+        });
+        if (data.custom_monsters) {
+            data.custom_monsters.forEach(m => {
+                enemiesMap.set(m.name, { name: m.name, image_path: m.file_path, stats: m, count: "Custom" });
+            });
+        }
+
+        if (enemiesMap.size === 0) { container.innerHTML = "<p style='color:#666'>No enemies found.</p>"; return; }
+
+        enemiesMap.forEach(enemy => {
+            let imgSrc = enemy.image_path ? enemy.image_path.replace("/static/stories", "/static/data/stories") : "";
+            let statsBadge = enemy.stats ? `<span class="tag tag-green">✅ Stats</span>` : `<span class="tag tag-red">⚠️ No Stats</span>`;
+
+            const html = `
+            <div class="card enemy-card">
+                <div class="enemy-img">
+                    ${imgSrc ? `<img src="${imgSrc}" style="width:100%; height:100%; object-fit:cover;">` : '<div style="text-align:center; font-size:0.8em; color:#888; margin-top:20px;">No Avatar</div>'}
+                </div>
+                <div style="flex:1">
+                    <h4 style="margin:0;">${enemy.name}</h4>
+                    <p style="margin:5px 0; font-size:0.9em; color:#555;">Count: ${enemy.count}</p>
+                    <div>${statsBadge}</div>
+                </div>
+                <div style="display:flex; flex-direction:column; align-items:flex-end;">
+                    <label class="upload-label" style="border-color:#007bff; color:#007bff;">
+                        🖼️ Avatar
+                        <input type="file" id="avatar-${enemy.name}" style="display:none" onchange="uploadEnemyFiles('${enemy.name}')">
+                    </label>
+                    <label class="upload-label" style="border-color:#f57c00; color:#f57c00;">
+                        📊 Stats
+                        <input type="file" id="stat-${enemy.name}" style="display:none" onchange="uploadEnemyFiles('${enemy.name}')">
+                    </label>
+                    <span id="status-${enemy.name}" class="loading" style="font-size:0.7em;"></span>
+                </div>
+            </div>`;
+            container.innerHTML += html;
+        });
+    }
+
+    async function uploadEnemyFiles(enemyName) {
+        const avatarInput = document.getElementById(`avatar-${enemyName}`);
+        const statInput = document.getElementById(`stat-${enemyName}`);
+        const statusLabel = document.getElementById(`status-${enemyName}`);
+        if (!avatarInput.files[0] && !statInput.files[0]) return;
+
+        const formData = new FormData();
+        formData.append('enemy_name', enemyName);
+        let msg = "Uploading...";
+        if (avatarInput.files[0]) { formData.append('avatar', avatarInput.files[0]); msg="Avatar..."; }
+        if (statInput.files[0]) { formData.append('stat_block', statInput.files[0]); msg="Stats..."; }
+        statusLabel.innerText = msg;
+
+        try {
+            const res = await fetch(`/stories/${currentStoryId}/enemies/upload-image`, { method: 'POST', body: formData });
+            if (!res.ok) throw new Error("Failed");
+            avatarInput.value = ""; statInput.value = ""; statusLabel.innerText = "Done!";
+            setTimeout(() => loadStoryDetail(currentStoryId), 800);
+        } catch (e) { alert(e.message); statusLabel.innerText = "Error"; }
+    }
+
+    async function uploadCustomEnemy() {
+        const name = document.getElementById('customEnemyName').value;
+        if(!name) return alert("Name required");
+        const avatarInput = document.getElementById('customEnemyAvatar');
+        const statInput = document.getElementById('customEnemyStat');
+        const status = document.getElementById('customEnemyStatus');
+        
+        const formData = new FormData();
+        formData.append('enemy_name', name);
+        if(avatarInput.files[0]) formData.append('avatar', avatarInput.files[0]);
+        if(statInput.files[0]) formData.append('stat_block', statInput.files[0]);
+        
+        status.innerText = "Creating...";
+        try {
+            const res = await fetch(`/stories/${currentStoryId}/enemies/upload-image`, { method:'POST', body:formData});
+            if(!res.ok) throw new Error(await res.text());
+            status.innerText = "Success!"; loadStoryDetail(currentStoryId);
+            document.getElementById('customEnemyName').value = "";
+            avatarInput.value = ""; statInput.value = "";
+        } catch(e) { status.innerText = "Error: " + e.message; }
+    }
+
+    function renderCharacters(data) {
+        const list = document.getElementById('characterList');
+        list.innerHTML = "";
+        if (!data.characters || data.characters.length === 0) { list.innerHTML = "<p style='color:#666'>No characters added yet.</p>"; return; }
+
+        data.characters.forEach(char => {
+            const avatarSrc = char.avatar_path || "https://placehold.co/100x100?text=No+Avatar";
+            let sheetPath = char.file_path || char.pdf_path;
+            if (char.all_files && char.all_files.length > 0) sheetPath = char.all_files[0];
+            const sheetLink = sheetPath ? `<a href="${sheetPath}" target="_blank" style="font-size:0.85em; text-decoration:none; color:#007bff;">📄 View Stats</a>` : "";
+
+            list.innerHTML += `
+            <div class="card" style="display:flex; gap:20px; align-items:flex-start;">
+                <div style="flex-shrink:0;">
+                    <img src="${avatarSrc}" style="width:100px; height:100px; object-fit:cover; border-radius:8px; border:1px solid #ddd; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                </div>
+                <div style="flex-grow:1;">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                        <h3 style="margin:0; font-size:1.2em;">${char.name}</h3>
+                        ${sheetLink}
+                    </div>
+                    <div style="margin-bottom:8px;">
+                        <span class="tag tag-green">Lvl ${char.level} ${char.class}</span>
+                        <span class="tag tag-orange">${char.race}</span>
+                        <span class="tag" style="border:1px solid #ddd;">HP: ${char.hp_max}</span>
+                    </div>
+                    <p style="margin:0; font-size:0.9em; color:#555; line-height:1.4;">
+                        ${char.background_story ? char.background_story.substring(0, 100) + '...' : ''}
+                    </p>
+                </div>
+            </div>`;
+        });
+    }
+
+    async function uploadCharacter() {
+        const fileInput = document.getElementById('charPdf');
+        const avatarInput = document.getElementById('charAvatar');
+        const bgInput = document.getElementById('charBackground');
+        const status = document.getElementById('charStatus');
+
+        if (fileInput.files.length === 0) return alert("Please select stats image.");
+        status.innerText = `Analyzing...`;
+        const formData = new FormData();
+        for (let i = 0; i < fileInput.files.length; i++) formData.append('files', fileInput.files[i]);
+        if (avatarInput.files[0]) formData.append('avatar', avatarInput.files[0]);
+        formData.append('background_info', bgInput.value);
+
+        try {
+            const res = await fetch(`/stories/${currentStoryId}/characters/add`, { method: 'POST', body: formData });
+            if (!res.ok) throw new Error(await res.text());
+            const result = await res.json();
+            status.innerText = `Success! Added ${result.character_name}`;
+            loadStoryDetail(currentStoryId);
+            fileInput.value = ""; avatarInput.value = ""; bgInput.value = "";
+        } catch (e) { status.innerText = "Error: " + e.message; }
+    }
+
+    // ================== GRAPH LOGIC ==================
+    function renderGraph(data) {
+        const container = document.getElementById('tab-graph');
+        const wrapText = (str, width = 25) => {
+            if (!str) return "";
+            const regex = new RegExp(`(.{1,${width}})(\\s|$)`, 'g');
+            const parts = str.match(regex);
+            return parts ? parts.join('<br/>') : str;
+        };
+
+        let mermaidDef = "graph TD;\n";
+        mermaidDef += "classDef encounter fill:#ffebee,stroke:#c62828,stroke-width:2px,color:#000;\n";
+        mermaidDef += "classDef transition fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#000;\n";
+        mermaidDef += "classDef roleplay fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#000;\n";
+
+        const nodes = data.nodes || {};
+        Object.values(nodes).forEach(node => {
+            let nodeLabel = `<b>${node.title}</b>`;
+            if (node.entities && node.entities.length > 0) {
+                nodeLabel += "<hr/>";
+                node.entities.forEach(ent => {
+                    const icon = (ent.type === 'monster' || ent.type === 'enemy') ? '👿' : '👤';
+                    nodeLabel += `<div style='font-size:0.9em; text-align:left;'>${icon} ${ent.name} <small>x${ent.count}</small></div>`;
+                });
+            }
+            // --- KEY FIX: Remove newlines from HTML string for Mermaid ---
+            nodeLabel = nodeLabel.replace(/(\r\n|\n|\r)/gm, "");
+
+            let shapeOpen = "[", shapeClose = "]";
+            if (node.type !== 'encounter') { shapeOpen = "("; shapeClose = ")"; }
+            if (node.type === 'roleplay') { shapeOpen = "{{"; shapeClose = "}}"; }
+            mermaidDef += `${node.id}${shapeOpen}"${nodeLabel}"${shapeClose}:::${node.type};\n`;
+
+            (node.edges || []).forEach(edge => {
+                 let labelText = edge.label || "";
+                 if (labelText.length > 25) labelText = wrapText(labelText, 25);
+                 labelText = labelText.replace(/"/g, "'");
+                 const safeLabel = labelText ? `|"${labelText}"|` : "";
+                 mermaidDef += `${node.id} -->${safeLabel} ${edge.to};\n`;
+            });
+        });
+
+        container.innerHTML = mermaidDef;
+        container.removeAttribute('data-processed'); 
+        setTimeout(() => mermaid.init(undefined, container), 100);
+    }
+
+    function showTab(tabName) {
+        // Update button states
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(`btn-${tabName}`).classList.add('active');
+
+        // Hide all tabs
+        ['scenes', 'enemies', 'characters', 'graph'].forEach(t => {
+            document.getElementById(`tab-${t}`).classList.add('hidden');
+        });
+
+        // Show selected tab
+        document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+
+        // Render graph ONLY if making it visible
+        if (tabName === 'graph' && currentStoryData) {
+            renderGraph(currentStoryData);
+        }
+    }
+</script>
+
+</body>
+</html>

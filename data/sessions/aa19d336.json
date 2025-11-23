@@ -1,0 +1,149 @@
+{
+  "session_id": "aa19d336",
+  "story_id": "ad261aa9",
+  "title": "xx's Journey in Intro to Stormwreck Isle",
+  "current_node_id": "voyage_to_stormwreck_isle",
+  "players": [
+    {
+      "name": "xx",
+      "character_sheet": {
+        "name": "Unknown",
+        "race": "Hill Dwarf",
+        "class_name": "Cleric",
+        "subclass": "Life Domain",
+        "level": 1,
+        "background": "Soldier",
+        "alignment": "Lawful Good",
+        "hp_max": 11,
+        "ac": 18,
+        "speed": 25,
+        "initiative": -1,
+        "proficiency_bonus": 2,
+        "abilities": {
+          "strength": 14,
+          "dexterity": 8,
+          "constitution": 15,
+          "intelligence": 10,
+          "wisdom": 16,
+          "charisma": 12
+        },
+        "skill_proficiencies": [
+          "Athletics",
+          "Intimidation"
+        ],
+        "saving_throw_proficiencies": [
+          "Wisdom",
+          "Charisma"
+        ],
+        "attacks": [
+          {
+            "name": "Mace",
+            "bonus": 4,
+            "damage": "1d6 + 2",
+            "damage_type": "bludgeoning"
+          },
+          {
+            "name": "Handaxe",
+            "bonus": 4,
+            "damage": "1d6 + 2",
+            "damage_type": "slashing"
+          }
+        ],
+        "spellcasting": {
+          "spell_save_dc": 13,
+          "spell_attack_bonus": 5,
+          "cantrips": [
+            "Light",
+            "Thaumaturgy",
+            "Sacred Flame"
+          ],
+          "level_1_spells": [
+            "Bless",
+            "Command",
+            "Cure Wounds",
+            "Detect Magic",
+            "Guiding Bolt",
+            "Healing Word",
+            "Protection from Evil and Good",
+            "Sanctuary",
+            "Shield of Faith"
+          ],
+          "prepared_spells": [
+            "Bless",
+            "Cure Wounds",
+            "Guiding Bolt",
+            "Shield of Faith"
+          ]
+        },
+        "equipment": [
+          "Chain mail",
+          "Shield",
+          "Mace",
+          "Handaxe",
+          "Holy symbol",
+          "Backpack",
+          "Bedroll",
+          "Mess kit",
+          "Tinderbox",
+          "10 torches",
+          "10 days of rations",
+          "Waterskin",
+          "50 feet of hempen rope",
+          "Insignia of rank",
+          "Broken blade from a fallen enemy",
+          "Set of bone dice",
+          "Set of common clothes",
+          "Pouch"
+        ],
+        "features": [
+          "Darkvision",
+          "Dwarven Resilience",
+          "Stonecunning",
+          "Dwarven Toughness",
+          "Divine Domain",
+          "Ritual Casting",
+          "Disciple of Life"
+        ],
+        "background_story": "You trained as a soldier in the land of Mintarn, and spent time with a mercenary company. You traveled to the city of Neverwinter with your company to serve in both the army and the watch. Over time, you developed distrust with many of your fellow soldiers. They seemed to enjoy their authority and exploited the people they were supposed to protect. Personal Goal: Banish a Shadow of Death. Researching images from your dreams pointed you to Sword Coast, not far from Neverwinter. A remote cloister holds a temple to the dragon god Bahamut, who is a patron of heroes and a champion of justice. Someone at the cloister may hold the key to the impending doom your deity wishes you to avert.",
+        "personality_traits": null,
+        "ideals": null,
+        "bonds": null,
+        "flaws": null,
+        "file_path": "/static/data/stories/ad261aa9/images/characters/sheet_d95225_dwarf1.png",
+        "all_files": [
+          "/static/data/stories/ad261aa9/images/characters/sheet_d95225_dwarf1.png",
+          "/static/data/stories/ad261aa9/images/characters/sheet_e8370d_dwarf2.png"
+        ],
+        "avatar_path": "/static/data/stories/ad261aa9/images/avatars/avatar_2c1d0e.png"
+      },
+      "current_hp": 11,
+      "temp_hp": 0,
+      "conditions": [],
+      "inventory": [
+        "Chain mail",
+        "Shield",
+        "Mace",
+        "Handaxe",
+        "Holy symbol",
+        "Backpack",
+        "Bedroll",
+        "Mess kit",
+        "Tinderbox",
+        "10 torches",
+        "10 days of rations",
+        "Waterskin",
+        "50 feet of hempen rope",
+        "Insignia of rank",
+        "Broken blade from a fallen enemy",
+        "Set of bone dice",
+        "Set of common clothes",
+        "Pouch"
+      ],
+      "position": "default"
+    }
+  ],
+  "enemy_states": {},
+  "chat_history": [],
+  "created_at": "2025-11-23T15:37:35.073837",
+  "updated_at": "2025-11-23T15:37:35.073837"
+}

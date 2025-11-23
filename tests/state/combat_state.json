@@ -1,0 +1,24 @@
+{
+  "actors": {
+    "hero": {
+      "conditions": [],
+      "temp_hp": 0,
+      "id": "hero",
+      "name": "Hero",
+      "max_hp": 30,
+      "hp": 30,
+      "armor_class": 16,
+      "extra": {}
+    },
+    "goblin": {
+      "conditions": [],
+      "temp_hp": 0,
+      "id": "goblin",
+      "name": "Goblin",
+      "max_hp": 15,
+      "hp": 12,
+      "armor_class": 13,
+      "extra": {}
+    }
+  }
+}

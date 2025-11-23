@@ -2,3 +2,7 @@ requests
 tqdm 
 sqlite-utils
 openai
+fastapi
+uvicorn 
+python-multipart 
+pypdf 
