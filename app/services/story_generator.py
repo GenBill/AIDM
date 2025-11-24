@@ -23,7 +23,7 @@ The input text may be narrative and lack explicit structured data. **You must in
 # Data Structure Rules
 
 ## 1. Scene Segmentation
-Break the text into a **JSON List** of Scene Nodes. Create a new node whenever:
+Break the text into a **JSON List** of Scene Nodes. Do not create duplicated same node!! You should create a directed acyclic graph, which means you cannot backtrack. Create a new node whenever:
 * The location changes.
 * A specific encounter (Combat/Social) begins.
 * The narrative "chapter" shifts.
@@ -31,6 +31,14 @@ Break the text into a **JSON List** of Scene Nodes. Create a new node whenever:
 ## 2. Field Extraction Guidelines
 * **id**: Snake_case unique identifier (e.g., `merrow_encounter`).
 * **type**: `encounter` (default), `roleplay`, `transition`, or `puzzle`.
+
+* **min_turns** (Complexity Score): **CRITICAL**. Analyze the content to determine how many turns (interactions) players should spend here before the system suggests moving on.
+    * **Use the following RUBRIC to assign `min_turns`**:
+    * **2 Turn (Simple)**: Pure transition scenes, empty rooms, or simple observations. (e.g., "You walk down the hallway.")
+    * **3 Turns (Standard)**: Minor interactions, investigating a room with loot, or talking to a simple NPC.
+    * **4 Turns (Complex)**: Standard combat encounters (e.g., 3 Zombies), puzzles with 1-2 steps, or important NPC negotiations.
+    * **6-7 Turns (Major)**: Boss fights, complex multi-stage puzzles, or major lore dumps requiring multiple questions.
+
 * **read_aloud**: Extract text explicitly meant to be read to players (often in boxes or quotes).
     * *Constraint*: Do NOT put rules, secrets, or enemy stats here.
 
@@ -64,12 +72,13 @@ Break the text into a **JSON List** of Scene Nodes. Create a new node whenever:
 
 # Output Format
 Return **ONLY** a valid JSON List. Do not wrap in markdown blocks if possible.
-
+Here is an example structure:
 [
   {
     "id": "unique_scene_id",
     "title": "Scene Title",
     "type": "encounter",
+    "min_turns": 4,
     "read_aloud": "Flavor text...",
     "gm_guidance": "DM secrets...",
     "environment": {

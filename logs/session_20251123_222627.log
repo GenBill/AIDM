@@ -1,0 +1,460 @@
+2025-11-23 22:27:33,703 | INFO | HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-23 22:27:35,748 | INFO | HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-23 22:28:27,465 | INFO | ================================================================================
+2025-11-23 22:28:27,465 | INFO | [USER QUERY] You are the AIDND rules/lore assistant. The game is PAUSED.
+    Use tools from the local Open5e catalog when needed; do not invent stats.
+
+    --- PLAYER CONTEXT ---
+    Name: dwdw
+    Race/Class/Level: Hill Dwarf / Cleric / L1
+    Abilities: {"strength": 14, "dexterity": 8, "constitution": 15, "intelligence": 10, "wisdom": 16, "charisma": 12}
+    Proficiency Bonus: 2
+
+    --- CURRENT SCENE (for reference only, do NOT advance story) ---
+    Title: Voyage to Stormwreck Isle
+    ReadAloud: Your journey has been smooth sailing so far. You left the bustling port of Neverwinter a few days ago, heading for an island with the foreboding name of Stormwreck Isle. But you woke this morning to a blood-red sunrise, and dark clouds overhead threaten a violent storm.
+    Entities: []
+
+    --- PLAYER QUESTION ---
+    tell me my spell sacred flame
+2025-11-23 22:28:27,467 | INFO | ================================================================================
+2025-11-23 22:28:27,467 | INFO | 
+[STEP 1] Sending messages to model:
+2025-11-23 22:28:27,467 | INFO |   SYSTEM: [You are AIDND Assistant]
+You MUST follow this ReACT tool-calling protocol. When you need data from the local catalog or Open5e, you MUST call tools.
+Do NOT narrate or describe your intentions. Instead, output exactly one tool call block:
+  <CALL>{"fn":"function_name","args":{...}}</CALL>
+After the system executes the tool, it will append a system message beginning with:
+  Observation: { ... }
+You may think again, optionally call more tools, and ONLY AFTER calling fetch_and_cache, produce the final user-facing answer.
+Never include <CALL> in your final answer.
+
+Available functions:
+- look_monster_table(query:str, limit:int=20)
+- search_table(type:str, name_or_slug:str, prefer_doc:str|None)
+- fetch_and_cache(type:str, slug:str)
+
+Supported resource types (for search_table & fetch_and_cache):
+  monsters, spells, equipment, backgrounds, classes,
+  conditions, documents, feats, planes, races,
+  sections, spelllist
+
+==================== EXAMPLES BY CATEGORY ====================
+
+### MONSTERS...
+2025-11-23 22:28:27,467 | INFO |   USER: You are the AIDND rules/lore assistant. The game is PAUSED.
+    Use tools from the local Open5e catalog when needed; do not invent stats.
+
+    --- PLAYER CONTEXT ---
+    Name: dwdw
+    Race/Class/Level: Hill Dwarf / Cleric / L1
+    Abilities: {"strength": 14, "dexterity": 8, "constitution": 15, "intelligence": 10, "wisdom": 16, "charisma": 12}
+    Proficiency Bonus: 2
+
+    --- CURRENT SCENE (for reference only, do NOT advance story) ---
+    Title: Voyage to Stormwreck Isle
+    ReadAloud: Your journey has been smooth sailing so far. You left the bustling port of Neverwinter a few days ago, heading for an island with the foreboding name of Stormwreck Isle. But you woke this morning to a blood-red sunrise, and dark clouds overhead threaten a violent storm.
+    Entities: []
+
+    --- PLAYER QUESTION ---
+    tell me my spell sacred flame
+2025-11-23 22:28:29,148 | INFO | HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-23 22:28:29,148 | INFO | [MODEL OUTPUT STEP 1] ----------------------------
+2025-11-23 22:28:29,148 | INFO | <CALL>{"fn":"search_table","args":{"type":"spells","name_or_slug":"Sacred Flame","prefer_doc":"srd-2014"}}</CALL>
+2025-11-23 22:28:29,148 | INFO | ------------------------------------------------------------
+2025-11-23 22:28:29,164 | INFO | [TOOL CALL DETECTED] search_table with args = {'type': 'spells', 'name_or_slug': 'Sacred Flame', 'prefer_doc': 'srd-2014'}
+2025-11-23 22:28:29,164 | INFO | [OBSERVATION]
+{
+  "fn": "search_table",
+  "args": {
+    "type": "spells",
+    "name_or_slug": "Sacred Flame",
+    "prefer_doc": "srd-2014"
+  },
+  "result": {
+    "chosen_name": "Sacred Flame",
+    "chosen_slug": "a5e-ag_sacred-flame",
+    "api_url": "https://api.open5e.com/v2/spells/a5e-ag_sacred-flame/"
+  }
+}
+2025-11-23 22:28:29,164 | INFO | 
+[STEP 2] Sending messages to model:
+2025-11-23 22:28:29,164 | INFO |   USER: You are the AIDND rules/lore assistant. The game is PAUSED.
+    Use tools from the local Open5e catalog when needed; do not invent stats.
+
+    --- PLAYER CONTEXT ---
+    Name: dwdw
+    Race/Class/Level: Hill Dwarf / Cleric / L1
+    Abilities: {"strength": 14, "dexterity": 8, "constitution": 15, "intelligence": 10, "wisdom": 16, "charisma": 12}
+    Proficiency Bonus: 2
+
+    --- CURRENT SCENE (for reference only, do NOT advance story) ---
+    Title: Voyage to Stormwreck Isle
+    ReadAloud: Your journey has been smooth sailing so far. You left the bustling port of Neverwinter a few days ago, heading for an island with the foreboding name of Stormwreck Isle. But you woke this morning to a blood-red sunrise, and dark clouds overhead threaten a violent storm.
+    Entities: []
+
+    --- PLAYER QUESTION ---
+    tell me my spell sacred flame
+2025-11-23 22:28:29,164 | INFO |   ASSISTANT: <CALL>{"fn":"search_table","args":{"type":"spells","name_or_slug":"Sacred Flame","prefer_doc":"srd-2014"}}</CALL>
+2025-11-23 22:28:29,164 | INFO |   SYSTEM: Observation: {
+  "fn": "search_table",
+  "args": {
+    "type": "spells",
+    "name_or_slug": "Sacred Flame",
+    "prefer_doc": "srd-2014"
+  },
+  "result": {
+    "chosen_name": "Sacred Flame",
+    "chosen_slug": "a5e-ag_sacred-flame",
+    "api_url": "https://api.open5e.com/v2/spells/a5e-ag_sacred-flame/"
+  }
+}
+2025-11-23 22:28:29,938 | INFO | HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-23 22:28:29,944 | INFO | [MODEL OUTPUT STEP 2] ----------------------------
+2025-11-23 22:28:29,944 | INFO | <CALL>{"fn":"fetch_and_cache","args":{"type":"spells","slug":"a5e-ag_sacred-flame"}}</CALL>
+2025-11-23 22:28:29,944 | INFO | ------------------------------------------------------------
+2025-11-23 22:28:30,367 | INFO | [TOOL CALL DETECTED] fetch_and_cache with args = {'type': 'spells', 'slug': 'a5e-ag_sacred-flame'}
+2025-11-23 22:28:30,383 | INFO | [OBSERVATION]
+{
+  "fn": "fetch_and_cache",
+  "args": {
+    "type": "spells",
+    "slug": "a5e-ag_sacred-flame"
+  },
+  "result": {
+    "slug": "a5e-ag_sacred-flame",
+    "api_url": "https://api.open5e.com/v2/spells/a5e-ag_sacred-flame/",
+    "data": {
+      "url": "https://api.open5e.com/v2/spells/a5e-ag_sacred-flame/",
+      "document": {
+        "name": "Adventurer's Guide",
+        "key": "a5e-ag",
+        "display_name": "Adventurer's Guide",
+        "publisher": {
+          "name": "EN Publishing",
+          "key": "en-publishing",
+          "url": "https://api.open5e.com/v2/publishers/en-publishing/"
+        },
+        "gamesystem": {
+          "name": "Advanced 5th Edition",
+          "key": "a5e",
+          "url": "https://api.open5e.com/v2/gamesystems/a5e/"
+        },
+        "permalink": "https://a5esrd.com/a5esrd"
+      },
+      "key": "a5e-ag_sacred-flame",
+      "casting_options": [
+        {
+          "type": "default",
+          "damage_roll": null,
+          "target_count": null,
+          "duration": null,
+          "range": null,
+          "concentration": null,
+          "shape_size": null,
+          "desc": null
+        },
+        {
+          "type": "player_level_1",
+          "damage_roll": "",
+          "target_count": null,
+          "duration": null,
+          "range": null,
+          "concentration": null,
+          "shape_size": null,
+          "desc": null
+        },
+        {
+          "type": "player_level_2",
+          "damage_roll": "",
+          "target_count": null,
+          "duration": null,
+          "range": null,
+          "concentration": null,
+          "shape_size": null,
+          "desc": null
+        },
+        {
+          "type": "player_level_3",
+          "damage_roll": "",
+          "target_count": null,
+          "duration": null,
+          "range": null,
+          "concentration": null,
+          "shape_size": null,
+          "desc": null
+        },
+        {
+          "type": "player_level_4",
+          "damage_roll": "",
+          "target_count": null,
+          "duration": null,
+          "range": null,
+          "concentration": null,
+          "shape_size": null,
+          "desc": null
+        },
+        {
+          "type": "player_level_5",
+          "damage_roll": "2d8",
+          "target_count": null,
+          "duration": null,
+          "range": null,
+          "concentration": null,
+          "shape_size": null,
+          "desc": null
+        },
+        {
+          "type": "player_level_6",
+          "damage_roll": "2d8",
+          "target_count": null,
+          "duration": null,
+          "range": null,
+          "concentration": null,
+          "shape_size": null,
+          "desc": null
+        },
+        {
+          "type": "player_level_7",
+          "damage_roll": "2d8",
+          "target_count": null,
+          "duration": null,
+          "range": null,
+          "concentration": null,
+          "shape_size": null,
+          "desc": null
+        },
+        {
+          "type": "player_level_8",
+          "damage_roll": "2d8",
+          "target_count": null,
+          "duration": null,
+          "range": null,
+          "concentration": null,
+          "shape_size": null,
+          "desc": null
+        },
+        {
+          "type": "player_level_9",
+          "damage_roll": "2d8",
+          "target_count": null,
+          "duration": null,
+          "range": null,
+          "concentration": null,
+          "shape_size": null,
+          "desc": null
+        },
+        {
+          "type": "player_level_10",
+          "damage_roll": "2d8",
+          "target_count": null,
+          "duration": null,
+          "range": null,
+          "concentration": null,
+          "shape_size": null,
+          "desc": null
+        },
+        {
+          "type": "player_level_11",
+          "damage_roll": "3d8",
+          "target_count": null,
+          "duration": null,
+          "range": null,
+          "concentration": null,
+          "shape_size": null,
+          "desc": null
+        },
+        {
+          "type": "player_level_12",
+          "damage_roll": "3d8",
+          "target_count": null,
+          "duration": null,
+          "range": null,
+          "concentration": null,
+          "shape_size": null,
+          "desc": null
+        },
+        {
+          "type": "player_level_13",
+          "damage_roll": "3d8",
+          "target_count": null,
+          "duration": null,
+          "range": null,
+          "concentration": null,
+          "shape_size": null,
+          "desc": null
+        },
+        {
+          "type": "player_level_14",
+          "damage_roll": "3d8",
+          "target_count": null,
+          "duration": null,
+          "range": null,
+          "concentration": null,
+          "shape_size": null,
+          "desc": null
+        },
+        {
+          "type": "player_level_15",
+          "damage_roll": "3d8",
+          "target_count": null,
+          "duration": null,
+          "range": null,
+          "concentration": null,
+          "shape_size": null,
+          "desc": null
+        },
+        {
+          "type": "player_level_16",
+          "damage_roll": "3d8",
+          "target_count": null,
+          "duration": null,
+          "range": null,
+          "concentration": null,
+          "shape_size": null,
+          "desc": null
+        },
+        {
+          "type": "player_level_17",
+          "damage_roll": "4d8",
+          "target_count": null,
+          "duration": null,
+          "range": null,
+          "concentration": null,
+          "shape_size": null,
+          "desc": null
+        },
+        {
+          "type": "player_level_18",
+          "damage_roll": "4d8",
+          "target_count": null,
+          "duration": null,
+          "range": null,
+          "concentration": null,
+          "shape_size": null,
+          "desc": null
+        },
+        {
+          "type": "player_level_19",
+          "damage_roll": "4d8",
+          "target_count": null,
+          "duration": null,
+          "range": null,
+          "concentration": null,
+          "shape_size": null,
+          "desc": null
+        },
+        {
+          "type": "player_level_20",
+          "damage_roll": "4d8",
+          "target_count": null,
+          "duration": null,
+          "range": null,
+          "concentration": null,
+          "shape_size": null,
+          "desc": null
+        }
+      ],
+      "school": {
+        "name": "Evocation",
+        "key": "evocation",
+        "url": "https://api.open5e.com/v2/spellschools/evocation/"
+      },
+      "classes": [],
+      "range_unit": "feet",
+      "shape_size_unit": "feet",
+      "name": "Sacred Flame",
+      "desc": "As long as you can see the target (even if it has cover) radiant holy flame envelops it, dealing 1d8 radiant damage.",
+      "level": 0,
+      "higher_level": "This spell's damage increases by 1d8 when you reach 5th level (2d8), 11th level (3d8), and 17th level (4d8).",
+      "target_type": "creature",
+      "range_text": "60 feet",
+      "range": 60.0,
+      "ritual": false,
+      "casting_time": "action",
+      "reaction_condition": null,
+      "verbal": true,
+      "somatic": true,
+      "material": false,
+      "material_specified": "",
+      "material_cost": null,
+      "material_consumed": false,
+      "target_count": 1,
+      "saving_throw_ability": "",
+      "attack_roll": false,
+      "damage_roll": "",
+      "damage_types": [],
+      "duration": "instantaneous",
+      "shape_type": null,
+      "shape_size": null,
+      "concentration": false
+    }
+  }
+}
+2025-11-23 22:28:30,383 | INFO | 
+[STEP 3] Sending messages to model:
+2025-11-23 22:28:30,383 | INFO |   ASSISTANT: <CALL>{"fn":"fetch_and_cache","args":{"type":"spells","slug":"a5e-ag_sacred-flame"}}</CALL>
+2025-11-23 22:28:30,383 | INFO |   SYSTEM: You have just received the full JSON data from fetch_and_cache. Now you MUST answer the user's question in natural language, using that data. Do NOT call any tools again, and do NOT output any <CALL> blocks in your next message.
+2025-11-23 22:28:30,383 | INFO |   SYSTEM: Observation: {
+  "fn": "fetch_and_cache",
+  "args": {
+    "type": "spells",
+    "slug": "a5e-ag_sacred-flame"
+  },
+  "result": {
+    "slug": "a5e-ag_sacred-flame",
+    "api_url": "https://api.open5e.com/v2/spells/a5e-ag_sacred-flame/",
+    "data": {
+      "url": "https://api.open5e.com/v2/spells/a5e-ag_sacred-flame/",
+      "document": {
+        "name": "Adventurer's Guide",
+        "key": "a5e-ag",
+        "display_name": "Adventurer's Guide",
+        "publisher": {
+          "name": "EN Publishing",
+          "key": "en-publishing",
+          "url": "https://api.open5e.com/v2/publishers/en-publishing/"
+        },
+        "gamesystem": {
+          "name": "Advanced 5th Edition",
+          "key": "a5e",
+          "url": "https://api.open5e.com/v2/gamesystems/a5e/"
+        },
+        "permalink": "https://a5esrd.com/a5esrd"
+      },
+      "key": "a5e-ag_sacred-flame",
+      "casting_options": [
+        {
+          "type": "default",
+          "damage_roll": null,
+          "target_count...
+2025-11-23 22:28:33,405 | INFO | HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-23 22:28:33,411 | INFO | [MODEL OUTPUT STEP 3] ----------------------------
+2025-11-23 22:28:33,411 | INFO | The spell "Sacred Flame" is a cantrip from the Evocation school. Here's what you need to know about it:
+
+- **Casting Time:** 1 action
+- **Range:** 60 feet
+- **Components:** Verbal, Somatic
+- **Duration:** Instantaneous
+- **Description:** You can target a creature you can see within range, even if it has cover. Radiant holy flame envelops the target, dealing 1d8 radiant damage.
+- **Higher Levels:** The damage increases by 1d8 when you reach 5th level (2d8), 11th level (3d8), and 17th level (4d8).
+- **Target:** One creature
+
+This spell does not require a saving throw or an attack roll, and it is not a ritual spell.
+2025-11-23 22:28:33,411 | INFO | ------------------------------------------------------------
+2025-11-23 22:28:33,411 | INFO | [NO TOOL CALL DETECTED] Returning final answer.
+
+2025-11-23 22:28:33,411 | INFO | ================================================================================
+2025-11-23 22:28:33,411 | INFO | [FINAL ANSWER]
+The spell "Sacred Flame" is a cantrip from the Evocation school. Here's what you need to know about it:
+
+- **Casting Time:** 1 action
+- **Range:** 60 feet
+- **Components:** Verbal, Somatic
+- **Duration:** Instantaneous
+- **Description:** You can target a creature you can see within range, even if it has cover. Radiant holy flame envelops the target, dealing 1d8 radiant damage.
+- **Higher Levels:** The damage increases by 1d8 when you reach 5th level (2d8), 11th level (3d8), and 17th level (4d8).
+- **Target:** One creature
+
+This spell does not require a saving throw or an attack roll, and it is not a ritual spell.
+2025-11-23 22:28:33,411 | INFO | ================================================================================

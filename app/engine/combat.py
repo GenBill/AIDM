@@ -348,3 +348,78 @@ def reset_combat_state() -> Dict[str, Any]:
     state = {"actors": {}}
     _save_state(state)
     return state
+
+# app/engine/combat.py (追加内容)
+
+def resolve_attack(
+    attacker_name: str,
+    attack_name: str,
+    attack_bonus: int,
+    target_name: str,
+    target_ac: int,
+    damage_dice: str
+) -> Dict[str, Any]:
+    """
+    原子化战斗解析工具：处理一次攻击判定 + 伤害计算。
+    
+    Args:
+        attacker_name: 攻击者名字 (e.g., "Thorin", "Merrow")
+        attack_name: 武器/技能名 (e.g., "Mace", "Claw")
+        attack_bonus: 命中加值 (e.g., 4)
+        target_name: 目标名字 (e.g., "Zombie")
+        target_ac: 目标防御等级 (e.g., 13, 18)
+        damage_dice: 伤害公式 (e.g., "1d6+2")
+    
+    Returns:
+        Dict containing result, logs, and damage amount.
+    """
+    # 1. 命中判定 (To Hit)
+    hit_roll = roll_dice(f"1d20+{attack_bonus}")
+    total_hit = hit_roll['total']
+    
+    # 判定逻辑 (D&D 5e: Roll >= AC is a Hit)
+    # 处理大成功 (Natural 20) 和 大失败 (Natural 1)
+    d20_val = hit_roll['terms'][0]['rolls'][0] # 获取原始 d20 点数
+    is_crit = (d20_val == 20)
+    is_fumble = (d20_val == 1)
+    
+    is_hit = False
+    if is_crit:
+        is_hit = True
+    elif is_fumble:
+        is_hit = False
+    else:
+        is_hit = (total_hit >= target_ac)
+
+    # 构建日志
+    log_parts = []
+    log_parts.append(f"⚔️ **{attacker_name}** attacks **{target_name}** with *{attack_name}*.")
+    
+    hit_status = "MISS"
+    if is_crit: hit_status = "CRITICAL HIT!"
+    elif is_hit: hit_status = "HIT"
+    
+    log_parts.append(f"🎲 To Hit: 1d20({d20_val}) + {attack_bonus} = **{total_hit}** vs AC {target_ac} -> **{hit_status}**")
+
+    damage_total = 0
+    if is_hit:
+        # 2. 伤害计算 (Damage)
+        # 如果暴击，D&D 5e 规则是骰子数翻倍 (这里简单处理：骰两次伤害或者只翻倍骰子部分)
+        # 为简化实现，我们直接骰普通的，如果是暴击由 DM AI 描述额外效果，或者这里简单翻倍
+        dmg_roll = roll_dice(damage_dice)
+        damage_total = dmg_roll['total']
+        
+        if is_crit:
+            # 简单的暴击规则：伤害翻倍 (或者你可以实现更复杂的骰子翻倍)
+            damage_total *= 2
+            log_parts.append(f"💥 Damage (Crit x2): {dmg_roll['normalized']} = **{damage_total}**")
+        else:
+            log_parts.append(f"🩸 Damage: {dmg_roll['normalized']} = **{damage_total}**")
+    else:
+        log_parts.append("🛡️ Attack was blocked or dodged.")
+
+    return {
+        "is_hit": is_hit,
+        "damage_dealt": damage_total,
+        "log": "\n".join(log_parts)
+    }

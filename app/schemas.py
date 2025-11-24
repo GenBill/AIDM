@@ -160,6 +160,20 @@ class PlayerState(BaseModel):
     inventory: List[str] = []       
     position: str = "default"       
 
+
+class StoryNode(BaseModel):
+    id: str
+    title: str
+    type: str # encounter, transition, roleplay
+    read_aloud: str
+    gm_guidance: str
+    min_turns: int = Field(1, description="Minimum interaction turns required before transition") # <--- 新增这个
+    environment: Dict[str, Any]
+    entities: List[Dict[str, Any]]
+    interactions: List[Dict[str, Any]]
+    loot: List[str]
+    edges: List[Dict[str, Any]]
+
 class GameSession(BaseModel):
     """完整的游戏存档结构"""
     model_config = {"populate_by_name": True}
@@ -171,11 +185,14 @@ class GameSession(BaseModel):
     # 进度指针
     current_node_id: str
     
+    # --- 新增：节奏控制器 ---
+    current_node_turns: int = 0  # 当前节点已经进行了多少轮对话
+    # ----------------------
+    
     # 状态
     players: List[PlayerState]
     enemy_states: Dict[str, Any] = {}
     
-    # 历史记录
     chat_history: List[Dict[str, str]] = [] 
     
     created_at: str
@@ -186,3 +203,12 @@ class SessionCreateRequest(BaseModel):
     story_id: str
     character_idx: int 
     player_name: str
+
+class DMResponse(BaseModel):
+    """LLM 返回给系统的结构化指令"""
+    narrative: str = Field(..., description="The story description to show the player.")
+    # --- 新增字段 ---
+    mechanics_log: Optional[str] = Field(None, description="Detailed math/dice logs. E.g. 'Attack Roll: 1d20(15) + 3 = 18 vs AC 13. Hit!'")
+    # ---------------
+    damage_taken: int = Field(0, description="Amount of damage the player takes this turn (0 if none).")
+    transition_to_id: Optional[str] = Field(None, description="The ID of the next node if the scene changes.")

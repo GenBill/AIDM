@@ -1,0 +1,176 @@
+{
+  "session_id": "083f04da",
+  "story_id": "198dc8cb",
+  "title": "yy's Journey",
+  "current_node_id": "voyage_to_stormwreck_isle",
+  "current_node_turns": 0,
+  "players": [
+    {
+      "name": "yy",
+      "character_sheet": {
+        "name": "",
+        "race": "Hill Dwarf",
+        "class_name": "Cleric",
+        "subclass": null,
+        "level": 1,
+        "background": "Soldier",
+        "alignment": "Lawful Good",
+        "hp_max": 11,
+        "ac": 18,
+        "speed": 25,
+        "initiative": -1,
+        "proficiency_bonus": 2,
+        "abilities": {
+          "strength": 14,
+          "dexterity": 8,
+          "constitution": 15,
+          "intelligence": 10,
+          "wisdom": 16,
+          "charisma": 12
+        },
+        "skill_proficiencies": [
+          "Athletics",
+          "Intimidation"
+        ],
+        "saving_throw_proficiencies": [
+          "Wisdom",
+          "Charisma"
+        ],
+        "attacks": [
+          {
+            "name": "Mace",
+            "bonus": 4,
+            "damage": "1d6+2",
+            "damage_type": "bludgeoning"
+          },
+          {
+            "name": "Handaxe",
+            "bonus": 4,
+            "damage": "1d6+2",
+            "damage_type": "slashing"
+          }
+        ],
+        "spellcasting": {
+          "spell_save_dc": 13,
+          "spell_attack_bonus": 5,
+          "cantrips": [
+            "light",
+            "thaumaturgy",
+            "sacred flame"
+          ],
+          "level_1_spells": [
+            "bless",
+            "command",
+            "cure wounds",
+            "detect magic (ritual)",
+            "guiding bolt",
+            "healing word",
+            "protection from evil and good",
+            "sanctuary",
+            "shield of faith"
+          ],
+          "prepared_spells": [
+            "bless",
+            "command",
+            "cure wounds"
+          ]
+        },
+        "equipment": [
+          "Chain mail",
+          "Shield",
+          "Mace",
+          "Handaxe",
+          "Holy symbol",
+          "Backpack",
+          "Bedroll",
+          "Mess kit",
+          "Tinderbox",
+          "10 torches",
+          "10 days of rations",
+          "Waterskin",
+          "50 feet of hempen rope",
+          "Insignia of rank",
+          "Broken blade as a trophy from a fallen enemy",
+          "Set of bone dice",
+          "Set of common clothes",
+          "Pouch"
+        ],
+        "features": [
+          "Darkvision",
+          "Dwarven Resilience",
+          "Stonecunning",
+          "Dwarven Toughness",
+          "Divine Domain: Life",
+          "Ritual Casting",
+          "Disciple of Life",
+          "Channel Divinity: Turn Undead",
+          "Channel Divinity: Preserve Life"
+        ],
+        "background_story": "You trained as a soldier in the island of Mintarn and joined a mercenary company...",
+        "personality_traits": null,
+        "ideals": null,
+        "bonds": null,
+        "flaws": null,
+        "file_path": "/static/data/stories/198dc8cb/images/characters/sheet_b82fea_dwarf1.png",
+        "all_files": [
+          "/static/data/stories/198dc8cb/images/characters/sheet_b82fea_dwarf1.png",
+          "/static/data/stories/198dc8cb/images/characters/sheet_dc1748_dwarf2.png"
+        ],
+        "avatar_path": "/static/data/stories/198dc8cb/images/avatars/avatar_19f1d6.png"
+      },
+      "current_hp": 11,
+      "temp_hp": 0,
+      "conditions": [],
+      "inventory": [
+        "Chain mail",
+        "Shield",
+        "Mace",
+        "Handaxe",
+        "Holy symbol",
+        "Backpack",
+        "Bedroll",
+        "Mess kit",
+        "Tinderbox",
+        "10 torches",
+        "10 days of rations",
+        "Waterskin",
+        "50 feet of hempen rope",
+        "Insignia of rank",
+        "Broken blade as a trophy from a fallen enemy",
+        "Set of bone dice",
+        "Set of common clothes",
+        "Pouch"
+      ],
+      "position": "default"
+    }
+  ],
+  "enemy_states": {},
+  "chat_history": [
+    {
+      "role": "query",
+      "content": "tell me about fireball"
+    },
+    {
+      "role": "query_answer",
+      "content": "The spell \"Fireball\" is a 3rd-level evocation spell. When you cast it, a fiery mote streaks to a point within range and explodes in a burst of flame. The fire spreads around corners and ignites unattended flammable objects. Each creature in the area takes 6d6 fire damage.\n\n- **Casting Time:** 1 action\n- **Range:** 120 feet\n- **Components:** Verbal, Somatic, Material\n- **Duration:** Instantaneous\n- **Damage Type:** Fire\n- **Damage Roll:** 6d6 fire damage\n\nThe spell can be cast using higher-level spell slots, increasing the damage by 1d6 for each slot level above 3rd."
+    },
+    {
+      "role": "query",
+      "content": "which calss can spend fireball"
+    },
+    {
+      "role": "query_answer",
+      "content": "The spell \"Fireball\" is a 3rd-level evocation spell that can be cast by classes that have access to it. Typically, the Wizard and Sorcerer classes can cast Fireball, as it is a staple spell for those classes. The spell involves a fiery explosion that deals 6d6 fire damage to creatures within a 120-foot range. The damage increases by 1d6 for each spell slot level above 3rd."
+    },
+    {
+      "role": "query",
+      "content": "cool"
+    },
+    {
+      "role": "query_answer",
+      "content": "As a Hill Dwarf, you have several unique traits and abilities:\n\n- **Ability Score Increase:** Your Constitution score increases by 2, and your Wisdom score increases by 1.\n- **Age:** Dwarves mature at the same rate as humans but are considered young until they reach 50. They typically live about 350 years.\n- **Alignment:** Most dwarves are lawful and tend toward good, valuing a well-ordered society and fair play.\n- **Size:** Dwarves are Medium-sized, standing between 4 and 5 feet tall and averaging about 150 pounds.\n- **Speed:** Your base walking speed is 25 feet, and it is not reduced by wearing heavy armor.\n- **Darkvision:** You can see in dim light within 60 feet as if it were bright light, and in darkness as if it were dim light, though you can't discern color in darkness.\n- **Dwarven Resilience:** You have advantage on saving throws against poison and resistance against poison damage.\n- **Dwarven Combat Training:** You are proficient with the battleaxe, handaxe, light hammer, and warhammer.\n- **Tool Proficiency:** You gain proficiency with one type of artisan's tools: smith's tools, brewer's supplies, or mason's tools.\n- **Stonecunning:** You are considered proficient in History checks related to stonework and add double your proficiency bonus to the check.\n- **Dwarven Toughness (Hill Dwarf Trait):** Your hit point maximum increases by 1, and it increases by 1 every time you gain a level.\n\nThese traits make you a resilient and skilled character, well-suited for adventures that require toughness and a deep connection to the earth. If you have more questions about your character or the game, feel free to ask!"
+    }
+  ],
+  "created_at": "2025-11-23T23:17:44.587577",
+  "updated_at": "2025-11-23T23:19:04.216379"
+}

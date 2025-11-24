@@ -1,314 +1,491 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>AI Dungeon Runner</title>
-    <style>/* static/game.html */
-        /* --- 沉浸式暗黑风格 CSS --- */
-        body { 
-            margin: 0; padding: 0; 
-            background-color: #121212; color: #e0e0e0; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            height: 100vh; overflow: hidden;
-            display: flex;
-        }
+  <meta charset="UTF-8">
+  <title>AI Dungeon Runner</title>
+  <style>
+    /* --- Layout base --- */
+    body { 
+      margin: 0; padding: 0; 
+      background-color: #121212; color: #e0e0e0; 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      height: 100vh; overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      grid-template-rows: 100vh;
+    }
 
-        /* 左侧：视觉区 (70%) */
-        .visual-panel {
-            flex: 7;
-            background-color: #000;
-            background-size: cover;
-            background-position: center;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end; /* 文字在底部 */
-            transition: background-image 0.5s ease-in-out;
-        }
-        /* 渐变遮罩，让文字看清楚 */
-        .visual-overlay {
-            background: linear-gradient(to top, rgba(0,0,0,0.95), transparent);
-            padding: 40px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
-        }
-        .scene-title { font-size: 2.5em; margin: 0; color: #fff; font-weight: bold; letter-spacing: 1px; }
-        .scene-type { font-size: 0.9em; text-transform: uppercase; color: #ff9800; letter-spacing: 2px; margin-bottom: 5px; display: block;}
+    .main-stage {
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid #333;
+      height: 100vh;
+      min-height: 0; /* important for nested flex scrolling */
+    }
 
-        /* 右侧：交互区 (30%) */
-        .interaction-panel {
-            flex: 3;
-            display: flex;
-            flex-direction: column;
-            background-color: #1e1e1e;
-            border-left: 1px solid #333;
-            min-width: 350px;
-            box-shadow: -5px 0 15px rgba(0,0,0,0.5);
-        }
+    /* === Visual panel (B方案：完整图 + 模糊扩展背景) === */
+    .visual-panel {
+      flex: 0 0 40%;        /* 固定占比，防止被聊天挤没 */
+      min-height: 260px;    /* 你可以加到 300px */
+      max-height: 50vh;     /* 防止图太高压聊天 */
+      position: relative;
+      overflow: hidden;     /* 避免模糊层溢出 */
+      background-color: #000;
+      box-shadow: inset 0 -50px 50px #121212;
+    }
 
-        /* 1. 角色状态栏 */
-        .char-status {
-            padding: 20px;
-            background-color: #252525;
-            border-bottom: 1px solid #333;
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-        .char-avatar { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; border: 2px solid #555; }
-        .hp-bar-container { width: 100%; height: 8px; background: #444; border-radius: 4px; margin-top: 5px; overflow: hidden; }
-        .hp-bar-fill { height: 100%; background: #d32f2f; width: 100%; transition: width 0.3s; }
+    /* 模糊扩展背景层 */
+    .visual-bg-blur {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      filter: blur(18px) brightness(0.7);
+      transform: scale(1.15); /* 避免 blur 后露边 */
+      opacity: 0.55;
+      z-index: 0;
+    }
 
-        /* 2. 聊天记录 (核心区域) */
-        .chat-history {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            scroll-behavior: smooth;
-        }
-        /* 消息气泡样式 */
-        .msg { padding: 12px 16px; border-radius: 8px; line-height: 1.5; max-width: 90%; font-size: 0.95em; }
-        .msg-dm { background-color: #2d2d3a; color: #ddd; border-left: 3px solid #7986cb; align-self: flex-start; }
-        .msg-player { background-color: #388e3c; color: #fff; align-self: flex-end; text-align: right; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-        .msg-system { text-align: center; font-size: 0.85em; color: #666; font-style: italic; margin: 10px 0; }
+    /* 前景完整图层（不裁剪） */
+    .scene-image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;       /* 关键：完整图不裁剪 */
+      object-position: center;
+      z-index: 1;
+      pointer-events: none;
+    }
 
-        /* 3. 输入区 */
-        .input-area {
-            padding: 20px;
-            background-color: #252525;
-            border-top: 1px solid #333;
-        }
-        textarea {
-            width: 100%; height: 60px;
-            background: #333; border: 1px solid #444; color: #fff;
-            padding: 10px; border-radius: 6px; resize: none;
-            font-family: inherit; outline: none; box-sizing: border-box;
-        }
-        textarea:focus { border-color: #777; background: #3a3a3a; }
-        
-        .btn-group { margin-top: 10px; display: flex; justify-content: space-between; align-items: center; }
-        button {
-            background: #ff9800; color: #000; border: none; padding: 8px 24px;
-            border-radius: 4px; font-weight: bold; cursor: pointer; transition: 0.2s;
-        }
-        button:hover { background: #fb8c00; }
-        
-        /* Loading Overlay */
-        .loading-overlay {
-            position: fixed; top:0; left:0; width:100%; height:100%;
-            background: #000; display: flex; justify-content: center; align-items: center;
-            z-index: 9999; color: white; font-size: 1.2em; letter-spacing: 2px;
-        }
-        .hidden { display: none; }
-    </style>
+    .visual-overlay {
+      position: relative;
+      z-index: 2;
+      background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+      padding: 20px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+    }
+    .scene-title { font-size: 2em; margin: 0; color: #fff; }
+
+    /* === Chat panel === */
+    .chat-panel {
+      flex: 1 1 auto;           /* 吃掉剩余空间 */
+      display: flex;
+      flex-direction: column;
+      background-color: #181818;
+      min-height: 0;            /* allow chat-history to scroll */
+    }
+
+    .chat-tabs { display: flex; background: #252525; border-bottom: 1px solid #333; }
+    .chat-tab { flex: 1; padding: 10px; text-align: center; cursor: pointer; font-weight: bold; color: #888; transition: 0.2s; }
+    .chat-tab:hover { background: #333; }
+    .chat-tab.active { color: #ff9800; border-bottom: 2px solid #ff9800; background: #2c2c2c; }
+    .chat-tab.active.query { color: #29b6f6; border-bottom-color: #29b6f6; }
+
+    .chat-history {
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      scroll-behavior: smooth;
+      overscroll-behavior: contain;
+    }
+    #chatBoxQuery { display: none; }
+
+    .input-area {
+      padding: 16px 20px;
+      background-color: #252525;
+      border-top: 1px solid #333;
+      flex-shrink: 0;  /* 固定在底部 */
+    }
+    textarea {
+      width: 100%; height: 60px; background: #333; border: 1px solid #444; color: #fff;
+      padding: 10px; border-radius: 6px; resize: none; outline: none; font-family: inherit; box-sizing: border-box;
+    }
+    textarea:focus { border-color: #777; }
+    .btn-group { margin-top: 10px; display: flex; justify-content: space-between; align-items: center; }
+    button#sendBtn {
+      background: #ff9800; color: #000; border: none; padding: 8px 24px; border-radius: 4px; font-weight: bold; cursor: pointer;
+    }
+    button#sendBtn.query-mode { background: #29b6f6; color: #000; }
+
+    /* === Sidebar === */
+    .stats-sidebar {
+      background-color: #1e1e1e;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      height: 100vh;
+      min-height: 0;
+    }
+    .stat-block { background: #252525; border-radius: 8px; padding: 15px; border: 1px solid #333; }
+    .stat-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+    .char-avatar { width: 70px; height: 70px; border-radius: 8px; border: 2px solid #555; object-fit: cover; }
+    .hp-bar-container { width: 100%; height: 10px; background: #444; border-radius: 5px; margin-top: 5px; overflow: hidden; }
+    .hp-bar-fill { height: 100%; background: #d32f2f; width: 100%; transition: width 0.3s; }
+
+    .abilities-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; text-align: center; }
+    .ability-box { background: #333; padding: 8px 5px; border-radius: 4px; }
+    .ability-label { font-size: 0.75em; color: #aaa; font-weight: bold; }
+    .ability-val { font-size: 1.1em; font-weight: bold; }
+    .ability-mod { font-size: 0.8em; color: #4caf50; }
+
+    h4 { margin: 0 0 10px 0; border-bottom: 1px solid #444; padding-bottom: 5px; color: #ddd; font-size: 0.9em; text-transform: uppercase; letter-spacing: 1px; }
+    ul { list-style: none; padding: 0; margin: 0; }
+    li { padding: 6px 0; border-bottom: 1px dashed #333; font-size: 0.9em; color: #ccc; }
+    li:last-child { border-bottom: none; }
+    .skill-tag { background: #333; padding: 2px 6px; border-radius: 4px; font-size: 0.8em; color: #bbb; margin-right: 5px; display: inline-block; margin-bottom: 4px; }
+    .attack-row { display: flex; justify-content: space-between; align-items: center; }
+    .dmg-text { color: #ef5350; font-weight: bold; font-size: 0.9em; }
+
+    /* === Message bubbles === */
+    .msg { padding: 10px 14px; border-radius: 6px; line-height: 1.5; max-width: 90%; font-size: 0.95em; margin-bottom: 6px;}
+    .msg-dm { background: #2d2d3a; color: #ddd; border-left: 3px solid #7986cb; align-self: flex-start; }
+    .msg-player { background: #388e3c; color: #fff; align-self: flex-end; text-align: right; }
+    .msg-data { background: #263238; color: #81d4fa; font-family: monospace; font-size: 0.85em; border: 1px solid #37474f; align-self: center; width: 90%; }
+    .msg-system { text-align: center; font-size: 0.8em; color: #666; margin: 10px 0; }
+  </style>
 </head>
 <body>
 
-    <div id="loadingScreen" class="loading-overlay">
-        Loading World State...
-    </div>
-
+  <div class="main-stage">
     <div class="visual-panel" id="bgPanel">
-        <div class="visual-overlay">
-            <span class="scene-type" id="sceneType">LOADING</span>
-            <h1 class="scene-title" id="sceneTitle">...</h1>
-        </div>
+      <div class="visual-bg-blur" id="bgBlur"></div>
+      <img id="sceneImage" class="scene-image" alt="scene"/>
+      <div class="visual-overlay">
+        <small id="sceneType" style="color:#ff9800; font-weight:bold;">LOCATION</small>
+        <h1 class="scene-title" id="sceneTitle">...</h1>
+      </div>
     </div>
 
-    <div class="interaction-panel">
-        
-        <div class="char-status">
-            <img src="" id="charAvatar" class="char-avatar">
-            <div style="flex:1;">
-                <div style="display:flex; justify-content:space-between;">
-                    <strong id="charName" style="font-size:1.1em;">Player</strong>
-                    <small style="color:#aaa;" id="charClass">Class</small>
-                </div>
-                <div class="hp-bar-container">
-                    <div class="hp-bar-fill" id="hpBar" style="width: 100%;"></div>
-                </div>
-                <div style="font-size:0.8em; margin-top:3px; text-align:right; color:#ccc;">
-                    HP: <span id="hpText">--/--</span>
-                </div>
-            </div>
-        </div>
+    <div class="chat-panel">
+      <div class="chat-tabs">
+        <div class="chat-tab active" id="tabAction" onclick="switchMode('action')">⚔️ Action (Advance Story)</div>
+        <div class="chat-tab" id="tabQuery" onclick="switchMode('query')">🔍 Query (Ask DM)</div>
+      </div>
 
-        <div class="chat-history" id="chatBox">
-            <div class="msg msg-system">Session Initialized.</div>
-        </div>
+      <div class="chat-history" id="chatBoxAction">
+        <div class="msg msg-system">Session Initialized.</div>
+      </div>
+      <div class="chat-history" id="chatBoxQuery">
+        <div class="msg msg-system">Query channel ready. Ask anything about lore/rules.</div>
+      </div>
 
-        <div class="input-area">
-            <textarea id="playerInput" placeholder="What do you want to do? (e.g., 'I check the chest', 'I attack the zombie')"></textarea>
-            <div class="btn-group">
-                <span style="font-size:0.8em; color:#666;">Shift+Enter for new line</span>
-                <button onclick="sendAction()">Action</button>
-            </div>
+      <div class="input-area">
+        <textarea id="playerInput" placeholder="Describe your action..."></textarea>
+        <div class="btn-group">
+          <span style="font-size:0.8em; color:#666;">Shift+Enter for new line</span>
+          <button id="sendBtn" onclick="sendInput()">Take Action</button>
         </div>
+      </div>
     </div>
+  </div>
+
+  <div class="stats-sidebar">
+    <div class="stat-block">
+      <div class="stat-header">
+        <img src="" id="charAvatar" class="char-avatar">
+        <div>
+          <h2 style="margin:0; font-size:1.2em;" id="charName">Player</h2>
+          <div style="color:#888; font-size:0.9em;" id="charClass">Lvl 1 Class</div>
+        </div>
+      </div>
+      <div style="display:flex; justify-content:space-between; margin-bottom:5px; font-size:0.9em;">
+        <span>HP <strong id="hpText">--/--</strong></span>
+        <span>AC <strong id="acText" style="color:#ffd700;">--</strong></span>
+      </div>
+      <div class="hp-bar-container">
+        <div class="hp-bar-fill" id="hpBar" style="width: 100%;"></div>
+      </div>
+      <div style="display:flex; justify-content:space-between; margin-top:10px; font-size:0.85em; color:#ccc;">
+        <span>Speed: <b id="speedText">30</b>ft</span>
+        <span>Init: <b id="initText">+0</b></span>
+        <span>Prof: <b id="profText">+2</b></span>
+      </div>
+    </div>
+
+    <div class="stat-block">
+      <h4>Abilities</h4>
+      <div class="abilities-grid" id="abilitiesGrid"></div>
+    </div>
+
+    <div class="stat-block">
+      <h4>Attacks</h4>
+      <ul id="attackList"></ul>
+    </div>
+
+    <div class="stat-block" id="spellBlock" style="display:none;">
+      <h4>Spellcasting</h4>
+      <div style="font-size:0.8em; margin-bottom:5px; color:#aaa;">
+        DC <span id="spellDC" style="color:#fff;">--</span> | Atk <span id="spellAtk" style="color:#fff;">--</span>
+      </div>
+      <ul id="spellList"></ul>
+    </div>
+
+    <div class="stat-block">
+      <h4>Proficiencies</h4>
+      <div id="skillList"></div>
+    </div>
+  </div>
 
 <script>
-    const params = new URLSearchParams(window.location.search);
-    const sessionId = params.get('session_id');
-    const chatBox = document.getElementById('chatBox');
+  const params = new URLSearchParams(window.location.search);
+  const sessionId = params.get('session_id');
 
-    // 1. 初始化：加载游戏状态
-    async function initGame() {
-        if (!sessionId) return alert("No Session ID provided!");
-        
-        try {
-            const res = await fetch(`/sessions/${sessionId}/render`);
-            if (!res.ok) throw new Error("Failed to load session");
-            
-            const data = await res.json();
-            renderState(data);
-            
-            document.getElementById('loadingScreen').classList.add('hidden');
-        } catch (e) {
-            document.getElementById('loadingScreen').innerText = "Error: " + e.message;
-        }
+  const chatBoxAction = document.getElementById('chatBoxAction');
+  const chatBoxQuery  = document.getElementById('chatBoxQuery');
+  let currentMode = 'action';
+
+  const actionHistory = [];
+  const queryHistory  = [];
+
+  function getActiveChatBox() {
+    return currentMode === 'action' ? chatBoxAction : chatBoxQuery;
+  }
+  function getActiveHistory() {
+    return currentMode === 'action' ? actionHistory : queryHistory;
+  }
+
+  async function initGame() {
+    if (!sessionId) {
+      console.error("No Session ID!");
+      return;
+    }
+    try {
+      const res = await fetch(`/sessions/${sessionId}/render`);
+      if (!res.ok) throw new Error("Failed to load session");
+      const data = await res.json();
+
+      renderVisuals(data.scene);
+      renderCharacterSheet(data.character);
+
+      seedActionHistory(data.history || []);
+      renderActiveHistory();
+    } catch (e) {
+      console.error("Init error:", e);
+    }
+  }
+
+  function seedActionHistory(serverHistory) {
+    actionHistory.length = 0;
+    if (serverHistory && serverHistory.length) {
+      for (const msg of serverHistory) {
+        actionHistory.push({ role: msg.role, content: msg.content });
+      }
+    } else {
+      actionHistory.push({ role: "dm", content: "The adventure begins..." });
+    }
+  }
+
+  function renderActiveHistory() {
+    const box = getActiveChatBox();
+    const hist = getActiveHistory();
+
+    box.innerHTML = "";
+    for (const m of hist) addMessageToBox(box, m.role, m.content);
+    box.scrollTop = box.scrollHeight;
+  }
+
+  function addMessage(role, text) {
+    const hist = getActiveHistory();
+    hist.push({ role, content: text });
+    const box = getActiveChatBox();
+    addMessageToBox(box, role, text);
+    box.scrollTop = box.scrollHeight;
+  }
+
+  function addMessageToBox(box, role, text) {
+    const div = document.createElement('div');
+    let cssClass = 'msg-dm';
+    if (role === 'user') cssClass = 'msg-player';
+    if (role === 'data') cssClass = 'msg-data';
+    if (role === 'system') cssClass = 'msg-system';
+    if (role === 'dm' || role === 'assistant') cssClass = 'msg-dm';
+
+    div.className = 'msg ' + cssClass;
+    div.innerHTML = (text || "").replace(/\n/g, '<br>');
+    box.appendChild(div);
+  }
+
+  function renderVisuals(scene) {
+    const bgBlur = document.getElementById("bgBlur");
+    const img = document.getElementById("sceneImage");
+
+    if (scene && scene.image) {
+      const bgPath = scene.image.replace("/static/stories", "/static/data/stories");
+      bgBlur.style.backgroundImage = "url('" + bgPath + "')";
+      img.src = bgPath;
+    } else {
+      bgBlur.style.backgroundImage = "none";
+      img.removeAttribute("src");
     }
 
-    // 2. 渲染：把后端数据填入界面
-    function renderState(data) {
-        // A. 场景 (Visuals)
-        const bgPanel = document.getElementById('bgPanel');
-        if (data.scene.image) {
-            // 路径修正：把后端存的相对路径修正为前端可访问的
-            const bgPath = data.scene.image.replace("/static/stories", "/static/data/stories");
-            bgPanel.style.backgroundImage = `url('${bgPath}')`;
-        } else {
-            bgPanel.style.backgroundImage = "none"; // 没图就黑屏
-        }
-        document.getElementById('sceneTitle').innerText = data.scene.title;
-        document.getElementById('sceneType').innerText = data.scene.type;
+    document.getElementById('sceneTitle').innerText = (scene && scene.title) ? scene.title : "";
+    document.getElementById('sceneType').innerText  = (scene && scene.type)  ? scene.type  : "";
+  }
 
-        // B. 角色 (Status)
-        const char = data.character;
-        document.getElementById('charName').innerText = char.name;
-        document.getElementById('charClass').innerText = `Lvl ${char.level} ${char.class_name}`;
-        document.getElementById('charAvatar').src = char.avatar;
-        
-        // 血条计算
-        const hpPercent = Math.max(0, Math.min(100, (char.hp_current / char.hp_max) * 100));
-        document.getElementById('hpBar').style.width = `${hpPercent}%`;
-        document.getElementById('hpText').innerText = `${char.hp_current}/${char.hp_max}`;
-        
-        // 血量颜色逻辑 (绿 -> 橙 -> 红)
-        const bar = document.getElementById('hpBar');
-        if (hpPercent < 30) bar.style.backgroundColor = "#d32f2f";
-        else if (hpPercent < 60) bar.style.backgroundColor = "#ff9800";
-        else bar.style.backgroundColor = "#388e3c";
+  function renderCharacterSheet(char) {
+    const sheet = char.sheet;
+    document.getElementById('charName').innerText = char.name;
+    document.getElementById('charClass').innerText = "Lvl " + sheet.level + " " + sheet.class + " (" + sheet.race + ")";
+    document.getElementById('charAvatar').src = char.avatar;
 
-        // C. 历史消息 (History)
-        // 清空现有消息，重新渲染 (简单粗暴，保证同步)
-        chatBox.innerHTML = '<div class="msg msg-system">Session Initialized.</div>';
-        if (data.history && data.history.length > 0) {
-            data.history.forEach(msg => addMessage(msg.role, msg.content));
-        } else {
-            // 如果没有历史（刚开局），可以显示一条提示
-            addMessage('dm', "The adventure begins...");
-        }
+    const hpMax = sheet.hp_max;
+    const hpCur = char.hp_current;
+    const hpPct = Math.min(100, Math.max(0, (hpCur / hpMax) * 100));
+    document.getElementById('hpBar').style.width = hpPct + "%";
+    document.getElementById('hpText').innerText = hpCur + "/" + hpMax;
+
+    document.getElementById('acText').innerText = sheet.ac;
+    document.getElementById('speedText').innerText = sheet.speed;
+    document.getElementById('initText').innerText = (sheet.initiative >= 0 ? "+" : "") + sheet.initiative;
+    document.getElementById('profText').innerText = "+" + sheet.proficiency_bonus;
+
+    const abs = sheet.abilities;
+    const grid = document.getElementById('abilitiesGrid');
+    grid.innerHTML = "";
+    for (const key in abs) {
+      const val = abs[key];
+      const mod = Math.floor((val - 10) / 2);
+      const modStr = mod >= 0 ? "+" + mod : "" + mod;
+      grid.innerHTML +=
+        '<div class="ability-box">' +
+          '<div class="ability-label">' + key.substring(0,3).toUpperCase() + '</div>' +
+          '<div class="ability-val">' + val + '</div>' +
+          '<div class="ability-mod">' + modStr + '</div>' +
+        '</div>';
     }
 
-    // 3. 辅助：添加消息气泡
-    function addMessage(role, text) {
-        const div = document.createElement('div');
-        // 映射 role: 'user' -> 'player', 'assistant' -> 'dm'
-        const cssClass = role === 'user' ? 'msg-player' : 'msg-dm';
-        div.className = `msg ${cssClass}`;
-        
-        // 处理换行
-        div.innerHTML = text.replace(/\n/g, '<br>');
-        
-        chatBox.appendChild(div);
-        chatBox.scrollTop = chatBox.scrollHeight; // 自动滚到底部
-    }
-
-// 4. 发送动作 (Real Logic)
-    async function sendAction() {
-        const input = document.getElementById('playerInput');
-        const text = input.value.trim();
-        if (!text) return;
-
-        // 1. UI 立即反馈 (Optimistic UI)
-        addMessage('user', text);
-        input.value = "";
-        input.disabled = true; // 防止重复提交
-        
-        // 显示 "Thinking..." 状态
-        const loadingId = 'msg-loading-' + Date.now();
-        const loadingDiv = document.createElement('div');
-        loadingDiv.id = loadingId;
-        loadingDiv.className = 'msg msg-dm';
-        loadingDiv.innerHTML = '<i>Thinking...</i>';
-        chatBox.appendChild(loadingDiv);
-        chatBox.scrollTop = chatBox.scrollHeight;
-
-        try {
-            // 2. 调用后端
-            const res = await fetch(`/sessions/${sessionId}/action`, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ action: text })
-            });
-            
-            if (!res.ok) throw new Error("AI Error");
-            
-            const data = await res.json();
-            
-            // 3. 移除 Loading，显示 AI 回复
-            document.getElementById(loadingId).remove();
-            addMessage('dm', data.narrative);
-            
-            // 4. 刷新整个状态 (血量、场景图片等可能变了)
-            // 我们可以重新调用 /render 接口来同步最新状态
-            await refreshGameState();
-            
-        } catch (e) {
-            document.getElementById(loadingId).innerText = "Error: " + e.message;
-        } finally {
-            input.disabled = false;
-            input.focus();
-        }
-    }
-
-    // 辅助：刷新状态 (复用 initGame 的逻辑，但只更新非历史部分)
-    async function refreshGameState() {
-        const res = await fetch(`/sessions/${sessionId}/render`);
-        const data = await res.json();
-        
-        // 更新血条
-        const char = data.character;
-        const hpPercent = Math.max(0, Math.min(100, (char.hp_current / char.hp_max) * 100));
-        document.getElementById('hpBar').style.width = `${hpPercent}%`;
-        document.getElementById('hpText').innerText = `${char.hp_current}/${char.hp_max}`;
-        
-        // 更新场景 (如果变了)
-        const bgPanel = document.getElementById('bgPanel');
-        if (data.scene.image) {
-            const bgPath = data.scene.image.replace("/static/stories", "/static/data/stories");
-            // 简单的去重判断，避免闪烁
-            if (!bgPanel.style.backgroundImage.includes(bgPath)) {
-                bgPanel.style.backgroundImage = `url('${bgPath}')`;
-                document.getElementById('sceneTitle').innerText = data.scene.title;
-                document.getElementById('sceneType').innerText = data.scene.type;
-            }
-        }
-    }
-
-    // 绑定回车键发送
-    document.getElementById('playerInput').addEventListener('keypress', function (e) {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            sendAction();
-        }
+    const atkList = document.getElementById('attackList');
+    atkList.innerHTML = "";
+    (sheet.attacks || []).forEach(atk => {
+      atkList.innerHTML +=
+        '<li class="attack-row">' +
+          '<span><b>' + atk.name + '</b> <small style="color:#888;">+' + atk.bonus + '</small></span>' +
+          '<span class="dmg-text">' + atk.damage + '</span>' +
+        '</li>';
     });
 
-    // 启动!
-    initGame();
+    if (sheet.spellcasting) {
+      document.getElementById('spellBlock').style.display = "block";
+      document.getElementById('spellDC').innerText = sheet.spellcasting.spell_save_dc;
+      document.getElementById('spellAtk').innerText = "+" + sheet.spellcasting.spell_attack_bonus;
 
+      const spList = document.getElementById('spellList');
+      spList.innerHTML = "";
+      (sheet.spellcasting.cantrips || []).forEach(sp => spList.innerHTML += "<li>[0] " + sp + "</li>");
+      (sheet.spellcasting.prepared_spells || []).forEach(sp => spList.innerHTML += "<li>[1+] " + sp + "</li>");
+    }
+
+    const skList = document.getElementById('skillList');
+    skList.innerHTML = "";
+    (sheet.skill_proficiencies || []).forEach(sk => {
+      skList.innerHTML += '<span class="skill-tag">' + sk + '</span>';
+    });
+  }
+
+  function switchMode(mode) {
+    if (currentMode === mode) return;
+    currentMode = mode;
+
+    document.getElementById('tabAction').classList.remove('active', 'query');
+    document.getElementById('tabQuery').classList.remove('active', 'query');
+
+    const activeTab = document.getElementById(mode === 'action' ? 'tabAction' : 'tabQuery');
+    activeTab.classList.add('active');
+    if (mode === 'query') activeTab.classList.add('query');
+
+    chatBoxAction.style.display = (mode === 'action') ? "flex" : "none";
+    chatBoxQuery.style.display  = (mode === 'query')  ? "flex" : "none";
+
+    const btn = document.getElementById('sendBtn');
+    const input = document.getElementById('playerInput');
+    if (mode === 'action') {
+      btn.innerText = "Take Action";
+      btn.classList.remove('query-mode');
+      input.placeholder = "Describe your action...";
+    } else {
+      btn.innerText = "Ask DM";
+      btn.classList.add('query-mode');
+      input.placeholder = "Ask a question about lore or rules...";
+    }
+
+    renderActiveHistory();
+    input.focus();
+  }
+
+  async function sendInput() {
+    const input = document.getElementById('playerInput');
+    const text = input.value.trim();
+    if (!text) return;
+
+    addMessage('user', text);
+    input.value = "";
+    input.disabled = true;
+
+    const box = getActiveChatBox();
+    const loadingId = 'loading-' + Date.now();
+    const loadingDiv = document.createElement('div');
+    loadingDiv.id = loadingId;
+    loadingDiv.className = 'msg msg-dm';
+    loadingDiv.innerHTML = '<i>Thinking...</i>';
+    box.appendChild(loadingDiv);
+    box.scrollTop = box.scrollHeight;
+
+    const endpoint = currentMode === 'action' ? 'action' : 'query';
+
+    try {
+      const res = await fetch("/sessions/" + sessionId + "/" + endpoint, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ action: text })
+      });
+
+      if (!res.ok) throw new Error("Network response was not ok");
+
+      const data = await res.json();
+      document.getElementById(loadingId).remove();
+
+      if (data.mechanics_log) addMessage('data', data.mechanics_log);
+      addMessage('dm', data.narrative);
+
+      if (currentMode === 'action') refreshStatus();
+    } catch (e) {
+      document.getElementById(loadingId).innerText = "Error: " + e.message;
+    } finally {
+      input.disabled = false;
+      input.focus();
+    }
+  }
+
+  async function refreshStatus() {
+    const res = await fetch("/sessions/" + sessionId + "/render");
+    const data = await res.json();
+
+    const char = data.character;
+    const hpMax = char.sheet.hp_max;
+    const hpCur = char.hp_current;
+    const hpPct = Math.min(100, Math.max(0, (hpCur / hpMax) * 100));
+    document.getElementById('hpBar').style.width = hpPct + "%";
+    document.getElementById('hpText').innerText = hpCur + "/" + hpMax;
+
+    // scene refresh
+    renderVisuals(data.scene);
+  }
+
+  document.getElementById('playerInput').addEventListener('keypress', function (e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendInput();
+    }
+  });
+
+  initGame();
 </script>
 </body>
 </html>

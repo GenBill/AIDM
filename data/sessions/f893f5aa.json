@@ -1,0 +1,200 @@
+{
+  "session_id": "f893f5aa",
+  "story_id": "198dc8cb",
+  "title": "xx's Journey",
+  "current_node_id": "merrow_encounter",
+  "current_node_turns": 3,
+  "players": [
+    {
+      "name": "xx",
+      "character_sheet": {
+        "name": "",
+        "race": "Hill Dwarf",
+        "class_name": "Cleric",
+        "subclass": null,
+        "level": 1,
+        "background": "Soldier",
+        "alignment": "Lawful Good",
+        "hp_max": 11,
+        "ac": 18,
+        "speed": 25,
+        "initiative": -1,
+        "proficiency_bonus": 2,
+        "abilities": {
+          "strength": 14,
+          "dexterity": 8,
+          "constitution": 15,
+          "intelligence": 10,
+          "wisdom": 16,
+          "charisma": 12
+        },
+        "skill_proficiencies": [
+          "Athletics",
+          "Intimidation"
+        ],
+        "saving_throw_proficiencies": [
+          "Wisdom",
+          "Charisma"
+        ],
+        "attacks": [
+          {
+            "name": "Mace",
+            "bonus": 4,
+            "damage": "1d6+2",
+            "damage_type": "bludgeoning"
+          },
+          {
+            "name": "Handaxe",
+            "bonus": 4,
+            "damage": "1d6+2",
+            "damage_type": "slashing"
+          }
+        ],
+        "spellcasting": {
+          "spell_save_dc": 13,
+          "spell_attack_bonus": 5,
+          "cantrips": [
+            "light",
+            "thaumaturgy",
+            "sacred flame"
+          ],
+          "level_1_spells": [
+            "bless",
+            "command",
+            "cure wounds",
+            "detect magic (ritual)",
+            "guiding bolt",
+            "healing word",
+            "protection from evil and good",
+            "sanctuary",
+            "shield of faith"
+          ],
+          "prepared_spells": [
+            "bless",
+            "command",
+            "cure wounds"
+          ]
+        },
+        "equipment": [
+          "Chain mail",
+          "Shield",
+          "Mace",
+          "Handaxe",
+          "Holy symbol",
+          "Backpack",
+          "Bedroll",
+          "Mess kit",
+          "Tinderbox",
+          "10 torches",
+          "10 days of rations",
+          "Waterskin",
+          "50 feet of hempen rope",
+          "Insignia of rank",
+          "Broken blade as a trophy from a fallen enemy",
+          "Set of bone dice",
+          "Set of common clothes",
+          "Pouch"
+        ],
+        "features": [
+          "Darkvision",
+          "Dwarven Resilience",
+          "Stonecunning",
+          "Dwarven Toughness",
+          "Divine Domain: Life",
+          "Ritual Casting",
+          "Disciple of Life",
+          "Channel Divinity: Turn Undead",
+          "Channel Divinity: Preserve Life"
+        ],
+        "background_story": "You trained as a soldier in the island of Mintarn and joined a mercenary company...",
+        "personality_traits": null,
+        "ideals": null,
+        "bonds": null,
+        "flaws": null,
+        "file_path": "/static/data/stories/198dc8cb/images/characters/sheet_b82fea_dwarf1.png",
+        "all_files": [
+          "/static/data/stories/198dc8cb/images/characters/sheet_b82fea_dwarf1.png",
+          "/static/data/stories/198dc8cb/images/characters/sheet_dc1748_dwarf2.png"
+        ],
+        "avatar_path": "/static/data/stories/198dc8cb/images/avatars/avatar_19f1d6.png"
+      },
+      "current_hp": 11,
+      "temp_hp": 0,
+      "conditions": [],
+      "inventory": [
+        "Chain mail",
+        "Shield",
+        "Mace",
+        "Handaxe",
+        "Holy symbol",
+        "Backpack",
+        "Bedroll",
+        "Mess kit",
+        "Tinderbox",
+        "10 torches",
+        "10 days of rations",
+        "Waterskin",
+        "50 feet of hempen rope",
+        "Insignia of rank",
+        "Broken blade as a trophy from a fallen enemy",
+        "Set of bone dice",
+        "Set of common clothes",
+        "Pouch"
+      ],
+      "position": "default"
+    }
+  ],
+  "enemy_states": {},
+  "chat_history": [
+    {
+      "role": "user",
+      "content": "where  am i"
+    },
+    {
+      "role": "assistant",
+      "content": "You find yourself aboard a sturdy vessel, slicing through the roiling waves of the open sea. The air carries a mix of salt and the ominous scent of rain. Above you, dark clouds loom, pregnant with an impending storm.\n\nThe ship is headed for Stormwreck Isle, a destination steeped in mystery and whispered lore. As you wake this morning, however, there's a palpable tension in the atmosphere, hinted at by a blood-red sunrise—a traditional sailor's warning of dangerous weather to come.\n\nThis sense of foreboding is accentuated by sporadic flashes of lightning that dance across the sky, illuminating the simmering storm. The crew around you appears cautious yet resolute, navigating the vessel with experienced hands.\n\nA sudden, sharp crack of thunder serves as a reminder of the brewing tempest, while the captain of the ship maintains a vigilant stance at the helm, eyes fixed on the horizon.\n\nYou feel the rhythmic lurch of the ship beneath your feet as you orient yourself and prepare for whatever challenges the storm might bring. There's an aura of expectation, as if the sea itself is alive and waiting for something."
+    },
+    {
+      "role": "user",
+      "content": "wandering around the vessel"
+    },
+    {
+      "role": "assistant",
+      "content": "The hair on the back of your neck stands on end as a sense of impending danger grips you. As you wander about the deck, entranced by the growing chaos of the rolling sea, a sudden bolt of lightning splits the sky, momentarily illuminating a monstrous figure. From the frothing darkness, a creature drenched in seawater hauls itself onto the ship's deck with a menacing hiss. It's a merrow, a sinister creature of the deep, its eyes gleaming with malicious intelligence.\n\nThe crew shouts in alarm, scrambling to grab weapons and form a defensive line against this unexpected threat. The beast swipes at anyone nearby, its intentions clear.\n\nThe storm seems to roar in concert with the creature, adding to the sense of urgency and danger all around.\n\nWhat do you do? Will you fight or perhaps try another approach?"
+    },
+    {
+      "role": "assistant",
+      "content": "\n\n[Entered: Merrow Encounter]\nAs lightning flashes across the sky, a monster hauls itself up onto the deck! 'These waters belong to the Scaled Queen. I’m here to collect her tribute.'"
+    },
+    {
+      "role": "user",
+      "content": "What does the merrow want"
+    },
+    {
+      "role": "assistant",
+      "content": "The merrow, a hulking, scaled creature with fins that cut through the air like the sails of the ship, echoes its demand with a guttural voice, its fish-like eyes fixed on you. \"These waters belong to the Scaled Queen,\" it snarls, its gaze unwavering. \"Tribute in gold or treasure must be offered. Failure to comply will lead to blood and thunder.\"\n\nThe air crackles with the energy of the storm, underscoring the threat. The crew looks to you, hoping you might know what to do."
+    },
+    {
+      "role": "user",
+      "content": "I don't know what to do"
+    },
+    {
+      "role": "assistant",
+      "content": "The merrow stands menacingly on the deck, water dripping from its scaled form as it eyes the motley crew assembled before it. Lightning flashes again, casting long shadows that seem to dance with the rhythm of the waves crashing against the hull of the ship.\n\nYou see the crew members nervously glancing between you and the monstrous figure, waiting for a command or an action. Whether to fight, negotiate, or cunningly deceive is now in your hands.\n\nThe options are clear but daunting:\n- **Fight**: Use your weapons to try and defeat the merrow.\n- **Negotiate**: Attempt to reduce the tribute demanded through a Charisma check.\n- **Outsmart**: Use the environment or a clever plan to bypass combat altogether.\n\nAcross from you, the merrow's gaze is unyielding, challenging you to make your move.\n\nWhat will you do?"
+    },
+    {
+      "role": "user",
+      "content": "I negotiate with the merrow."
+    },
+    {
+      "role": "data",
+      "content": "Attempted negotiation: Rolled 11 = 10 (roll) + 1 (Charisma modifier) vs DC 15. Result: Failure to reduce tribute. [System Verified: Rolled 1d20+1 => 11]"
+    },
+    {
+      "role": "assistant",
+      "content": "In the dim light of the storm, you step forward with a calm and diplomatic demeanor, trying to appeal to the merrow's greed and reason. Your words flow with confidence, and the crew holds its breath, hoping to avert a fight.\n\nHowever, while your charisma holds strength, the merrow, driven by the Scaled Queen's desire and pride, is not entirely convinced. Its eyes narrow with calculating thought as it growls, \"The tribute I demand remains. You may seek to reduce it, but only if you offer more convincing words or treasure.\""
+    }
+  ],
+  "created_at": "2025-11-23T19:57:01.105593",
+  "updated_at": "2025-11-23T20:01:15.243416"
+}

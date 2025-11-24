@@ -1,16 +1,17 @@
 {
-  "session_id": "aa19d336",
-  "story_id": "ad261aa9",
-  "title": "xx's Journey in Intro to Stormwreck Isle",
+  "session_id": "abcd024c",
+  "story_id": "198dc8cb",
+  "title": "llk's Journey",
   "current_node_id": "voyage_to_stormwreck_isle",
+  "current_node_turns": 0,
   "players": [
     {
-      "name": "xx",
+      "name": "llk",
       "character_sheet": {
-        "name": "Unknown",
+        "name": "",
         "race": "Hill Dwarf",
         "class_name": "Cleric",
-        "subclass": "Life Domain",
+        "subclass": null,
         "level": 1,
         "background": "Soldier",
         "alignment": "Lawful Good",
@@ -39,13 +40,13 @@
           {
             "name": "Mace",
             "bonus": 4,
-            "damage": "1d6 + 2",
+            "damage": "1d6+2",
             "damage_type": "bludgeoning"
           },
           {
             "name": "Handaxe",
             "bonus": 4,
-            "damage": "1d6 + 2",
+            "damage": "1d6+2",
             "damage_type": "slashing"
           }
         ],
@@ -53,26 +54,25 @@
           "spell_save_dc": 13,
           "spell_attack_bonus": 5,
           "cantrips": [
-            "Light",
-            "Thaumaturgy",
-            "Sacred Flame"
+            "light",
+            "thaumaturgy",
+            "sacred flame"
           ],
           "level_1_spells": [
-            "Bless",
-            "Command",
-            "Cure Wounds",
-            "Detect Magic",
-            "Guiding Bolt",
-            "Healing Word",
-            "Protection from Evil and Good",
-            "Sanctuary",
-            "Shield of Faith"
+            "bless",
+            "command",
+            "cure wounds",
+            "detect magic (ritual)",
+            "guiding bolt",
+            "healing word",
+            "protection from evil and good",
+            "sanctuary",
+            "shield of faith"
           ],
           "prepared_spells": [
-            "Bless",
-            "Cure Wounds",
-            "Guiding Bolt",
-            "Shield of Faith"
+            "bless",
+            "command",
+            "cure wounds"
           ]
         },
         "equipment": [
@@ -90,7 +90,7 @@
           "Waterskin",
           "50 feet of hempen rope",
           "Insignia of rank",
-          "Broken blade from a fallen enemy",
+          "Broken blade as a trophy from a fallen enemy",
           "Set of bone dice",
           "Set of common clothes",
           "Pouch"
@@ -100,21 +100,23 @@
           "Dwarven Resilience",
           "Stonecunning",
           "Dwarven Toughness",
-          "Divine Domain",
+          "Divine Domain: Life",
           "Ritual Casting",
-          "Disciple of Life"
+          "Disciple of Life",
+          "Channel Divinity: Turn Undead",
+          "Channel Divinity: Preserve Life"
         ],
-        "background_story": "You trained as a soldier in the land of Mintarn, and spent time with a mercenary company. You traveled to the city of Neverwinter with your company to serve in both the army and the watch. Over time, you developed distrust with many of your fellow soldiers. They seemed to enjoy their authority and exploited the people they were supposed to protect. Personal Goal: Banish a Shadow of Death. Researching images from your dreams pointed you to Sword Coast, not far from Neverwinter. A remote cloister holds a temple to the dragon god Bahamut, who is a patron of heroes and a champion of justice. Someone at the cloister may hold the key to the impending doom your deity wishes you to avert.",
+        "background_story": "You trained as a soldier in the island of Mintarn and joined a mercenary company...",
         "personality_traits": null,
         "ideals": null,
         "bonds": null,
         "flaws": null,
-        "file_path": "/static/data/stories/ad261aa9/images/characters/sheet_d95225_dwarf1.png",
+        "file_path": "/static/data/stories/198dc8cb/images/characters/sheet_b82fea_dwarf1.png",
         "all_files": [
-          "/static/data/stories/ad261aa9/images/characters/sheet_d95225_dwarf1.png",
-          "/static/data/stories/ad261aa9/images/characters/sheet_e8370d_dwarf2.png"
+          "/static/data/stories/198dc8cb/images/characters/sheet_b82fea_dwarf1.png",
+          "/static/data/stories/198dc8cb/images/characters/sheet_dc1748_dwarf2.png"
         ],
-        "avatar_path": "/static/data/stories/ad261aa9/images/avatars/avatar_2c1d0e.png"
+        "avatar_path": "/static/data/stories/198dc8cb/images/avatars/avatar_19f1d6.png"
       },
       "current_hp": 11,
       "temp_hp": 0,
@@ -134,7 +136,7 @@
         "Waterskin",
         "50 feet of hempen rope",
         "Insignia of rank",
-        "Broken blade from a fallen enemy",
+        "Broken blade as a trophy from a fallen enemy",
         "Set of bone dice",
         "Set of common clothes",
         "Pouch"
@@ -144,6 +146,6 @@
   ],
   "enemy_states": {},
   "chat_history": [],
-  "created_at": "2025-11-23T15:37:35.073837",
-  "updated_at": "2025-11-23T15:37:35.073837"
+  "created_at": "2025-11-23T23:31:15.624817",
+  "updated_at": "2025-11-23T23:31:15.624817"
 }

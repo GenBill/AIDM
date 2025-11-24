@@ -5,7 +5,7 @@
       "title": "Voyage to Stormwreck Isle",
       "type": "transition",
       "read_aloud": "Your journey has been smooth sailing so far. You left the bustling port of Neverwinter a few days ago, heading for an island with the foreboding name of Stormwreck Isle. But you woke this morning to a blood-red sunrise, and dark clouds overhead threaten a violent storm.",
-      "gm_guidance": "Introduce the players to the setting and the impending storm. Use the illustration of the ship at sea to enhance the atmosphere. Prepare for the merrow encounter as the storm intensifies.",
+      "gm_guidance": "Introduce the adventure and set the scene. The players are on a ship heading to Stormwreck Isle. The environment is tense with a storm brewing.",
       "environment": {
         "light": "Dim",
         "terrain": "Water",
@@ -23,18 +23,18 @@
           "condition": null
         }
       ],
-      "image_path": "/static/data/stories/a76eed6e/images/backgrounds/bg_voyage_to_stormwreck_isle_ef19f8.png"
+      "image_path": "/static/data/stories/198dc8cb/images/backgrounds/bg_voyage_to_stormwreck_isle_9ad88f.png"
     },
     "merrow_encounter": {
       "id": "merrow_encounter",
       "title": "Merrow Encounter",
       "type": "encounter",
-      "read_aloud": "“These waters belong to the Scaled Queen. I’m here to collect her tribute.”",
-      "gm_guidance": "The merrow demands a tribute of 400 gp. Players can negotiate using Charisma checks (DC 15) to reduce the tribute by 100 gp per success. If players inquire about the Scaled Queen, the merrow describes her as a huge, two-headed merrow blessed by Demogorgon. If combat ensues, the merrow is not a significant threat and should be defeated in 1-2 rounds.",
+      "read_aloud": "As lightning flashes across the sky, a monster hauls itself up onto the deck! 'These waters belong to the Scaled Queen. I’m here to collect her tribute.'",
+      "gm_guidance": "The merrow demands tribute for the Scaled Queen. Players can negotiate, attack, or use creative solutions. If negotiating, each DC 15 Charisma check reduces the tribute by 100 gp. The merrow is not overly threatening and can be defeated in 1-2 rounds.",
       "environment": {
         "light": "Dim",
         "terrain": "Water",
-        "sound": "Storm",
+        "sound": "Thunder",
         "notes": null
       },
       "entities": [
@@ -46,7 +46,7 @@
           "state": "On deck",
           "disposition": "hostile",
           "extra": {},
-          "image_path": "/static/data/stories/a76eed6e/images/enemies/avatar_Merrow_9c5d0b.png",
+          "image_path": "/static/data/stories/198dc8cb/images/enemies/avatar_Merrow_f847c1.png",
           "stats": {
             "name": "Merrow Extortionist",
             "size": "Large",
@@ -90,7 +90,7 @@
             ],
             "reactions": [],
             "legendary_actions": [],
-            "file_path": "/static/data/stories/a76eed6e/images/enemies/stat_Merrow_e7ebcb.png"
+            "file_path": "/static/data/stories/198dc8cb/images/enemies/stat_Merrow_ba2996.png"
           },
           "source": "custom_upload"
         }
@@ -101,6 +101,12 @@
           "mechanic": "DC 15 Charisma",
           "success": "Cost reduced by 100gp",
           "failure": "Merrow gets angry"
+        },
+        {
+          "trigger": "Creative Solution",
+          "mechanic": "Appropriate ability check",
+          "success": "Merrow is dealt with creatively",
+          "failure": null
         }
       ],
       "loot": [],
@@ -118,7 +124,7 @@
       "title": "Arrival at Dragon's Rest",
       "type": "transition",
       "read_aloud": "Stormwreck Isle—now visible off the bow—promises rare wonders. Seaweed shimmers in countless brilliant colors below you, and rays of sunlight defy the overcast sky to illuminate the lush grass and dark basalt rock of the island.",
-      "gm_guidance": "Describe the approach to Dragon's Rest. Encourage players to introduce their characters and discuss their reasons for visiting. Note the party's marching order as they prepare to disembark.",
+      "gm_guidance": "The ship arrives at Dragon's Rest. Players can introduce their characters and discuss their reasons for visiting. Encourage them to establish a marching order.",
       "environment": {
         "light": "Bright",
         "terrain": "Normal",
@@ -136,30 +142,30 @@
           "condition": null
         }
       ],
-      "image_path": "/static/data/stories/a76eed6e/images/backgrounds/bg_arrival_at_dragons_rest_187354.png"
+      "image_path": "/static/data/stories/198dc8cb/images/backgrounds/bg_arrival_at_dragons_rest_0789e7.png"
     },
     "drowned_sailors_encounter": {
       "id": "drowned_sailors_encounter",
       "title": "Drowned Sailors Encounter",
       "type": "encounter",
-      "read_aloud": "Three figures are shambling up from the water’s edge, about thirty feet away. They’re dressed as sailors, but their skin is gray and they look drowned.",
-      "gm_guidance": "The players can choose to fight or avoid the zombies. If they fight, use the zombie stat block and initiative rules. Highlight the Undead Fortitude trait and how radiant damage affects zombies. If players are defeated, Elder Runara rescues them.",
+      "read_aloud": "As you’re about to leave the beach and start your climb, you hear a ruckus of splashing and a wet, gurgling moan behind you. Three figures are shambling up from the water’s edge, about thirty feet away.",
+      "gm_guidance": "Three zombie sailors approach. Players can fight or flee. Zombies have Undead Fortitude, making them hard to kill. Radiant damage bypasses this. If players are defeated, Elder Runara rescues them.",
       "environment": {
         "light": "Bright",
-        "terrain": "Beach",
-        "sound": "Waves",
+        "terrain": "Normal",
+        "sound": "Splashing water",
         "notes": null
       },
       "entities": [
         {
-          "name": "Zombie",
+          "name": "Zombie Sailor",
           "type": "monster",
           "ref_slug": "zombie",
           "count": 3,
           "state": "Shambling from water",
           "disposition": "hostile",
           "extra": {},
-          "image_path": "/static/data/stories/a76eed6e/images/enemies/avatar_Zombie_d5a6a2.png",
+          "image_path": "/static/data/stories/198dc8cb/images/enemies/avatar_Zombie_Sailor_37a625.png",
           "stats": {
             "name": "Zombie",
             "size": "Medium",
@@ -201,7 +207,7 @@
             ],
             "reactions": [],
             "legendary_actions": [],
-            "file_path": "/static/data/stories/a76eed6e/images/enemies/stat_Zombie_3199ce.png"
+            "file_path": "/static/data/stories/198dc8cb/images/enemies/stat_Zombie_Sailor_1b9c25.png"
           },
           "source": "custom_upload"
         }
@@ -217,19 +223,46 @@
       "loot": [],
       "edges": [
         {
-          "to": "dragon_rest_temple",
+          "to": "dragons_rest_temple",
           "weight": 1.0,
-          "label": "After dealing with the zombies, the path to Dragon's Rest is clear.",
+          "label": "If players defeat or avoid the zombies, they continue to Dragon's Rest.",
           "condition": null
         }
       ]
+    },
+    "dragons_rest_temple": {
+      "id": "dragons_rest_temple",
+      "title": "Dragon's Rest Temple",
+      "type": "roleplay",
+      "read_aloud": "A large, open-air temple comes into view, perched on the edge of a cliff high above you. The ship drops anchor at the mouth of the harbor, and two sailors row you ashore.",
+      "gm_guidance": "Players arrive at Dragon's Rest. They can explore, meet Elder Runara, and learn about the island's dangers. Encourage character interaction and exploration.",
+      "environment": {
+        "light": "Bright",
+        "terrain": "Normal",
+        "sound": "Calm sea",
+        "notes": null
+      },
+      "entities": [
+        {
+          "name": "Elder Runara",
+          "type": "npc",
+          "ref_slug": "elder_runara",
+          "count": 1,
+          "state": "At the temple",
+          "disposition": "friendly",
+          "extra": {}
+        }
+      ],
+      "interactions": [],
+      "loot": [],
+      "edges": []
     }
   },
-  "id": "a76eed6e",
+  "id": "198dc8cb",
   "title": "Intro to Stormwreck Isle",
   "characters": [
     {
-      "name": "Unnamed",
+      "name": "",
       "race": "Hill Dwarf",
       "class_name": "Cleric",
       "subclass": null,
@@ -251,7 +284,6 @@
       },
       "skill_proficiencies": [
         "Athletics",
-        "History",
         "Intimidation"
       ],
       "saving_throw_proficiencies": [
@@ -262,13 +294,13 @@
         {
           "name": "Mace",
           "bonus": 4,
-          "damage": "1d6 + 2",
+          "damage": "1d6+2",
           "damage_type": "bludgeoning"
         },
         {
           "name": "Handaxe",
           "bonus": 4,
-          "damage": "1d6 + 2",
+          "damage": "1d6+2",
           "damage_type": "slashing"
         }
       ],
@@ -276,27 +308,25 @@
         "spell_save_dc": 13,
         "spell_attack_bonus": 5,
         "cantrips": [
-          "Light",
-          "Thaumaturgy",
-          "Sacred Flame"
+          "light",
+          "thaumaturgy",
+          "sacred flame"
         ],
         "level_1_spells": [
-          "Bless",
-          "Command",
-          "Cure Wounds",
-          "Detect Magic (ritual)",
-          "Guiding Bolt",
-          "Healing Word",
-          "Protection from Evil and Good",
-          "Sanctuary",
-          "Shield of Faith"
+          "bless",
+          "command",
+          "cure wounds",
+          "detect magic (ritual)",
+          "guiding bolt",
+          "healing word",
+          "protection from evil and good",
+          "sanctuary",
+          "shield of faith"
         ],
         "prepared_spells": [
-          "Bless",
-          "Command",
-          "Cure Wounds",
-          "Guiding Bolt",
-          "Sanctuary"
+          "bless",
+          "command",
+          "cure wounds"
         ]
       },
       "equipment": [
@@ -326,19 +356,21 @@
         "Dwarven Toughness",
         "Divine Domain: Life",
         "Ritual Casting",
-        "Disciple of Life"
+        "Disciple of Life",
+        "Channel Divinity: Turn Undead",
+        "Channel Divinity: Preserve Life"
       ],
-      "background_story": "Trained as a soldier on the island of Mintarn and joined a mercenary company.",
+      "background_story": "You trained as a soldier in the island of Mintarn and joined a mercenary company...",
       "personality_traits": null,
       "ideals": null,
       "bonds": null,
       "flaws": null,
-      "file_path": "/static/data/stories/a76eed6e/images/characters/sheet_4a503a_dwarf1.png",
+      "file_path": "/static/data/stories/198dc8cb/images/characters/sheet_b82fea_dwarf1.png",
       "all_files": [
-        "/static/data/stories/a76eed6e/images/characters/sheet_4a503a_dwarf1.png",
-        "/static/data/stories/a76eed6e/images/characters/sheet_1644d6_dwarf2.png"
+        "/static/data/stories/198dc8cb/images/characters/sheet_b82fea_dwarf1.png",
+        "/static/data/stories/198dc8cb/images/characters/sheet_dc1748_dwarf2.png"
       ],
-      "avatar_path": "/static/data/stories/a76eed6e/images/avatars/avatar_df6331.png"
+      "avatar_path": "/static/data/stories/198dc8cb/images/avatars/avatar_19f1d6.png"
     }
   ]
 }

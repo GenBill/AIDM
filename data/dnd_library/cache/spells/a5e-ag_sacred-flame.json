@@ -1,0 +1,269 @@
+{
+  "slug": "a5e-ag_sacred-flame",
+  "api_url": "https://api.open5e.com/v2/spells/a5e-ag_sacred-flame/",
+  "data": {
+    "url": "https://api.open5e.com/v2/spells/a5e-ag_sacred-flame/",
+    "document": {
+      "name": "Adventurer's Guide",
+      "key": "a5e-ag",
+      "display_name": "Adventurer's Guide",
+      "publisher": {
+        "name": "EN Publishing",
+        "key": "en-publishing",
+        "url": "https://api.open5e.com/v2/publishers/en-publishing/"
+      },
+      "gamesystem": {
+        "name": "Advanced 5th Edition",
+        "key": "a5e",
+        "url": "https://api.open5e.com/v2/gamesystems/a5e/"
+      },
+      "permalink": "https://a5esrd.com/a5esrd"
+    },
+    "key": "a5e-ag_sacred-flame",
+    "casting_options": [
+      {
+        "type": "default",
+        "damage_roll": null,
+        "target_count": null,
+        "duration": null,
+        "range": null,
+        "concentration": null,
+        "shape_size": null,
+        "desc": null
+      },
+      {
+        "type": "player_level_1",
+        "damage_roll": "",
+        "target_count": null,
+        "duration": null,
+        "range": null,
+        "concentration": null,
+        "shape_size": null,
+        "desc": null
+      },
+      {
+        "type": "player_level_2",
+        "damage_roll": "",
+        "target_count": null,
+        "duration": null,
+        "range": null,
+        "concentration": null,
+        "shape_size": null,
+        "desc": null
+      },
+      {
+        "type": "player_level_3",
+        "damage_roll": "",
+        "target_count": null,
+        "duration": null,
+        "range": null,
+        "concentration": null,
+        "shape_size": null,
+        "desc": null
+      },
+      {
+        "type": "player_level_4",
+        "damage_roll": "",
+        "target_count": null,
+        "duration": null,
+        "range": null,
+        "concentration": null,
+        "shape_size": null,
+        "desc": null
+      },
+      {
+        "type": "player_level_5",
+        "damage_roll": "2d8",
+        "target_count": null,
+        "duration": null,
+        "range": null,
+        "concentration": null,
+        "shape_size": null,
+        "desc": null
+      },
+      {
+        "type": "player_level_6",
+        "damage_roll": "2d8",
+        "target_count": null,
+        "duration": null,
+        "range": null,
+        "concentration": null,
+        "shape_size": null,
+        "desc": null
+      },
+      {
+        "type": "player_level_7",
+        "damage_roll": "2d8",
+        "target_count": null,
+        "duration": null,
+        "range": null,
+        "concentration": null,
+        "shape_size": null,
+        "desc": null
+      },
+      {
+        "type": "player_level_8",
+        "damage_roll": "2d8",
+        "target_count": null,
+        "duration": null,
+        "range": null,
+        "concentration": null,
+        "shape_size": null,
+        "desc": null
+      },
+      {
+        "type": "player_level_9",
+        "damage_roll": "2d8",
+        "target_count": null,
+        "duration": null,
+        "range": null,
+        "concentration": null,
+        "shape_size": null,
+        "desc": null
+      },
+      {
+        "type": "player_level_10",
+        "damage_roll": "2d8",
+        "target_count": null,
+        "duration": null,
+        "range": null,
+        "concentration": null,
+        "shape_size": null,
+        "desc": null
+      },
+      {
+        "type": "player_level_11",
+        "damage_roll": "3d8",
+        "target_count": null,
+        "duration": null,
+        "range": null,
+        "concentration": null,
+        "shape_size": null,
+        "desc": null
+      },
+      {
+        "type": "player_level_12",
+        "damage_roll": "3d8",
+        "target_count": null,
+        "duration": null,
+        "range": null,
+        "concentration": null,
+        "shape_size": null,
+        "desc": null
+      },
+      {
+        "type": "player_level_13",
+        "damage_roll": "3d8",
+        "target_count": null,
+        "duration": null,
+        "range": null,
+        "concentration": null,
+        "shape_size": null,
+        "desc": null
+      },
+      {
+        "type": "player_level_14",
+        "damage_roll": "3d8",
+        "target_count": null,
+        "duration": null,
+        "range": null,
+        "concentration": null,
+        "shape_size": null,
+        "desc": null
+      },
+      {
+        "type": "player_level_15",
+        "damage_roll": "3d8",
+        "target_count": null,
+        "duration": null,
+        "range": null,
+        "concentration": null,
+        "shape_size": null,
+        "desc": null
+      },
+      {
+        "type": "player_level_16",
+        "damage_roll": "3d8",
+        "target_count": null,
+        "duration": null,
+        "range": null,
+        "concentration": null,
+        "shape_size": null,
+        "desc": null
+      },
+      {
+        "type": "player_level_17",
+        "damage_roll": "4d8",
+        "target_count": null,
+        "duration": null,
+        "range": null,
+        "concentration": null,
+        "shape_size": null,
+        "desc": null
+      },
+      {
+        "type": "player_level_18",
+        "damage_roll": "4d8",
+        "target_count": null,
+        "duration": null,
+        "range": null,
+        "concentration": null,
+        "shape_size": null,
+        "desc": null
+      },
+      {
+        "type": "player_level_19",
+        "damage_roll": "4d8",
+        "target_count": null,
+        "duration": null,
+        "range": null,
+        "concentration": null,
+        "shape_size": null,
+        "desc": null
+      },
+      {
+        "type": "player_level_20",
+        "damage_roll": "4d8",
+        "target_count": null,
+        "duration": null,
+        "range": null,
+        "concentration": null,
+        "shape_size": null,
+        "desc": null
+      }
+    ],
+    "school": {
+      "name": "Evocation",
+      "key": "evocation",
+      "url": "https://api.open5e.com/v2/spellschools/evocation/"
+    },
+    "classes": [],
+    "range_unit": "feet",
+    "shape_size_unit": "feet",
+    "name": "Sacred Flame",
+    "desc": "As long as you can see the target (even if it has cover) radiant holy flame envelops it, dealing 1d8 radiant damage.",
+    "level": 0,
+    "higher_level": "This spell's damage increases by 1d8 when you reach 5th level (2d8), 11th level (3d8), and 17th level (4d8).",
+    "target_type": "creature",
+    "range_text": "60 feet",
+    "range": 60.0,
+    "ritual": false,
+    "casting_time": "action",
+    "reaction_condition": null,
+    "verbal": true,
+    "somatic": true,
+    "material": false,
+    "material_specified": "",
+    "material_cost": null,
+    "material_consumed": false,
+    "target_count": 1,
+    "saving_throw_ability": "",
+    "attack_roll": false,
+    "damage_roll": "",
+    "damage_types": [],
+    "duration": "instantaneous",
+    "shape_type": null,
+    "shape_size": null,
+    "concentration": false
+  }
+}

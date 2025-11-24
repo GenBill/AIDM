@@ -383,18 +383,13 @@ def get_session(session_id: str):
 @router.get("/sessions/{session_id}/render")
 def get_session_render_data(session_id: str):
     """
-    获取前端渲染所需的所有数据：
-    1. 玩家状态 (HP, Name, Avatar)
-    2. 当前场景信息 (Title, Background Image, Description)
-    3. 聊天记录
+    获取前端渲染所需的所有数据：包含完整的人物卡
     """
-    # 1. 加载动态 Session
     try:
         session = session_manager.load_session(session_id)
     except FileNotFoundError:
         raise HTTPException(404, detail="Session not found")
 
-    # 2. 加载静态 Story (为了获取当前节点的描述和图片)
     story_path = STORIES_DIR / session.story_id / "story.json"
     if not story_path.exists():
         raise HTTPException(404, detail="Story file missing")
@@ -402,30 +397,23 @@ def get_session_render_data(session_id: str):
     with open(story_path, "r", encoding="utf-8") as f:
         story_data = json.load(f)
     
-    # 获取当前节点数据
     current_node = story_data["nodes"].get(session.current_node_id)
     if not current_node:
-        # 如果找不到节点，可能是一个 bug，或者初始节点设置错了
-        return {"error": f"Node '{session.current_node_id}' not found in story."}
+        return {"error": f"Node '{session.current_node_id}' not found."}
 
-    # 3. 提取玩家信息 (单人模式取第一个)
     player = session.players[0]
     
-    # 4. 组装返回数据
     return {
         "session_id": session.session_id,
         "character": {
             "name": player.name,
             "hp_current": player.current_hp,
-            "hp_max": player.character_sheet.hp_max,
-            "class_name": player.character_sheet.class_name,
-            "level": player.character_sheet.level,
-            # 如果没有头像，用默认占位图
+            # 关键修改：直接把整个 character_sheet 传回去，让前端去解析细节
+            "sheet": player.character_sheet.model_dump(by_alias=True), 
             "avatar": player.character_sheet.avatar_path or "https://placehold.co/100x100/333/ccc?text=Avatar"
         },
         "scene": {
             "title": current_node.get("title", "Unknown Location"),
-            # 昨天的背景图功能在这里生效
             "image": current_node.get("image_path", ""), 
             "type": current_node.get("type", "transition")
         },
@@ -434,7 +422,23 @@ def get_session_render_data(session_id: str):
 
 @router.post("/sessions/{session_id}/action", response_model=DMResponse)
 def process_game_action(session_id: str, req: GameActionRequest):
+    """正常推进剧情 (Action)"""
     try:
         return ai_dm.process_turn(session_id, req.action)
     except Exception as e:
+        print(f"AI Error: {e}")
+        raise HTTPException(500, detail=str(e))
+    
+# --- 新增：询问接口 (Query) ---
+@router.post("/sessions/{session_id}/query", response_model=DMResponse)
+def process_game_query(session_id: str, req: GameActionRequest):
+    """
+    玩家提问 (Query)
+    特点：不推进时间，不触发转场，只回答问题 (Lore/Rules)
+    """
+    try:
+        # 调用 ai_dm 的新方法 (稍后实现)
+        return ai_dm.process_query(session_id, req.action)
+    except Exception as e:
+        print(f"AI Query Error: {e}")
         raise HTTPException(500, detail=str(e))

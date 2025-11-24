@@ -1,4 +1,4 @@
-# aidnd_tools.py
+# catalog.py
 """
 All system-implemented tool functions live here.
 These tools are imported and invoked by the workflow/orchestrator.

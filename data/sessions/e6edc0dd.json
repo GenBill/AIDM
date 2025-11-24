@@ -1,0 +1,200 @@
+{
+  "session_id": "e6edc0dd",
+  "story_id": "198dc8cb",
+  "title": "zxvc's Journey",
+  "current_node_id": "voyage_to_stormwreck_isle",
+  "current_node_turns": 5,
+  "players": [
+    {
+      "name": "zxvc",
+      "character_sheet": {
+        "name": "",
+        "race": "Hill Dwarf",
+        "class_name": "Cleric",
+        "subclass": null,
+        "level": 1,
+        "background": "Soldier",
+        "alignment": "Lawful Good",
+        "hp_max": 11,
+        "ac": 18,
+        "speed": 25,
+        "initiative": -1,
+        "proficiency_bonus": 2,
+        "abilities": {
+          "strength": 14,
+          "dexterity": 8,
+          "constitution": 15,
+          "intelligence": 10,
+          "wisdom": 16,
+          "charisma": 12
+        },
+        "skill_proficiencies": [
+          "Athletics",
+          "Intimidation"
+        ],
+        "saving_throw_proficiencies": [
+          "Wisdom",
+          "Charisma"
+        ],
+        "attacks": [
+          {
+            "name": "Mace",
+            "bonus": 4,
+            "damage": "1d6+2",
+            "damage_type": "bludgeoning"
+          },
+          {
+            "name": "Handaxe",
+            "bonus": 4,
+            "damage": "1d6+2",
+            "damage_type": "slashing"
+          }
+        ],
+        "spellcasting": {
+          "spell_save_dc": 13,
+          "spell_attack_bonus": 5,
+          "cantrips": [
+            "light",
+            "thaumaturgy",
+            "sacred flame"
+          ],
+          "level_1_spells": [
+            "bless",
+            "command",
+            "cure wounds",
+            "detect magic (ritual)",
+            "guiding bolt",
+            "healing word",
+            "protection from evil and good",
+            "sanctuary",
+            "shield of faith"
+          ],
+          "prepared_spells": [
+            "bless",
+            "command",
+            "cure wounds"
+          ]
+        },
+        "equipment": [
+          "Chain mail",
+          "Shield",
+          "Mace",
+          "Handaxe",
+          "Holy symbol",
+          "Backpack",
+          "Bedroll",
+          "Mess kit",
+          "Tinderbox",
+          "10 torches",
+          "10 days of rations",
+          "Waterskin",
+          "50 feet of hempen rope",
+          "Insignia of rank",
+          "Broken blade as a trophy from a fallen enemy",
+          "Set of bone dice",
+          "Set of common clothes",
+          "Pouch"
+        ],
+        "features": [
+          "Darkvision",
+          "Dwarven Resilience",
+          "Stonecunning",
+          "Dwarven Toughness",
+          "Divine Domain: Life",
+          "Ritual Casting",
+          "Disciple of Life",
+          "Channel Divinity: Turn Undead",
+          "Channel Divinity: Preserve Life"
+        ],
+        "background_story": "You trained as a soldier in the island of Mintarn and joined a mercenary company...",
+        "personality_traits": null,
+        "ideals": null,
+        "bonds": null,
+        "flaws": null,
+        "file_path": "/static/data/stories/198dc8cb/images/characters/sheet_b82fea_dwarf1.png",
+        "all_files": [
+          "/static/data/stories/198dc8cb/images/characters/sheet_b82fea_dwarf1.png",
+          "/static/data/stories/198dc8cb/images/characters/sheet_dc1748_dwarf2.png"
+        ],
+        "avatar_path": "/static/data/stories/198dc8cb/images/avatars/avatar_19f1d6.png"
+      },
+      "current_hp": 11,
+      "temp_hp": 0,
+      "conditions": [],
+      "inventory": [
+        "Chain mail",
+        "Shield",
+        "Mace",
+        "Handaxe",
+        "Holy symbol",
+        "Backpack",
+        "Bedroll",
+        "Mess kit",
+        "Tinderbox",
+        "10 torches",
+        "10 days of rations",
+        "Waterskin",
+        "50 feet of hempen rope",
+        "Insignia of rank",
+        "Broken blade as a trophy from a fallen enemy",
+        "Set of bone dice",
+        "Set of common clothes",
+        "Pouch"
+      ],
+      "position": "default"
+    }
+  ],
+  "enemy_states": {},
+  "chat_history": [
+    {
+      "role": "user",
+      "content": "where am i"
+    },
+    {
+      "role": "assistant",
+      "content": "You find yourself on the creaking deck of a ship, bound for the mysterious Stormwreck Isle. The sky above is a tumultuous expanse, a storm rolling in with clouds swollen like bruised fruit threatening to burst at any moment. The salty spray of the sea splashes over the side, the air thick with the scent of brine and the sharp tang of tension. Fellow passengers, faces anxious and drawn, clutch the rails or peer into the distance, as if hoping to catch a glimpse of land. The crew moves swiftly about their duties, eyes often cast upward at the darkening sky. The captain stands at the helm, his gaze fixed forward, unyielding in the face of nature's fury."
+    },
+    {
+      "role": "user",
+      "content": "I wandering around the deck"
+    },
+    {
+      "role": "assistant",
+      "content": "As you wander around the deck of the ship, the wood softly creaking beneath your feet, you observe the crew as they work diligently to prepare for the incoming storm. You see sailors tightening ropes and securing the sails, a couple of them nodding at you while they hustle. The atmosphere is charged, both in anticipation of the approaching storm and the journey’s destination.\n\nYou pass by other passengers, some murmuring among themselves in hushed tones. The waves splash against the sides of the ship, occasionally sending a spray over the deck. Off to the side, you notice a fellow traveler staring out at the sea, likely praying for safe passage.\n\nYour steps take you toward the bow of the ship, where the captain stands, overseeing the operations, a weary but determined look etched into his weathered face. From here, the ship seems to cut through the waves with a purpose, onward to the mysterious lands of Stormwreck Isle."
+    },
+    {
+      "role": "user",
+      "content": "I keep alert"
+    },
+    {
+      "role": "data",
+      "content": "Perception Roll: 1d20(5) + 3 = 8\n[Verified Details]:\nCheck: Rolled 1d20+3 => 8"
+    },
+    {
+      "role": "assistant",
+      "content": "You maintain your stance on the deck, keeping a vigilant watch on the activities around you. However, as the ship pitches and rolls with the waves, it's difficult to maintain a solid footing and stay fully alert. Occasionally your eyes are distracted by a dramatic flash of distant lightning, and the reality of the impending storm is hard to ignore. Despite your best efforts, important details elude you at the moment, with the sea's chaos commanding most of your attention."
+    },
+    {
+      "role": "user",
+      "content": "what to do now"
+    },
+    {
+      "role": "assistant",
+      "content": "The ship continues its voyage through the unsettled sea, and as the storm looms overhead, there's a sense that everyone aboard shares the same nervous energy. Here are a few things you might consider doing:\n\n1. **Talk to the Crew**: Engaging with the crew might provide you with valuable insight into the voyage and the conditions ahead. They might even have stories or tips about Stormwreck Isle.\n\n2. **Prepare for the Storm**: With your Athletics skill, you could lend a hand securing the ship against the storm's fury, which might earn you some goodwill with the crew.\n\n3. **Interact with Fellow Passengers**: Getting to know other travelers could build alliances for whatever might await on Stormwreck Isle.\n\n4. **Explore Below Deck**: You might want to see how the interior of the ship is faring and if there's anything of interest or perhaps some trouble brewing there.\n\nThese actions can both enrich your current journey and prepare you for what lies ahead at the isle."
+    },
+    {
+      "role": "user",
+      "content": "prepare for the storm"
+    },
+    {
+      "role": "data",
+      "content": "Athletics Check: 1d20(18) + 2 = 20. Success!\n[Verified Details]:\nCheck: Rolled 1d20+2 => 20"
+    },
+    {
+      "role": "assistant",
+      "content": "With determination, you spring into action, your strong stride steady against the swaying of the vessel. As the storm draws nearer, dark clouds swirling ominously overhead, you quickly join the sailors at the ropes, your natural athleticism coming to the fore. Tackling the task with skill and strength, you assist in tightening the sails and securing loose items on the deck. Your actions not only prevent potential disaster but also win the appreciative nods of several crew members, who are clearly impressed by your competence and helpfulness."
+    }
+  ],
+  "created_at": "2025-11-24T15:45:45.968572",
+  "updated_at": "2025-11-24T15:49:24.896688"
+}

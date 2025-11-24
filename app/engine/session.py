@@ -48,8 +48,9 @@ class SessionManager:
         session = GameSession(
             session_id=session_id,
             story_id=request.story_id,
-            title=f"{request.player_name}'s Journey in {story_data.get('title', 'Unknown')}",
+            title=f"{request.player_name}'s Journey",
             current_node_id=start_node_id,
+            current_node_turns=0,  # <--- 初始化为 0
             players=[player_state],
             chat_history=[], 
             created_at=now,
