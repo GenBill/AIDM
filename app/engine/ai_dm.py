@@ -218,26 +218,86 @@ class DungeonMasterAI:
             
             welcome_text = f"\n\n[Entered: {new_node.get('title')}]\n" + (new_node.get('read_aloud') or "")
             
-            # === 插入：遭遇战图片生成逻辑 ===
+            # === 插入：遭遇战图片生成逻辑 (多模态版) ===
+            # === 插入：遭遇战图片生成逻辑 (多模态版 + 路径修复 + 调试日志) ===
             if new_node.get("type") == "encounter" and client_google:
-                print(f"🎨 Generating encounter art for: {new_node.get('title')}")
+                print(f"🎨 [GenAI] Preparing encounter art for: {new_node.get('title')}")
                 try:
+                    from PIL import Image
+                    from app.config import BASE_DIR # 确保引入项目根目录路径
+
+                    # --- 定义带调试功能的图片加载函数 ---
+                    def load_image(rel_path, label):
+                        if not rel_path:
+                            print(f"   ⚠️ [Image Load] No path provided for {label}")
+                            return None
+                        
+                        # 1. 清洗路径：去掉开头的 /
+                        clean_path = rel_path.lstrip("/").lstrip("\\")
+
+                        if clean_path.startswith("static/"):
+                            clean_path = clean_path[len("static/"):]
+    
+                        # 如果以 "static\\" 开头（Windows），也删除
+                        if clean_path.startswith("static\\"):
+                            clean_path = clean_path[len("static\\"):]
+                        
+                        # 2. 拼接绝对路径 (BASE_DIR 是项目根目录)
+                        abs_path = BASE_DIR / clean_path
+                        
+                        print(f"   🔍 [Image Load] Trying to load {label} from: {abs_path}")
+                        
+                        if abs_path.exists():
+                            try:
+                                img = Image.open(abs_path)
+                                print(f"   ✅ [Image Load] Loaded {label} successfully.")
+                                return img
+                            except Exception as e:
+                                print(f"   ❌ [Image Load] File exists but failed to open {label}: {e}")
+                                return None
+                        else:
+                            print(f"   ❌ [Image Load] File NOT FOUND: {abs_path}")
+                            return None
+
+                    # 1. 收集素材
                     enemy_name = new_node.get("entities", [{}])[0].get("name", "Monster")
                     scene_desc = new_node.get("read_aloud") or new_node.get("title")
                     player_desc = f"{player.character_sheet.race} {player.character_sheet.class_name}"
                     
+                    # 2. 加载参考图 (带调试信息)
+                    print("   --- Loading Reference Images ---")
+                    bg_img = load_image(current_node.get("image_path"), "Background")
+                    player_img = load_image(player.character_sheet.avatar_path, "Player Avatar")
+                    enemy_img = load_image(new_node.get("entities", [{}])[0].get("image_path"), "Enemy Avatar")
+
+                    # 3. 构建 Prompt
                     image_prompt = (
-                        f"Fantasy RPG concept art, high quality, cinematic lighting. "
-                        f"Scene: {scene_desc}. "
-                        f"Foreground Action: A {player_desc} confronting a {enemy_name}. "
-                        f"Atmosphere: Tense, dramatic shadows, detailed textures. "
-                        f"No text, no watermark, no modern objects."
+                        f"Fantasy RPG concept art, high quality, cinematic lighting.Dungeon and Dragons style. The references characters are all dnd characters. Make "
+                        f"Scene description: {scene_desc}. "
+                        f"Composition: A fierce {enemy_name} (This is the enemy, see reference image) is confronting a {player_desc} (This is the player, see reference image).Make them face each other in a dynamic pose, ready for battle. Make sure the scene only contains these reference characters. "
+                        f"Background: Consistent with the provided background reference image. "
+                        f"Atmosphere: Tense, dramatic shadows, detailed textures. No text."
                     )
 
-                    # ✅ 新版：用 Gemini Image 模型直接生成图片
+                    # 4. 打包内容 (Prompt + 成功加载的图片)
+                    gen_contents = [image_prompt]
+                    loaded_count = 0
+                    if bg_img: 
+                        gen_contents.append(bg_img)
+                        loaded_count += 1
+                    if player_img: 
+                        gen_contents.append(player_img)
+                        loaded_count += 1
+                    if enemy_img: 
+                        gen_contents.append(enemy_img)
+                        loaded_count += 1
+                    
+                    print(f"   🚀 [GenAI] Sending request with {loaded_count} reference images...")
+
+                    # 5. 调用 Google GenAI
                     response = client_google.models.generate_content(
                         model="gemini-2.5-flash-image",
-                        contents=image_prompt,
+                        contents=gen_contents,
                         config=types.GenerateContentConfig(
                             response_modalities=["IMAGE"],
                             safety_settings=[
@@ -249,7 +309,7 @@ class DungeonMasterAI:
                         )
                     )
 
-                    # 取图片 bytes
+                    # 6. 解析并保存结果
                     generated_image_bytes = None
                     try:
                         for part in response.candidates[0].content.parts:
@@ -260,27 +320,27 @@ class DungeonMasterAI:
                         generated_image_bytes = None
                     
                     if generated_image_bytes:
-                        # 1. 确保目录存在
                         encounter_images_dir = STORIES_DIR / session.story_id / "images" / "encounters"
                         os.makedirs(encounter_images_dir, exist_ok=True)
                         
-                        # 2. 保存图片
                         image_filename = f"gen_{uuid.uuid4().hex[:8]}.png"
                         image_full_path = encounter_images_dir / image_filename
                         with open(image_full_path, "wb") as f_img:
                             f_img.write(generated_image_bytes)
                         
-                        # 3. 更新 JSON
                         web_path = f"/static/data/stories/{session.story_id}/images/encounters/{image_filename}"
                         story_data["nodes"][dm_decision.transition_to_id]["image_path"] = web_path
                         
                         with open(story_path, "w", encoding="utf-8") as f:
                             json.dump(story_data, f, indent=2, ensure_ascii=False)
-                        print(f"✅ Image generated: {web_path}")
+                        print(f"   ✅ [GenAI] Image saved to: {web_path}")
+                    else:
+                        print("   ⚠️ [GenAI] API returned no image data.")
 
                 except Exception as e:
-                    print(f"❌ Google Image Gen Error: {e}")
-            # =================================
+                    print(f"   ❌ [GenAI] Critical Error: {e}")
+            # =================================================
+            # =================================================
 
             session.chat_history.append({"role": "assistant", "content": welcome_text})
             dm_decision.narrative += welcome_text

@@ -23,10 +23,11 @@ The input text may be narrative and lack explicit structured data. **You must in
 # Data Structure Rules
 
 ## 1. Scene Segmentation
-Break the text into a **JSON List** of Scene Nodes. Do not create duplicated same node!! You should create a directed acyclic graph, which means you cannot backtrack. Create a new node whenever:
+Break the text into a **JSON List** of Scene Nodes. Do not create duplicated same node!! Important: YOU MUST create a directed acyclic graph, which means you cannot backtrack. Create a new node whenever:
 * The location changes.
 * A specific encounter (Combat/Social) begins.
 * The narrative "chapter" shifts.
+Important: YOU MUST create a directed acyclic graph!
 
 ## 2. Field Extraction Guidelines
 * **id**: Snake_case unique identifier (e.g., `merrow_encounter`).

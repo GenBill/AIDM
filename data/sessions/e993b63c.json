@@ -1,14 +1,14 @@
 {
-  "session_id": "8453f093",
-  "story_id": "1215d65f",
-  "title": "hhh's Journey",
-  "current_node_id": "merrow_encounter",
-  "current_node_turns": 0,
+  "session_id": "e993b63c",
+  "story_id": "eb94688e",
+  "title": "fff's Journey",
+  "current_node_id": "introduction_scene",
+  "current_node_turns": 1,
   "players": [
     {
-      "name": "hhh",
+      "name": "fff",
       "character_sheet": {
-        "name": "Unnamed",
+        "name": "Unknown",
         "race": "Hill Dwarf",
         "class_name": "Cleric",
         "subclass": null,
@@ -40,13 +40,13 @@
           {
             "name": "Mace",
             "bonus": 4,
-            "damage": "1d6 + 2",
+            "damage": "1d6+2",
             "damage_type": "bludgeoning"
           },
           {
             "name": "Handaxe",
             "bonus": 4,
-            "damage": "1d6 + 2",
+            "damage": "1d6+2",
             "damage_type": "slashing"
           }
         ],
@@ -71,9 +71,8 @@
           ],
           "prepared_spells": [
             "Bless",
-            "Cure Wounds",
-            "Guiding Bolt",
-            "Shield of Faith"
+            "Command",
+            "Cure Wounds"
           ]
         },
         "equipment": [
@@ -91,32 +90,34 @@
           "Waterskin",
           "50 feet of hempen rope",
           "Insignia of rank",
-          "Broken blade",
+          "Broken blade as a trophy from a fallen enemy",
           "Set of bone dice",
           "Set of common clothes",
           "Pouch"
         ],
         "features": [
+          "Divine Domain: Life",
+          "Ritual Casting",
+          "Disciple of Life",
           "Darkvision",
           "Dwarven Resilience",
           "Stonecunning",
           "Dwarven Toughness",
           "Channel Divinity",
-          "Ritual Casting",
-          "Disciple of Life",
+          "Turn Undead",
           "Preserve Life"
         ],
-        "background_story": "You trained as a soldier on the island of Mintarn and joined a mercenary company. You traveled to the city of Neverwinter with your company to serve in both the army and the city watch.",
-        "personality_traits": "Certain of your deity’s wishes, you resigned your post and set out on your quest.",
-        "ideals": "Responsibility and loyalty to your allies.",
-        "bonds": "Standing against death and injustice.",
-        "flaws": "Dismissive of dreams and portents.",
-        "file_path": "/static/data/stories/1215d65f/images/characters/sheet_6f2953_dwarf1.png",
+        "background_story": "You trained as a soldier in the land of Mintearn and joined a mercenary company. You traveled to the city of Neverwinter with your company to serve in both the army and the city watch. Over time, you clashed visibly with many of your fellow soldiers. They seemed to enjoy their authority and subjugate the people they’re supposed to protect. Your background shaped your character as a righteous warrior. You learned several languages in the course of your military career (shown in “Languages” on page 1).",
+        "personality_traits": null,
+        "ideals": null,
+        "bonds": null,
+        "flaws": null,
+        "file_path": "/static/data/stories/eb94688e/images/characters/sheet_501e9a_dwarf1.png",
         "all_files": [
-          "/static/data/stories/1215d65f/images/characters/sheet_6f2953_dwarf1.png",
-          "/static/data/stories/1215d65f/images/characters/sheet_3434bf_dwarf2.png"
+          "/static/data/stories/eb94688e/images/characters/sheet_501e9a_dwarf1.png",
+          "/static/data/stories/eb94688e/images/characters/sheet_265a59_dwarf2.png"
         ],
-        "avatar_path": "/static/data/stories/1215d65f/images/avatars/avatar_0e6a51.png"
+        "avatar_path": "/static/data/stories/eb94688e/images/avatars/avatar_04461f.png"
       },
       "current_hp": 11,
       "temp_hp": 0,
@@ -136,7 +137,7 @@
         "Waterskin",
         "50 feet of hempen rope",
         "Insignia of rank",
-        "Broken blade",
+        "Broken blade as a trophy from a fallen enemy",
         "Set of bone dice",
         "Set of common clothes",
         "Pouch"
@@ -147,22 +148,14 @@
   "enemy_states": {},
   "chat_history": [
     {
-      "role": "assistant",
-      "content": "\n\n[Entered: Merrow Encounter]\nAs lightning flashes across the sky, a monster hauls itself up onto the deck! 'These waters belong to the Scaled Queen. I’m here to collect her tribute.'"
-    },
-    {
       "role": "user",
       "content": "where am i"
     },
     {
-      "role": "data",
-      "content": "N/A"
-    },
-    {
       "role": "assistant",
-      "content": "As you look around the deck of the ship you're on, the creaking wood and the salty sea air serve as reminders of your voyage. You're currently on a merchant vessel bound for Stormwreck Isle, a place known for its treacherous waters and rumored treasures. You set sail from the lively port of Neverwinter, and despite the ominous skies, your spirits remain high.\n\nYou notice the crew going about their tasks with a sense of urgency, likely due to the approaching storm. The captain stands at the helm barking orders to keep the ship steady as the winds pick up.\n\nAs you ponder the day's journey, you suddenly hear a massive splash nearby. Turning to look, you see a monstrous figure emerging from the sea, its scaled body glistening with water as it hauls itself onto the deck before you.\n\n[Entered: Merrow Encounter]\nAs lightning flashes across the sky, a monster hauls itself up onto the deck! 'These waters belong to the Scaled Queen. I’m here to collect her tribute.'"
+      "content": "You find yourself in a grand room hall that stretches seemingly endlessly. The walls are adorned with tapestries depicting tales of ancient heroes and mythical creatures. Shafts of light penetrate through tall, stained glass windows casting vibrant patterns on the marble floor. At the center of this vast expanse lies a large, intricately carved wooden table, surrounded by comfortable chairs. On the table, various maps and scrolls are spread out, inviting an allure of adventure yet to be fully realized.\n\nThis is the gathering place for heroes before they set out on their quests, a room built for strategizing and fellowship. The air smells faintly of aged parchment and the lingering aroma of a feast once served.\n\nYou stand ready to embark on a great journey, the beginning of legendary tales waiting to be penned."
     }
   ],
-  "created_at": "2025-11-24T21:04:00.072667",
-  "updated_at": "2025-11-24T21:04:13.490416"
+  "created_at": "2025-11-25T15:59:47.777142",
+  "updated_at": "2025-11-25T16:00:08.930675"
 }
