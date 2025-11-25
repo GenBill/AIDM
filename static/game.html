@@ -81,6 +81,10 @@
     .chat-tab:hover { background: #333; }
     .chat-tab.active { color: #ff9800; border-bottom: 2px solid #ff9800; background: #2c2c2c; }
     .chat-tab.active.query { color: #29b6f6; border-bottom-color: #29b6f6; }
+    
+    /* --- 新增：Fight Tab 样式 --- */
+    .chat-tab.active.fight { color: #ff5252; border-bottom-color: #ff5252; background: #2b1b1b; } 
+    /* -------------------------- */
 
     .chat-history {
       flex: 1 1 auto;
@@ -93,7 +97,8 @@
       scroll-behavior: smooth;
       overscroll-behavior: contain;
     }
-    #chatBoxQuery { display: none; }
+    /* 默认隐藏非活跃对话框 */
+    .chat-history.hidden { display: none !important; }
 
     .input-area {
       padding: 16px 20px;
@@ -111,6 +116,11 @@
       background: #ff9800; color: #000; border: none; padding: 8px 24px; border-radius: 4px; font-weight: bold; cursor: pointer;
     }
     button#sendBtn.query-mode { background: #29b6f6; color: #000; }
+    
+    /* --- 新增：Fight Button 样式 --- */
+    button#sendBtn.fight-mode { background: #d32f2f; color: #fff; }
+    button#sendBtn.fight-mode:hover { background: #b71c1c; }
+    /* ----------------------------- */
 
     /* === Sidebar === */
     .stats-sidebar {
@@ -165,14 +175,20 @@
 
     <div class="chat-panel">
       <div class="chat-tabs">
-        <div class="chat-tab active" id="tabAction" onclick="switchMode('action')">⚔️ Action (Advance Story)</div>
-        <div class="chat-tab" id="tabQuery" onclick="switchMode('query')">🔍 Query (Ask DM)</div>
+        <div class="chat-tab active" id="tabAction" onclick="switchMode('action')">⚔️ Action</div>
+        <div class="chat-tab" id="tabFight" onclick="switchMode('fight')">🔥 Fight</div>
+        <div class="chat-tab" id="tabQuery" onclick="switchMode('query')">🔍 Query</div>
       </div>
 
       <div class="chat-history" id="chatBoxAction">
         <div class="msg msg-system">Session Initialized.</div>
       </div>
-      <div class="chat-history" id="chatBoxQuery">
+      
+      <div class="chat-history hidden" id="chatBoxFight">
+        <div class="msg msg-system" style="color:#ef5350;">COMBAT MODE ENGAGED. strict turn-based rules active.</div>
+      </div>
+      
+      <div class="chat-history hidden" id="chatBoxQuery">
         <div class="msg msg-system">Query channel ready. Ask anything about lore/rules.</div>
       </div>
 
@@ -238,17 +254,19 @@
   const sessionId = params.get('session_id');
 
   const chatBoxAction = document.getElementById('chatBoxAction');
+  const chatBoxFight  = document.getElementById('chatBoxFight'); // 新增
   const chatBoxQuery  = document.getElementById('chatBoxQuery');
   let currentMode = 'action';
 
+  // 简单的 history 管理：因为没有后端 role 分流，暂时把所有历史都塞 Action，
+  // 之后的实时对话会根据 tab 分流到各自的框
   const actionHistory = [];
-  const queryHistory  = [];
+  // const fightHistory = []; // 如果需要记忆 fight，可以启用
+  // const queryHistory  = [];
 
   function getActiveChatBox() {
+    if (currentMode === 'fight') return chatBoxFight; // 新增
     return currentMode === 'action' ? chatBoxAction : chatBoxQuery;
-  }
-  function getActiveHistory() {
-    return currentMode === 'action' ? actionHistory : queryHistory;
   }
 
   async function initGame() {
@@ -265,35 +283,27 @@
       renderCharacterSheet(data.character);
 
       seedActionHistory(data.history || []);
-      renderActiveHistory();
+      // renderActiveHistory(); // 不再重绘整个，只显示 DOM 里的
     } catch (e) {
       console.error("Init error:", e);
     }
   }
 
   function seedActionHistory(serverHistory) {
-    actionHistory.length = 0;
+    chatBoxAction.innerHTML = '<div class="msg msg-system">Session Initialized.</div>';
     if (serverHistory && serverHistory.length) {
       for (const msg of serverHistory) {
-        actionHistory.push({ role: msg.role, content: msg.content });
+        // 简单 heuristic: query 历史放到 query tab, 其他放到 action tab
+        // 但为了简单起见，初始化时所有历史都显示在 Action 框里作为背景
+        addMessageToBox(chatBoxAction, msg.role, msg.content);
       }
     } else {
-      actionHistory.push({ role: "dm", content: "The adventure begins..." });
+      addMessageToBox(chatBoxAction, "dm", "The adventure begins...");
     }
-  }
-
-  function renderActiveHistory() {
-    const box = getActiveChatBox();
-    const hist = getActiveHistory();
-
-    box.innerHTML = "";
-    for (const m of hist) addMessageToBox(box, m.role, m.content);
-    box.scrollTop = box.scrollHeight;
+    chatBoxAction.scrollTop = chatBoxAction.scrollHeight;
   }
 
   function addMessage(role, text) {
-    const hist = getActiveHistory();
-    hist.push({ role, content: text });
     const box = getActiveChatBox();
     addMessageToBox(box, role, text);
     box.scrollTop = box.scrollHeight;
@@ -393,29 +403,49 @@
     if (currentMode === mode) return;
     currentMode = mode;
 
-    document.getElementById('tabAction').classList.remove('active', 'query');
-    document.getElementById('tabQuery').classList.remove('active', 'query');
+    // 1. 重置 Tab 样式
+    ['tabAction', 'tabFight', 'tabQuery'].forEach(id => {
+        const el = document.getElementById(id);
+        el.classList.remove('active', 'query', 'fight');
+    });
 
-    const activeTab = document.getElementById(mode === 'action' ? 'tabAction' : 'tabQuery');
+    // 2. 激活当前 Tab
+    const activeTabMap = { 'action': 'tabAction', 'fight': 'tabFight', 'query': 'tabQuery' };
+    const activeTab = document.getElementById(activeTabMap[mode]);
     activeTab.classList.add('active');
     if (mode === 'query') activeTab.classList.add('query');
+    if (mode === 'fight') activeTab.classList.add('fight'); // RED
 
-    chatBoxAction.style.display = (mode === 'action') ? "flex" : "none";
-    chatBoxQuery.style.display  = (mode === 'query')  ? "flex" : "none";
+    // 3. 切换 Chat Box 显示 (使用 class hidden)
+    ['chatBoxAction', 'chatBoxFight', 'chatBoxQuery'].forEach(id => {
+        document.getElementById(id).classList.add('hidden');
+    });
+    
+    const activeBoxMap = { 'action': 'chatBoxAction', 'fight': 'chatBoxFight', 'query': 'chatBoxQuery' };
+    const activeBox = document.getElementById(activeBoxMap[mode]);
+    activeBox.classList.remove('hidden');
+    activeBox.scrollTop = activeBox.scrollHeight;
 
+    // 4. 更新按钮和输入框
     const btn = document.getElementById('sendBtn');
     const input = document.getElementById('playerInput');
+    
+    // Reset classes
+    btn.className = ''; 
+    
     if (mode === 'action') {
       btn.innerText = "Take Action";
-      btn.classList.remove('query-mode');
       input.placeholder = "Describe your action...";
+    } else if (mode === 'fight') {
+      btn.innerText = "Attack";
+      btn.classList.add('fight-mode'); // RED button
+      input.placeholder = "E.g. 'Use Mace', 'Cast Sacred Flame'";
     } else {
       btn.innerText = "Ask DM";
       btn.classList.add('query-mode');
       input.placeholder = "Ask a question about lore or rules...";
     }
 
-    renderActiveHistory();
     input.focus();
   }
 
@@ -437,7 +467,11 @@
     box.appendChild(loadingDiv);
     box.scrollTop = box.scrollHeight;
 
-    const endpoint = currentMode === 'action' ? 'action' : 'query';
+    // --- 关键：根据 Mode 选择后端接口 ---
+    // Action -> /action
+    // Fight  -> /fight
+    // Query  -> /query
+    const endpoint = currentMode; 
 
     try {
       const res = await fetch("/sessions/" + sessionId + "/" + endpoint, {
@@ -454,7 +488,16 @@
       if (data.mechanics_log) addMessage('data', data.mechanics_log);
       addMessage('dm', data.narrative);
 
-      if (currentMode === 'action') refreshStatus();
+      // --- 新增：自动 Tab 切换逻辑 ---
+      if (data.active_mode) {
+          console.log("Auto-switching to:", data.active_mode);
+          switchMode(data.active_mode);
+      }
+      // ----------------------------
+
+      // 只有 Action 和 Fight 模式才刷新血条
+      if (currentMode !== 'query') refreshStatus();
+      
     } catch (e) {
       document.getElementById(loadingId).innerText = "Error: " + e.message;
     } finally {

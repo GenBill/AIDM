@@ -1,0 +1,164 @@
+{
+  "session_id": "f9b9e8b7",
+  "story_id": "1215d65f",
+  "title": "gggz's Journey",
+  "current_node_id": "merrow_encounter",
+  "current_node_turns": 0,
+  "players": [
+    {
+      "name": "gggz",
+      "character_sheet": {
+        "name": "Unnamed",
+        "race": "Hill Dwarf",
+        "class_name": "Cleric",
+        "subclass": null,
+        "level": 1,
+        "background": "Soldier",
+        "alignment": "Lawful Good",
+        "hp_max": 11,
+        "ac": 18,
+        "speed": 25,
+        "initiative": -1,
+        "proficiency_bonus": 2,
+        "abilities": {
+          "strength": 14,
+          "dexterity": 8,
+          "constitution": 15,
+          "intelligence": 10,
+          "wisdom": 16,
+          "charisma": 12
+        },
+        "skill_proficiencies": [
+          "Athletics",
+          "Intimidation"
+        ],
+        "saving_throw_proficiencies": [
+          "Wisdom",
+          "Charisma"
+        ],
+        "attacks": [
+          {
+            "name": "Mace",
+            "bonus": 4,
+            "damage": "1d6 + 2",
+            "damage_type": "bludgeoning"
+          },
+          {
+            "name": "Handaxe",
+            "bonus": 4,
+            "damage": "1d6 + 2",
+            "damage_type": "slashing"
+          }
+        ],
+        "spellcasting": {
+          "spell_save_dc": 13,
+          "spell_attack_bonus": 5,
+          "cantrips": [
+            "Light",
+            "Thaumaturgy",
+            "Sacred Flame"
+          ],
+          "level_1_spells": [
+            "Bless",
+            "Command",
+            "Cure Wounds",
+            "Detect Magic (ritual)",
+            "Guiding Bolt",
+            "Healing Word",
+            "Protection from Evil and Good",
+            "Sanctuary",
+            "Shield of Faith"
+          ],
+          "prepared_spells": [
+            "Bless",
+            "Cure Wounds",
+            "Guiding Bolt",
+            "Shield of Faith"
+          ]
+        },
+        "equipment": [
+          "Chain mail",
+          "Shield",
+          "Mace",
+          "Handaxe",
+          "Holy symbol",
+          "Backpack",
+          "Bedroll",
+          "Mess kit",
+          "Tinderbox",
+          "10 torches",
+          "10 days of rations",
+          "Waterskin",
+          "50 feet of hempen rope",
+          "Insignia of rank",
+          "Broken blade",
+          "Set of bone dice",
+          "Set of common clothes",
+          "Pouch"
+        ],
+        "features": [
+          "Darkvision",
+          "Dwarven Resilience",
+          "Stonecunning",
+          "Dwarven Toughness",
+          "Channel Divinity",
+          "Ritual Casting",
+          "Disciple of Life",
+          "Preserve Life"
+        ],
+        "background_story": "You trained as a soldier on the island of Mintarn and joined a mercenary company. You traveled to the city of Neverwinter with your company to serve in both the army and the city watch.",
+        "personality_traits": "Certain of your deity’s wishes, you resigned your post and set out on your quest.",
+        "ideals": "Responsibility and loyalty to your allies.",
+        "bonds": "Standing against death and injustice.",
+        "flaws": "Dismissive of dreams and portents.",
+        "file_path": "/static/data/stories/1215d65f/images/characters/sheet_6f2953_dwarf1.png",
+        "all_files": [
+          "/static/data/stories/1215d65f/images/characters/sheet_6f2953_dwarf1.png",
+          "/static/data/stories/1215d65f/images/characters/sheet_3434bf_dwarf2.png"
+        ],
+        "avatar_path": "/static/data/stories/1215d65f/images/avatars/avatar_0e6a51.png"
+      },
+      "current_hp": 11,
+      "temp_hp": 0,
+      "conditions": [],
+      "inventory": [
+        "Chain mail",
+        "Shield",
+        "Mace",
+        "Handaxe",
+        "Holy symbol",
+        "Backpack",
+        "Bedroll",
+        "Mess kit",
+        "Tinderbox",
+        "10 torches",
+        "10 days of rations",
+        "Waterskin",
+        "50 feet of hempen rope",
+        "Insignia of rank",
+        "Broken blade",
+        "Set of bone dice",
+        "Set of common clothes",
+        "Pouch"
+      ],
+      "position": "default"
+    }
+  ],
+  "enemy_states": {},
+  "chat_history": [
+    {
+      "role": "assistant",
+      "content": "\n\n[Entered: Merrow Encounter]\nAs lightning flashes across the sky, a monster hauls itself up onto the deck! 'These waters belong to the Scaled Queen. I’m here to collect her tribute.'"
+    },
+    {
+      "role": "user",
+      "content": "where am i"
+    },
+    {
+      "role": "assistant",
+      "content": "As you stand on the deck of the ship, the wooden boards creaking beneath your feet, the salty tang of the sea fills your nostrils. Surrounding you is the vast expanse of ocean, its surface rippling under the gentle sway of the vessel. Farther in the distance, dark, rolling clouds gather ominously, their edges flickering with distant lightning. It's clear that a storm is brewing, its promise painted vividly in hues of dark gray and black against the morning sky, now lightened only by the eerie, crimson sunrise.\n\nIn the shadows of these forming clouds, the looming silhouette of Stormwreck Isle barely breaks the horizon—a dark shape with secrets yet to unveil. The name alone suggests danger, whispering tales of shipwrecks and lost sailors.\n\nThe crew bustles about, preparing the ship for the approaching storm, their voices tense but experienced. Your own mission remains forefront: to uncover the mysteries that Stormwreck Isle holds.\n\nSuddenly, a light splash catches your ear as something breaks the surface of the water nearby. You peer over the ship's rail, feeling a chill as if watched by unseen eyes. What could be lurking just beneath the waves?\n\n[Entered: Merrow Encounter]\nAs lightning flashes across the sky, a monster hauls itself up onto the deck! 'These waters belong to the Scaled Queen. I’m here to collect her tribute.'"
+    }
+  ],
+  "created_at": "2025-11-24T21:17:08.229939",
+  "updated_at": "2025-11-24T21:17:23.584830"
+}

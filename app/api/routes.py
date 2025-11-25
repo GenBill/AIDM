@@ -442,3 +442,17 @@ def process_game_query(session_id: str, req: GameActionRequest):
     except Exception as e:
         print(f"AI Query Error: {e}")
         raise HTTPException(500, detail=str(e))
+    
+# 引入新 Agent
+from app.engine.fight_agent import fight_agent
+
+@router.post("/sessions/{session_id}/fight", response_model=DMResponse)
+def process_fight_turn(session_id: str, req: GameActionRequest):
+    """
+    专属战斗接口：严谨的回合制处理
+    """
+    try:
+        return fight_agent.process_fight_round(session_id, req.action)
+    except Exception as e:
+        print(f"Fight Error: {e}")
+        raise HTTPException(500, detail=str(e))

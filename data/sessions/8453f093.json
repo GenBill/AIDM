@@ -1,0 +1,168 @@
+{
+  "session_id": "8453f093",
+  "story_id": "1215d65f",
+  "title": "hhh's Journey",
+  "current_node_id": "merrow_encounter",
+  "current_node_turns": 0,
+  "players": [
+    {
+      "name": "hhh",
+      "character_sheet": {
+        "name": "Unnamed",
+        "race": "Hill Dwarf",
+        "class_name": "Cleric",
+        "subclass": null,
+        "level": 1,
+        "background": "Soldier",
+        "alignment": "Lawful Good",
+        "hp_max": 11,
+        "ac": 18,
+        "speed": 25,
+        "initiative": -1,
+        "proficiency_bonus": 2,
+        "abilities": {
+          "strength": 14,
+          "dexterity": 8,
+          "constitution": 15,
+          "intelligence": 10,
+          "wisdom": 16,
+          "charisma": 12
+        },
+        "skill_proficiencies": [
+          "Athletics",
+          "Intimidation"
+        ],
+        "saving_throw_proficiencies": [
+          "Wisdom",
+          "Charisma"
+        ],
+        "attacks": [
+          {
+            "name": "Mace",
+            "bonus": 4,
+            "damage": "1d6 + 2",
+            "damage_type": "bludgeoning"
+          },
+          {
+            "name": "Handaxe",
+            "bonus": 4,
+            "damage": "1d6 + 2",
+            "damage_type": "slashing"
+          }
+        ],
+        "spellcasting": {
+          "spell_save_dc": 13,
+          "spell_attack_bonus": 5,
+          "cantrips": [
+            "Light",
+            "Thaumaturgy",
+            "Sacred Flame"
+          ],
+          "level_1_spells": [
+            "Bless",
+            "Command",
+            "Cure Wounds",
+            "Detect Magic (ritual)",
+            "Guiding Bolt",
+            "Healing Word",
+            "Protection from Evil and Good",
+            "Sanctuary",
+            "Shield of Faith"
+          ],
+          "prepared_spells": [
+            "Bless",
+            "Cure Wounds",
+            "Guiding Bolt",
+            "Shield of Faith"
+          ]
+        },
+        "equipment": [
+          "Chain mail",
+          "Shield",
+          "Mace",
+          "Handaxe",
+          "Holy symbol",
+          "Backpack",
+          "Bedroll",
+          "Mess kit",
+          "Tinderbox",
+          "10 torches",
+          "10 days of rations",
+          "Waterskin",
+          "50 feet of hempen rope",
+          "Insignia of rank",
+          "Broken blade",
+          "Set of bone dice",
+          "Set of common clothes",
+          "Pouch"
+        ],
+        "features": [
+          "Darkvision",
+          "Dwarven Resilience",
+          "Stonecunning",
+          "Dwarven Toughness",
+          "Channel Divinity",
+          "Ritual Casting",
+          "Disciple of Life",
+          "Preserve Life"
+        ],
+        "background_story": "You trained as a soldier on the island of Mintarn and joined a mercenary company. You traveled to the city of Neverwinter with your company to serve in both the army and the city watch.",
+        "personality_traits": "Certain of your deity’s wishes, you resigned your post and set out on your quest.",
+        "ideals": "Responsibility and loyalty to your allies.",
+        "bonds": "Standing against death and injustice.",
+        "flaws": "Dismissive of dreams and portents.",
+        "file_path": "/static/data/stories/1215d65f/images/characters/sheet_6f2953_dwarf1.png",
+        "all_files": [
+          "/static/data/stories/1215d65f/images/characters/sheet_6f2953_dwarf1.png",
+          "/static/data/stories/1215d65f/images/characters/sheet_3434bf_dwarf2.png"
+        ],
+        "avatar_path": "/static/data/stories/1215d65f/images/avatars/avatar_0e6a51.png"
+      },
+      "current_hp": 11,
+      "temp_hp": 0,
+      "conditions": [],
+      "inventory": [
+        "Chain mail",
+        "Shield",
+        "Mace",
+        "Handaxe",
+        "Holy symbol",
+        "Backpack",
+        "Bedroll",
+        "Mess kit",
+        "Tinderbox",
+        "10 torches",
+        "10 days of rations",
+        "Waterskin",
+        "50 feet of hempen rope",
+        "Insignia of rank",
+        "Broken blade",
+        "Set of bone dice",
+        "Set of common clothes",
+        "Pouch"
+      ],
+      "position": "default"
+    }
+  ],
+  "enemy_states": {},
+  "chat_history": [
+    {
+      "role": "assistant",
+      "content": "\n\n[Entered: Merrow Encounter]\nAs lightning flashes across the sky, a monster hauls itself up onto the deck! 'These waters belong to the Scaled Queen. I’m here to collect her tribute.'"
+    },
+    {
+      "role": "user",
+      "content": "where am i"
+    },
+    {
+      "role": "data",
+      "content": "N/A"
+    },
+    {
+      "role": "assistant",
+      "content": "As you look around the deck of the ship you're on, the creaking wood and the salty sea air serve as reminders of your voyage. You're currently on a merchant vessel bound for Stormwreck Isle, a place known for its treacherous waters and rumored treasures. You set sail from the lively port of Neverwinter, and despite the ominous skies, your spirits remain high.\n\nYou notice the crew going about their tasks with a sense of urgency, likely due to the approaching storm. The captain stands at the helm barking orders to keep the ship steady as the winds pick up.\n\nAs you ponder the day's journey, you suddenly hear a massive splash nearby. Turning to look, you see a monstrous figure emerging from the sea, its scaled body glistening with water as it hauls itself onto the deck before you.\n\n[Entered: Merrow Encounter]\nAs lightning flashes across the sky, a monster hauls itself up onto the deck! 'These waters belong to the Scaled Queen. I’m here to collect her tribute.'"
+    }
+  ],
+  "created_at": "2025-11-24T21:04:00.072667",
+  "updated_at": "2025-11-24T21:04:13.490416"
+}

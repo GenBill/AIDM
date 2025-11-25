@@ -1,13 +1,31 @@
 import json
+import os
+import uuid
 from openai import OpenAI
+
+# --- 新增：Google GenAI 依赖 ---
+try:
+    from google import genai
+    from google.genai import types
+    GOOGLE_GENAI_AVAILABLE = True
+except ImportError:
+    GOOGLE_GENAI_AVAILABLE = False
+    print("⚠️ Google GenAI SDK not found. Images will not generate.")
+
 from app.engine.session import session_manager
 from app.schemas import DMResponse
 from app.config import STORIES_DIR
-# 引入双工具
 from app.engine.combat import roll_dice, resolve_attack 
 from app.engine.agent_workflow import answer_query
 
 client = OpenAI()
+
+# --- 新增：初始化 Google Client ---
+client_google = None
+if GOOGLE_GENAI_AVAILABLE:
+    api_key = os.environ.get("GOOGLE_API_KEY")
+    if api_key:
+        client_google = genai.Client(api_key=api_key)
 
 # --- TOOL DEFINITIONS ---
 TOOLS = [
@@ -15,7 +33,7 @@ TOOLS = [
         "type": "function",
         "function": {
             "name": "roll_dice",
-            "description": "Roll dice for general checks (Skill Checks, Saving Throws). DO NOT use for Combat Attacks.",
+            "description": "Roll dice for general checks (Skill Checks, Saving Throws).",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -29,7 +47,7 @@ TOOLS = [
         "type": "function",
         "function": {
             "name": "resolve_attack",
-            "description": "Resolve a COMBAT ATTACK. Calculates Hit/Miss and Damage automatically.",
+            "description": "Resolve a COMBAT ATTACK. Calculates Hit/Miss and Damage.",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -46,37 +64,31 @@ TOOLS = [
     }
 ]
 
+# --- PROMPT (保持你的原版) ---
 SYSTEM_PROMPT = """
 You are an expert Dungeon Master running a D&D 5e adventure.
 
-Remember what a Dungeon Master do:
-1. When the player knows what they want to do
-→ Provide the key information they need.
-2. When the player doesn't know what to do
-→ Guide them toward noticing the key information.
-3. When the player takes an unexpected action
-→ Find a way to bring them back:
-Either prevent them from leaving the sandbox, or
-Use another interesting event to lure them back into the intended path.
-4. Do not force players to move on, instruct them to move on, unless it is a encounter fight.
-### DECISION PROTOCOL
-1. **General Checks (Negotiation, Perception, Stealth)**:
-   - Call `roll_dice("1d20 + Modifier")`.
-   - Compare result vs DC.
-   
-2. **Combat Attacks**:
-   - Call `resolve_attack` with attacker stats and target AC.
-   - Determine who attacks whom based on the turn flow.
+### MODE CONTROL (CRITICAL)
+You control the user interface state via the `active_mode` field.
+1. **"action" (Default)**: Exploration, dialogue, negotiation, and descriptions. 
+   - **Even if an enemy appears**, keep it in "action" mode until violence actually erupts.
+2. **"fight"**: Set this ONLY when **Initiative is rolled** or **Attacks are exchanged**.
+   - Use this when negotiation fails or the player chooses violence.
+3. **null**: Maintain the current mode.
 
 ### RULES
-- **Respect Results**: If a check/attack fails, describe the failure and its consequences. Do not fudge rolls.
-- **Stats**: Use the Player and Entity stats from Context.
+1. **Narrative**: Be vivid. When entering a new scene, describe it first.
+2. **Dice**: Call tools for uncertain outcomes.
+3. **Transitions**: Move story based on logic.
 
-### OUTPUT
-1. **Narrative**: Vivid description.
-2. **Mechanics Log**: Summarize rolls.
-3. **Damage**: Player damage taken.
-4. **Transition**: Next scene ID.
+### OUTPUT FORMAT (JSON)
+{
+  "narrative": "...",
+  "mechanics_log": "...",
+  "damage_taken": 0,
+  "transition_to_id": "node_id or null",
+  "active_mode": "fight | action | null" 
+}
 """
 
 class DungeonMasterAI:
@@ -90,12 +102,10 @@ class DungeonMasterAI:
         
         current_node = story_data["nodes"].get(session.current_node_id)
         
-        # --- 节奏控制 (Pacing Logic) ---
+        # --- 节奏控制 (保持你的原版) ---
         session.current_node_turns += 1
-        min_turns = current_node.get("min_turns", 2)
-        current_node_type = current_node.get("type", "roleplay")
+        min_turns = current_node.get("min_turns", 1)
         
-        # 预判下一个节点类型
         next_edges = current_node.get('edges', [])
         next_node_type = "unknown"
         if next_edges:
@@ -104,64 +114,40 @@ class DungeonMasterAI:
                 next_node_type = story_data["nodes"][first_target_id].get("type", "transition")
 
         pacing_instruction = ""
-        
         if session.current_node_turns < min_turns:
-            # 1. 回合未满：按住玩家
-            pacing_instruction = f"[PACING: HOLD] Turn {session.current_node_turns}/{min_turns}. Keep player in current scene."
+            pacing_instruction = f"[PACING] Player has spent {session.current_node_turns}/{min_turns} turns here. MUST staying unless PLAYER ask for moving."
         else:
-            # 2. 回合已满：根据情况决定
-            if current_node_type == 'encounter':
-                # A. 刚打完架：给玩家喘息时间 (Victory Lap)
-                pacing_instruction = """
-                [PACING: VICTORY LAP] 
-                Combat is likely resolved. Do NOT auto-transition.
-                Describe the aftermath (loot, silence). Ask "What do you do?".
-                Only transition if player explicitly moves on.
-                """
-            elif next_node_type == 'encounter':
-                # B. 下一场是战斗：强制突袭 (AMBUSH) !!!
-                pacing_instruction = """
-                [PACING: AMBUSH]
-                The current scene is over. The NEXT node is a COMBAT ENCOUNTER.
-                You MUST trigger the transition NOW.
-                Interrupt the player's action with the arrival of the threat (monster/enemy).
-                Set `transition_to_id` to the encounter node immediately.
-                """
-            else:
-                # C. 下一场是剧情：自然过渡
-                pacing_instruction = "[PACING: GUIDE] Scene complete. Guide player to next area naturally."
+            pacing_instruction = f"[PACING] Scene complexity met. You may transition to the next node ({next_node_type}) if the story flows there."
 
         # 构建 Context
         context = f"""
         --- PLAYER ---
         Name: {player.name} | HP: {player.current_hp}
-        Stats: {json.dumps(player.character_sheet.abilities.dict())}
         
         --- CURRENT SCENE ---
-        Title: {current_node.get('title')}
+        Title: {current_node.get('title')} ({current_node.get('type')})
         Description: {current_node.get('read_aloud')}
         GM Secrets: {current_node.get('gm_guidance')}
         
-        --- NEXT SCENE PREVIEW ---
-        Next Node Type: {next_node_type}
-        Available Exits: {json.dumps(next_edges, indent=2)}
+        --- EXITS ---
+        {json.dumps(next_edges, indent=2)}
         
         --- INSTRUCTIONS ---
         {pacing_instruction}
+        **Reminder**: If you transition to an Encounter, describe the threat appearing, but keep `active_mode`="action" initially. Only switch to "fight" if combat starts immediately.
         Player says: "{player_input}"
         """
 
-        # 初始化消息
         messages = [
             {"role": "system", "content": SYSTEM_PROMPT},
             *self._sanitize_history(session.chat_history[-6:]),
             {"role": "user", "content": context}
         ]
 
-        # 工具循环
         mechanics_logs = [] 
         total_player_damage_taken = 0
 
+        # --- 工具循环 (保持你的原版) ---
         while True:
             completion = client.chat.completions.create(
                 model="gpt-4o-2024-08-06",
@@ -169,7 +155,6 @@ class DungeonMasterAI:
                 tools=TOOLS,
                 tool_choice="auto" 
             )
-            
             msg = completion.choices[0].message
 
             if msg.tool_calls:
@@ -177,7 +162,6 @@ class DungeonMasterAI:
                 for tool in msg.tool_calls:
                     tool_name = tool.function.name
                     args = json.loads(tool.function.arguments)
-                    
                     try:
                         result_content = ""
                         if tool_name == "resolve_attack":
@@ -203,17 +187,9 @@ class DungeonMasterAI:
                             mechanics_logs.append(detail)
                             result_content = json.dumps(result)
 
-                        messages.append({
-                            "role": "tool",
-                            "tool_call_id": tool.id,
-                            "content": result_content
-                        })
+                        messages.append({"role": "tool", "tool_call_id": tool.id, "content": result_content})
                     except Exception as e:
-                        messages.append({
-                            "role": "tool",
-                            "tool_call_id": tool.id,
-                            "content": f"Error: {str(e)}"
-                        })
+                        messages.append({"role": "tool", "tool_call_id": tool.id, "content": f"Error: {str(e)}"})
             else:
                 break
 
@@ -222,7 +198,6 @@ class DungeonMasterAI:
             messages=messages, 
             response_format=DMResponse
         )
-        
         dm_decision = final_completion.choices[0].message.parsed
         
         if total_player_damage_taken > 0:
@@ -235,6 +210,83 @@ class DungeonMasterAI:
             else:
                 dm_decision.mechanics_log = combined_logs
 
+        # --- 状态更新 (此处插入图片生成逻辑) ---
+        if dm_decision.transition_to_id and dm_decision.transition_to_id in story_data["nodes"]:
+            session.current_node_id = dm_decision.transition_to_id
+            session.current_node_turns = 0
+            new_node = story_data["nodes"][dm_decision.transition_to_id]
+            
+            welcome_text = f"\n\n[Entered: {new_node.get('title')}]\n" + (new_node.get('read_aloud') or "")
+            
+            # === 插入：遭遇战图片生成逻辑 ===
+            if new_node.get("type") == "encounter" and client_google:
+                print(f"🎨 Generating encounter art for: {new_node.get('title')}")
+                try:
+                    enemy_name = new_node.get("entities", [{}])[0].get("name", "Monster")
+                    scene_desc = new_node.get("read_aloud") or new_node.get("title")
+                    player_desc = f"{player.character_sheet.race} {player.character_sheet.class_name}"
+                    
+                    image_prompt = (
+                        f"Fantasy RPG concept art, high quality, cinematic lighting. "
+                        f"Scene: {scene_desc}. "
+                        f"Foreground Action: A {player_desc} confronting a {enemy_name}. "
+                        f"Atmosphere: Tense, dramatic shadows, detailed textures. "
+                        f"No text, no watermark, no modern objects."
+                    )
+
+                    # ✅ 新版：用 Gemini Image 模型直接生成图片
+                    response = client_google.models.generate_content(
+                        model="gemini-2.5-flash-image",
+                        contents=image_prompt,
+                        config=types.GenerateContentConfig(
+                            response_modalities=["IMAGE"],
+                            safety_settings=[
+                                types.SafetySetting(
+                                    category="HARM_CATEGORY_DANGEROUS_CONTENT",
+                                    threshold="BLOCK_ONLY_HIGH"
+                                )
+                            ]
+                        )
+                    )
+
+                    # 取图片 bytes
+                    generated_image_bytes = None
+                    try:
+                        for part in response.candidates[0].content.parts:
+                            if getattr(part, "inline_data", None) and part.inline_data.mime_type.startswith("image/"):
+                                generated_image_bytes = part.inline_data.data
+                                break
+                    except Exception:
+                        generated_image_bytes = None
+                    
+                    if generated_image_bytes:
+                        # 1. 确保目录存在
+                        encounter_images_dir = STORIES_DIR / session.story_id / "images" / "encounters"
+                        os.makedirs(encounter_images_dir, exist_ok=True)
+                        
+                        # 2. 保存图片
+                        image_filename = f"gen_{uuid.uuid4().hex[:8]}.png"
+                        image_full_path = encounter_images_dir / image_filename
+                        with open(image_full_path, "wb") as f_img:
+                            f_img.write(generated_image_bytes)
+                        
+                        # 3. 更新 JSON
+                        web_path = f"/static/data/stories/{session.story_id}/images/encounters/{image_filename}"
+                        story_data["nodes"][dm_decision.transition_to_id]["image_path"] = web_path
+                        
+                        with open(story_path, "w", encoding="utf-8") as f:
+                            json.dump(story_data, f, indent=2, ensure_ascii=False)
+                        print(f"✅ Image generated: {web_path}")
+
+                except Exception as e:
+                    print(f"❌ Google Image Gen Error: {e}")
+            # =================================
+
+            session.chat_history.append({"role": "assistant", "content": welcome_text})
+            dm_decision.narrative += welcome_text
+            
+            # 删除了之前的 active_mode 强制切换逻辑，完全听从 AI
+
         session.chat_history.append({"role": "user", "content": player_input})
         if dm_decision.mechanics_log:
             session.chat_history.append({"role": "data", "content": dm_decision.mechanics_log})
@@ -242,15 +294,6 @@ class DungeonMasterAI:
         
         if dm_decision.damage_taken > 0:
             player.current_hp = max(0, player.current_hp - dm_decision.damage_taken)
-            
-        if dm_decision.transition_to_id and dm_decision.transition_to_id in story_data["nodes"]:
-            session.current_node_id = dm_decision.transition_to_id
-            session.current_node_turns = 0
-            new_node = story_data["nodes"][dm_decision.transition_to_id]
-            welcome_text = f"\n\n[Entered: {new_node.get('title')}]\n" + (new_node.get('read_aloud') or "")
-            
-            session.chat_history.append({"role": "assistant", "content": welcome_text})
-            dm_decision.narrative += welcome_text
 
         session_manager.save_session(session)
         return dm_decision

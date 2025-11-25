@@ -1,0 +1,196 @@
+{
+  "session_id": "bfc3d998",
+  "story_id": "1215d65f",
+  "title": "Unn's Journey",
+  "current_node_id": "arrival_at_dragons_rest",
+  "current_node_turns": 0,
+  "players": [
+    {
+      "name": "Unn",
+      "character_sheet": {
+        "name": "Unnamed",
+        "race": "Hill Dwarf",
+        "class_name": "Cleric",
+        "subclass": null,
+        "level": 1,
+        "background": "Soldier",
+        "alignment": "Lawful Good",
+        "hp_max": 11,
+        "ac": 18,
+        "speed": 25,
+        "initiative": -1,
+        "proficiency_bonus": 2,
+        "abilities": {
+          "strength": 14,
+          "dexterity": 8,
+          "constitution": 15,
+          "intelligence": 10,
+          "wisdom": 16,
+          "charisma": 12
+        },
+        "skill_proficiencies": [
+          "Athletics",
+          "Intimidation"
+        ],
+        "saving_throw_proficiencies": [
+          "Wisdom",
+          "Charisma"
+        ],
+        "attacks": [
+          {
+            "name": "Mace",
+            "bonus": 4,
+            "damage": "1d6 + 2",
+            "damage_type": "bludgeoning"
+          },
+          {
+            "name": "Handaxe",
+            "bonus": 4,
+            "damage": "1d6 + 2",
+            "damage_type": "slashing"
+          }
+        ],
+        "spellcasting": {
+          "spell_save_dc": 13,
+          "spell_attack_bonus": 5,
+          "cantrips": [
+            "Light",
+            "Thaumaturgy",
+            "Sacred Flame"
+          ],
+          "level_1_spells": [
+            "Bless",
+            "Command",
+            "Cure Wounds",
+            "Detect Magic (ritual)",
+            "Guiding Bolt",
+            "Healing Word",
+            "Protection from Evil and Good",
+            "Sanctuary",
+            "Shield of Faith"
+          ],
+          "prepared_spells": [
+            "Bless",
+            "Cure Wounds",
+            "Guiding Bolt",
+            "Shield of Faith"
+          ]
+        },
+        "equipment": [
+          "Chain mail",
+          "Shield",
+          "Mace",
+          "Handaxe",
+          "Holy symbol",
+          "Backpack",
+          "Bedroll",
+          "Mess kit",
+          "Tinderbox",
+          "10 torches",
+          "10 days of rations",
+          "Waterskin",
+          "50 feet of hempen rope",
+          "Insignia of rank",
+          "Broken blade",
+          "Set of bone dice",
+          "Set of common clothes",
+          "Pouch"
+        ],
+        "features": [
+          "Darkvision",
+          "Dwarven Resilience",
+          "Stonecunning",
+          "Dwarven Toughness",
+          "Channel Divinity",
+          "Ritual Casting",
+          "Disciple of Life",
+          "Preserve Life"
+        ],
+        "background_story": "You trained as a soldier on the island of Mintarn and joined a mercenary company. You traveled to the city of Neverwinter with your company to serve in both the army and the city watch.",
+        "personality_traits": "Certain of your deity’s wishes, you resigned your post and set out on your quest.",
+        "ideals": "Responsibility and loyalty to your allies.",
+        "bonds": "Standing against death and injustice.",
+        "flaws": "Dismissive of dreams and portents.",
+        "file_path": "/static/data/stories/1215d65f/images/characters/sheet_6f2953_dwarf1.png",
+        "all_files": [
+          "/static/data/stories/1215d65f/images/characters/sheet_6f2953_dwarf1.png",
+          "/static/data/stories/1215d65f/images/characters/sheet_3434bf_dwarf2.png"
+        ],
+        "avatar_path": "/static/data/stories/1215d65f/images/avatars/avatar_0e6a51.png"
+      },
+      "current_hp": 11,
+      "temp_hp": 0,
+      "conditions": [],
+      "inventory": [
+        "Chain mail",
+        "Shield",
+        "Mace",
+        "Handaxe",
+        "Holy symbol",
+        "Backpack",
+        "Bedroll",
+        "Mess kit",
+        "Tinderbox",
+        "10 torches",
+        "10 days of rations",
+        "Waterskin",
+        "50 feet of hempen rope",
+        "Insignia of rank",
+        "Broken blade",
+        "Set of bone dice",
+        "Set of common clothes",
+        "Pouch"
+      ],
+      "position": "default"
+    }
+  ],
+  "enemy_states": {},
+  "chat_history": [
+    {
+      "role": "user",
+      "content": "where am i"
+    },
+    {
+      "role": "assistant",
+      "content": "The eerie calmness of the sea beneath the looming threat of an impending storm greets you. The wooden beams of the ship creak softly as it makes its way through the waters towards Stormwreck Isle. Overhead, the dark clouds twist and churn, a prelude to the chaos that might descend. You are standing on the deck, where sailors move about, ensuring everything is secured for what lies ahead. The air is thick with anticipation and the faint scent of salt and coming rain.\n\nStanding at the railing, gazing into the horizon where the sea meets the sky, you're very aware of being a small figure upon a vast, untamable ocean."
+    },
+    {
+      "role": "assistant",
+      "content": "\n\n[Entered: Merrow Encounter]\nAs lightning flashes across the sky, a monster hauls itself up onto the deck! 'These waters belong to the Scaled Queen. I’m here to collect her tribute.'"
+    },
+    {
+      "role": "user",
+      "content": "i walk around"
+    },
+    {
+      "role": "assistant",
+      "content": "Moving away from the railing, you decide to take a leisurely walk around the vessel to shake off the uneasy feeling of the stormy horizon. The deck beneath your boots is slick with gathering moisture as the sea spray mixes with the first few drops of rain from the ominous clouds. As you make your way along the side, cords whipping slightly in the breeze and sails flapping half-heartedly, there's a sudden, ominous splash followed by a loud, guttural growl. \n\nAt the ship's edge, something pulls itself up—a creature with scales shimmering in the dimming light, webbed hands clinging tightly to the railing as eyes like pools of stormy ink lock onto you. A merrow, part of a species known to inhabit treacherous waters like these, has taken a peculiar interest in your vessel.\n\n[Entered: Merrow Encounter]\nAs lightning flashes across the sky, a monster hauls itself up onto the deck! 'These waters belong to the Scaled Queen. I’m here to collect her tribute.'"
+    },
+    {
+      "role": "user",
+      "content": "what does merrow want"
+    },
+    {
+      "role": "assistant",
+      "content": "The merrow, undeterred by the driving rain and the chaos of the storm above, unfurls itself to its full height, displaying its menacing presence. Its fish-like eyes glint with a mischievous spark, and its voice, gurgling and deep, echoes across the deck. \"We require tribute for the Scaled Queen, ruler of these waters. She demands her due—400 gold pieces—or you shall not pass unmolested.\" The merrow's tone is clear. However, there seems to be room for negotiation if you wish to attempt it."
+    },
+    {
+      "role": "assistant",
+      "content": "\n\n[Entered: Arrival at Dragon's Rest]\nStormwreck Isle—now visible off the bow—promises rare wonders. Seaweed shimmers in countless brilliant colors below you, and rays of sunlight defy the overcast sky to illuminate the lush grass and dark basalt rock of the island. Avoiding the rocks jutting up from the ocean, your ship makes its way toward a calm harbor on the island’s north side."
+    },
+    {
+      "role": "user",
+      "content": "I try to negotiate with it"
+    },
+    {
+      "role": "data",
+      "content": "Charisma (Persuasion) check: 21 (Success). Tribute demand reduced to 300 gp.\n[Verified]:\nCheck: Rolled 1d20+2 => 21"
+    },
+    {
+      "role": "assistant",
+      "content": "Unn, with resolve and a calm demeanor amidst the raging storm, steps forward and speaks with diplomatic finesse. Utilizing a commanding yet diplomatic tone, Unn negotiates with the merrow. “Four hundred gold is a steep demand, and yet, she might be content with less, considering this humble vessel,” you say, gesturing around at the modest ship.\n\nThe merrow pauses, its interest piqued by your words and the persuasive sway in your argument. It considers your proposal, responding with a slight nod. “Very well, brave soul. Three hundred it shall be. You have shown the respect due a queen's subject,” it says, in a slightly more amicable tone.\n\nWith a successful negotiation, you have managed to reduce the tribute demand significantly, and it seems the merrow is appeased, allowing the journey to continue.\n\n[Entered: Arrival at Dragon's Rest]\nStormwreck Isle—now visible off the bow—promises rare wonders. Seaweed shimmers in countless brilliant colors below you, and rays of sunlight defy the overcast sky to illuminate the lush grass and dark basalt rock of the island. Avoiding the rocks jutting up from the ocean, your ship makes its way toward a calm harbor on the island’s north side."
+    }
+  ],
+  "created_at": "2025-11-24T21:10:52.722837",
+  "updated_at": "2025-11-24T21:11:54.803855"
+}

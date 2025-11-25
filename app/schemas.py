@@ -206,9 +206,11 @@ class SessionCreateRequest(BaseModel):
 
 class DMResponse(BaseModel):
     """LLM 返回给系统的结构化指令"""
-    narrative: str = Field(..., description="The story description to show the player.")
+    narrative: str = Field(..., description="Story description")
+    mechanics_log: Optional[str] = Field(None, description="Dice logs")
+    damage_taken: int = Field(0, description="Damage to player")
+    transition_to_id: Optional[str] = Field(None, description="Next scene node ID")
+    
     # --- 新增字段 ---
-    mechanics_log: Optional[str] = Field(None, description="Detailed math/dice logs. E.g. 'Attack Roll: 1d20(15) + 3 = 18 vs AC 13. Hit!'")
-    # ---------------
-    damage_taken: int = Field(0, description="Amount of damage the player takes this turn (0 if none).")
-    transition_to_id: Optional[str] = Field(None, description="The ID of the next node if the scene changes.")
+    # 取值: "action" (探索模式) | "fight" (战斗模式) | null (保持当前)
+    active_mode: Optional[str] = Field(None, description="Force frontend to switch tab.")

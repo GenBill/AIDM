@@ -1,0 +1,4 @@
+2025-11-24 21:31:18,413 | INFO | HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-24 21:31:24,085 | INFO | HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-24 21:31:24,085 | INFO | AFC is enabled with max remote calls: 10.
+2025-11-24 21:31:30,507 | INFO | HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent "HTTP/1.1 200 OK"
