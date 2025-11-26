@@ -1,0 +1,605 @@
+{
+  "nodes": {
+    "intro_demo_setup": {
+      "id": "intro_demo_setup",
+      "title": "Demo Introduction and How to Play",
+      "type": "roleplay",
+      "min_turns": 2,
+      "read_aloud": "Hi everyone. I’m going to be running you through a quick demo on how to play D&D. I’m the Dungeon Master, so it’s my job to tell you what’s happening in the world around you and rolling any dice for the monster. You’re playing the heroes!",
+      "gm_guidance": "Use this brief scene to welcome players and set expectations. Clarify that you (or the system) describe the world and run monsters, while they describe what their heroes do. Emphasize that this is a quick demo and that they don’t need to know rules in advance.\nExplain that you’ll be handling dice for monsters and helping them interpret their character sheets. Keep this short and move quickly into the first in-world description.\nThis node is mostly meta-intro; once players understand the premise, transition to the voyage scene.",
+      "environment": {
+        "light": "Bright",
+        "terrain": "Normal",
+        "sound": "Murmur of a ship’s crew and gentle sea sounds in the background",
+        "notes": "Meta-intro; can be treated as out-of-world table talk if desired."
+      },
+      "entities": [],
+      "interactions": [
+        {
+          "trigger": "Begin the voyage scene",
+          "mechanic": "No check required.",
+          "success": "You move into the in-world description of the voyage toward Stormwreck Isle.",
+          "failure": "N/A."
+        }
+      ],
+      "loot": [],
+      "options": [
+        "Begin the voyage scene"
+      ],
+      "edges": [
+        {
+          "to": "voyage_to_stormwreck_approach",
+          "weight": 1.0,
+          "label": "Start the in-world narrative",
+          "condition": "You are ready to begin describing the adventure fiction."
+        }
+      ],
+      "image_path": null
+    },
+    "voyage_to_stormwreck_approach": {
+      "id": "voyage_to_stormwreck_approach",
+      "title": "Voyage to Stormwreck Isle",
+      "type": "roleplay",
+      "min_turns": 3,
+      "read_aloud": "Your journey has been smooth sailing so far. You left the bustling port of Neverwinter a few days ago, heading for an island with the foreboding name of Stormwreck Isle. But you woke this morning to a blood-red sunrise, and dark clouds overhead threaten a violent storm.\n\nAs lightning flashes across the sky, a monster hauls itself up onto the deck!\n\n“These waters belong to the Scaled Queen. I’m here to collect her tribute.”",
+      "gm_guidance": "Show the illustration of the ship at sea, then the merrow illustration if available. Adopt an intimidating voice for the merrow’s line.\nConvey that the sea has turned ominous: blood-red sunrise, dark storm clouds, lightning. The merrow hauls itself up onto the deck in a dramatic moment as lightning flashes.\nDo not start combat yet. This is the setup for a flexible encounter where the characters can choose how to respond. Make it clear that they are trained for combat but not forced to fight.\nImmediately after the merrow’s demand, explain the basic game loop: players describe actions, you call for rolls, and outcomes follow from those rolls. Encourage them that they can fight, negotiate, trick, or attempt other creative tactics.\nTransition into the structured merrow encounter node once players start deciding how to respond.",
+      "environment": {
+        "light": "Dim",
+        "terrain": "Difficult (Wet ship deck)",
+        "sound": "Thunder, crashing waves, wind whipping sails, creaking rigging, distant crew shouts",
+        "notes": "Storm brewing; deck is slick with spray and rain, but the storm has not yet fully broken."
+      },
+      "entities": [
+        {
+          "name": "Merrow Extortionist",
+          "type": "monster",
+          "ref_slug": "merrow_extortionist",
+          "count": 1,
+          "state": "Hauling itself up onto the deck, looming over the characters, demanding tribute for the Scaled Queen",
+          "disposition": "hostile",
+          "extra": {}
+        },
+        {
+          "name": "Ship Crew",
+          "type": "npc",
+          "ref_slug": "ship_crew_generic",
+          "count": 4,
+          "state": "Nervous and watching, ready to follow the characters’ lead if rallied",
+          "disposition": "neutral",
+          "extra": {}
+        }
+      ],
+      "interactions": [
+        {
+          "trigger": "Explain how actions and dice work",
+          "mechanic": "No check required; brief rules explanation.",
+          "success": "Players understand that most actions involve rolling a d20 and adding a modifier from their sheet, and that they can attempt combat, negotiation, tricks, or other ideas.",
+          "failure": "N/A – repeat or clarify if players seem confused."
+        },
+        {
+          "trigger": "Confront the merrow",
+          "mechanic": "No check required to move into the encounter.",
+          "success": "The scene shifts into a structured encounter where players choose how to deal with the merrow.",
+          "failure": "N/A."
+        }
+      ],
+      "loot": [],
+      "options": [
+        "Explain how actions and dice work",
+        "Confront the merrow"
+      ],
+      "edges": [
+        {
+          "to": "merrow_extortion_encounter",
+          "weight": 1.0,
+          "label": "Players begin interacting with the merrow",
+          "condition": "Players indicate any concrete response to the merrow (talking, attacking, or planning a trick)."
+        }
+      ],
+      "image_path": null
+    },
+    "merrow_extortion_encounter": {
+      "id": "merrow_extortion_encounter",
+      "title": "Merrow Tribute Demand",
+      "type": "encounter",
+      "min_turns": 4,
+      "read_aloud": "I’ve just told you the situation you’re in. What happens next is up to you. You’re all trained for combat, so if you want to fight this monster, which is called a merrow, I can help you do that. But you can also try to negotiate with the merrow, or trick it, or anything else you can imagine.\n\nJust about anything you can think of to try will require some combination of skill, natural ability, and luck to pull off. And the D&D game represents that by having you roll one of these 20-sided dice and add a number from your sheet. So… what do you want to do?",
+      "gm_guidance": "Let the players take the lead. Encourage them to say what their characters are thinking and what they want to try. Reinforce that almost any reasonable idea is possible, resolved via ability checks or combat.\nUse vivid descriptions of the storm, the wet deck, and the looming merrow to keep tension high regardless of approach.\nThis node handles non-combat resolutions and the decision to start combat. Only move to the combat node once a character clearly attacks or the situation escalates beyond talk.\nNegotiation: The merrow demands 400 gp or equivalent in goods, roughly the value of all cargo in the hold. Each successful DC 15 Charisma check (Persuasion, Intimidation, or Deception as appropriate) reduces the demanded tribute by 100 gp. Track the current demanded amount; if reduced to 0, the merrow leaves satisfied. If reduced but not to 0, it might accept a compromise or threaten to return later, at your discretion.\nLore: If players ask about the Scaled Queen, have the merrow boast that she is a huge, two-headed merrow blessed by Demogorgon, the Prince of Demons. Use this to seed future fear and lore.\nShenanigans: If players propose creative tactics (rolling barrels, dropping sails, rallying crew, using spells, etc.), respond with “You can try!” and translate their idea into one or more appropriate ability checks or spell uses. Reward clever plans with advantage, reduced DCs, or narrative benefits (e.g., knocking the merrow overboard, blinding it, or intimidating it into retreat).\nFailure/Escalation: If negotiation checks fail repeatedly, or a trick obviously backfires, the merrow grows impatient and hostile. Have it threaten the crew or move aggressively toward the characters. If players persist in defiance or attack, transition to the combat node.\nIf players simply pay the full 400 gp without argument, the merrow takes the tribute, issues a final threat in the Scaled Queen’s name, and dives back into the sea. The ship continues on its way.\nKeep the encounter non-lethal in tone; this merrow is fearsome but mechanically modest and is here to extort, not to slaughter everyone outright.",
+      "environment": {
+        "light": "Dim",
+        "terrain": "Difficult (Wet ship deck)",
+        "sound": "Thunder, crashing waves, wind, creaking timbers, merrow’s guttural voice, nervous crew murmurs",
+        "notes": "Storm threatens but has not yet fully broken; occasional lightning flashes illuminate the scene."
+      },
+      "entities": [
+        {
+          "name": "Merrow Extortionist",
+          "type": "monster",
+          "ref_slug": "merrow_extortionist",
+          "count": 1,
+          "state": "On the deck, looming over the characters, demanding tribute and watching for signs of defiance",
+          "disposition": "hostile",
+          "extra": {
+            "armor_class": 13,
+            "hit_points": 30,
+            "speed": "10 ft., swim 40 ft.",
+            "abilities": {
+              "STR": 16,
+              "DEX": 10,
+              "CON": 15,
+              "INT": 8,
+              "WIS": 10,
+              "CHA": 9
+            },
+            "traits": [
+              "Amphibious (can breathe air and water)"
+            ],
+            "actions": [
+              "Multiattack (two Rend attacks)",
+              "Rend +5 to hit, reach 10 ft., 2d4+3 piercing"
+            ]
+          }
+        },
+        {
+          "name": "Ship Crew",
+          "type": "npc",
+          "ref_slug": "ship_crew_generic",
+          "count": 4,
+          "state": "Clustered nearby, frightened but potentially rallyable to assist with ropes, sails, or a rush attack",
+          "disposition": "neutral",
+          "extra": {}
+        }
+      ],
+      "interactions": [
+        {
+          "trigger": "Negotiate",
+          "mechanic": "One or more DC 15 Charisma checks (Persuasion, Intimidation, or Deception, depending on approach).",
+          "success": "Each successful check reduces the merrow’s demanded tribute by 100 gp. If the demand is reduced to 0 gp or to an amount the party can and will pay, the merrow accepts the deal and leaves without a fight.",
+          "failure": "The merrow grows impatient and more threatening. After several failed attempts or obvious stalling, it prepares to attack, escalating to combat if the characters don’t back down or pay."
+        },
+        {
+          "trigger": "Attack the merrow",
+          "mechanic": "No check required to initiate; a character declares an attack and initiative is rolled.",
+          "success": "Structured combat begins against the merrow (transition to the merrow combat node).",
+          "failure": "N/A – once an attack is declared, the scene moves into combat."
+        },
+        {
+          "trigger": "Attempt a creative tactic",
+          "mechanic": "One or more ability checks, typically DC 13–15, depending on the plan (e.g., Strength (Athletics) to roll a barrel, Dexterity (Acrobatics) to drop a sail, Charisma (Intimidation) to rally crew).",
+          "success": "The tactic works: the merrow is knocked overboard, entangled, blinded, or otherwise disadvantaged, or is cowed into retreat. The encounter can end without full combat or with the merrow at a significant disadvantage if combat starts.",
+          "failure": "The plan partially works or backfires. The merrow is angered or feels mocked, and the situation likely escalates into combat."
+        },
+        {
+          "trigger": "Ask about the Scaled Queen",
+          "mechanic": "No check required.",
+          "success": "The merrow boasts that the Scaled Queen is a huge, two-headed merrow blessed by Demogorgon, the Prince of Demons, and that these waters are hers by right.",
+          "failure": "N/A – the merrow is eager to boast about its mistress."
+        },
+        {
+          "trigger": "Pay the demanded tribute",
+          "mechanic": "No check required if the party can and chooses to pay the current demanded amount.",
+          "success": "The merrow accepts the tribute, issues a final threat in the Scaled Queen’s name, and dives back into the sea. The ship continues toward Stormwreck Isle.",
+          "failure": "If the party cannot actually pay what they claim or tries to cheat blatantly, the merrow notices and becomes hostile, likely triggering combat."
+        }
+      ],
+      "loot": [],
+      "options": [
+        "Negotiate",
+        "Attack the merrow",
+        "Attempt a creative tactic",
+        "Ask about the Scaled Queen",
+        "Pay the demanded tribute"
+      ],
+      "edges": [
+        {
+          "to": "merrow_extortion_combat",
+          "weight": 1.0,
+          "label": "Merrow combat begins",
+          "condition": "Any character declares an attack or the merrow escalates to violence after failed negotiations or tricks."
+        },
+        {
+          "to": "post_merrow_wrapup",
+          "weight": 1.0,
+          "label": "Merrow leaves or is otherwise driven off without extended combat",
+          "condition": "The party pays tribute, successfully negotiates the demand down to an acceptable amount, or a creative tactic drives the merrow away without needing a full combat resolution."
+        }
+      ],
+      "image_path": null
+    },
+    "merrow_extortion_combat": {
+      "id": "merrow_extortion_combat",
+      "title": "Merrow on the Deck – Combat",
+      "type": "combat",
+      "min_turns": 4,
+      "read_aloud": "As you move to attack, the merrow snarls and lashes out with its jagged claws, the storm-tossed deck slick beneath your feet.",
+      "gm_guidance": "This node represents structured combat with the merrow extortionist.\nInitiative: When a player decides their character attacks, that character acts first in combat. Then play passes to the right (or follow standard initiative rules if preferred). Roll initiative for the merrow and any crew that might join.\nOn each player’s turn, walk them through their options: weapon attacks, spellcasting, movement, and any class features. Explain their different weapons and spell attacks as needed for new players.\nOn the merrow’s turn, it closes to melee and uses Multiattack (two Rend attacks) against the most threatening or nearest target. It may focus on characters who seem to be leading the resistance or who dealt it the most damage.\nTactics: The merrow fights aggressively but not suicidally. If reduced to low hit points and clearly outmatched, it might attempt to disengage by diving back into the sea, snarling that the Scaled Queen will hear of this insult.\nDifficulty: This merrow looks fearsome but is intentionally not too dangerous; the characters should be able to defeat it in 1–2 rounds. Avoid targeting downed characters repeatedly; spread attacks a bit to keep things tense but fair.\nEnvironment: The wet deck can be described as slick, but unless you want extra complexity, don’t impose mechanical penalties beyond flavor. If players try to use the environment (e.g., shoving the merrow overboard), resolve with contested checks.\nOutcome: When the merrow is reduced to 0 hit points or flees, end combat and move to the wrap-up node. If something unusual happens (e.g., the merrow captures someone and dives overboard), improvise but still aim to keep this as an introductory, survivable encounter.",
+      "environment": {
+        "light": "Dim",
+        "terrain": "Difficult (Wet ship deck)",
+        "sound": "Thunder cracks, waves slam the hull, steel and claws clash, crew shouting in fear",
+        "notes": "Lightning occasionally illuminates the combat; use this for dramatic description."
+      },
+      "entities": [
+        {
+          "name": "Merrow Extortionist",
+          "type": "monster",
+          "ref_slug": "merrow_extortionist",
+          "count": 1,
+          "state": "Engaged in melee with the characters on the slick deck",
+          "disposition": "hostile",
+          "extra": {
+            "armor_class": 13,
+            "hit_points": 30,
+            "speed": "10 ft., swim 40 ft.",
+            "abilities": {
+              "STR": 16,
+              "DEX": 10,
+              "CON": 15,
+              "INT": 8,
+              "WIS": 10,
+              "CHA": 9
+            },
+            "traits": [
+              "Amphibious"
+            ],
+            "actions": [
+              "Multiattack (two Rend attacks)",
+              "Rend +5 to hit, reach 10 ft., 2d4+3 piercing"
+            ]
+          }
+        },
+        {
+          "name": "Ship Crew",
+          "type": "npc",
+          "ref_slug": "ship_crew_generic",
+          "count": 4,
+          "state": "Mostly staying back, possibly helping with advantage-granting actions if rallied",
+          "disposition": "neutral",
+          "extra": {}
+        }
+      ],
+      "interactions": [
+        {
+          "trigger": "Fight to the finish",
+          "mechanic": "Standard D&D combat resolution until the merrow is reduced to 0 hit points.",
+          "success": "The merrow is slain and collapses on the deck before sliding or being thrown back into the sea.",
+          "failure": "If the merrow drops multiple characters and the party is clearly losing, you may have it attempt to drag someone overboard or retreat; however, this encounter is designed to be winnable."
+        },
+        {
+          "trigger": "Force the merrow to retreat",
+          "mechanic": "Combat plus possible Intimidation or environmental checks (DC 13–15) to shove it overboard or convince it the fight isn’t worth it.",
+          "success": "The merrow dives back into the ocean, snarling threats in the Scaled Queen’s name, ending the encounter without killing it.",
+          "failure": "The merrow continues fighting until defeated or until it independently decides to flee at low hit points."
+        }
+      ],
+      "loot": [],
+      "options": [
+        "Fight to the finish",
+        "Force the merrow to retreat"
+      ],
+      "edges": [
+        {
+          "to": "post_merrow_wrapup",
+          "weight": 1.0,
+          "label": "Merrow defeated or driven off",
+          "condition": "The merrow is reduced to 0 hit points or flees the ship."
+        }
+      ],
+      "image_path": null
+    },
+    "post_merrow_wrapup": {
+      "id": "post_merrow_wrapup",
+      "title": "After the Merrow",
+      "type": "transition",
+      "min_turns": 2,
+      "read_aloud": "With a splash, the merrow disappears into the ocean deeps and the ship continues on its way. The sailors raise a cheer, and the storm brewing overhead seems not quite so threatening now.\n\nAnd that brings us to the end of your first taste of adventure.",
+      "gm_guidance": "Use this scene to close out the introductory merrow encounter, whether it ended via payment, negotiation, trickery, or combat. Adjust the narration slightly to fit the outcome (e.g., if the merrow was killed, describe its body washing away; if it was paid, describe it diving away with its loot).\nThe key beats: the merrow is gone, the ship continues toward Stormwreck Isle, the crew is relieved, and the storm seems to ease a bit.\nThis is also a good moment to answer any quick player questions about what just happened or about the world, then pivot to the arrival at Dragon’s Rest.\nTransition cleanly into the next chapter: the approach to Stormwreck Isle and Dragon’s Rest.",
+      "environment": {
+        "light": "Dim",
+        "terrain": "Normal (ship at sea)",
+        "sound": "Waves calming slightly, relieved cheers from sailors, wind still gusting but less ominous",
+        "notes": "The storm’s threat lessens symbolically as the first challenge is overcome."
+      },
+      "entities": [
+        {
+          "name": "Ship Crew",
+          "type": "npc",
+          "ref_slug": "ship_crew_generic",
+          "count": 4,
+          "state": "Cheering and relieved, grateful to the characters",
+          "disposition": "friendly",
+          "extra": {}
+        }
+      ],
+      "interactions": [
+        {
+          "trigger": "Sail on toward Stormwreck Isle",
+          "mechanic": "No check required.",
+          "success": "The scene shifts to the approach to Stormwreck Isle and Dragon’s Rest.",
+          "failure": "N/A."
+        }
+      ],
+      "loot": [],
+      "options": [
+        "Sail on toward Stormwreck Isle"
+      ],
+      "edges": [
+        {
+          "to": "approach_dragons_rest",
+          "weight": 1.0,
+          "label": "Arrive near Stormwreck Isle",
+          "condition": "The merrow encounter has concluded and the ship continues its voyage."
+        }
+      ],
+      "image_path": null
+    },
+    "approach_dragons_rest": {
+      "id": "approach_dragons_rest",
+      "title": "Approach to Dragon’s Rest",
+      "type": "roleplay",
+      "min_turns": 3,
+      "read_aloud": "Stormwreck Isle—now visible off the bow—promises rare wonders. Seaweed shimmers in countless brilliant colors below you, and rays of sunlight defy the overcast sky to illuminate the lush grass and dark basalt rock of the island. Avoiding the rocks jutting up from the ocean, your ship makes its way toward a calm harbor on the island’s north side.\n\nA large, open-air temple comes into view, perched on the edge of a cliff high above you. The ship drops anchor at the mouth of the harbor, and two sailors row you ashore. You have plenty of time to admire the towering statue at the center of the temple, depicting a wizened man surrounded by seven songbirds. A long path winds up the side of the cliff to the temple, dotted along the way with doorways cut into the rock.\n\nThe sailors set you ashore on a rickety dock, where a large rowboat is neatly tied. They point to the base of the path and wish you good luck before they row back to the ship. Your visit to Dragon’s Rest begins!",
+      "gm_guidance": "Describe the contrast between the earlier storm and the more hopeful, sunlit view of Stormwreck Isle. Emphasize the colorful seaweed, rays of sunlight, lush grass, and dark basalt rock to set a mystical, serene tone.\nHighlight the open-air temple on the cliff, the towering statue of a wizened man with seven songbirds, and the winding path with doorways cut into the rock. These details foreshadow the cloister’s spiritual and contemplative nature.\nOnce the characters are set ashore and the sailors depart, encourage players to introduce their characters to each other if they haven’t already. Prompt them to share or hint at their reasons for visiting Dragon’s Rest, either openly or secretly.\nAsk for the party’s marching order as they begin up the path: who is in front and who is in the rear. Make a note of this for upcoming encounters.\nWhen players are ready and marching order is set, transition to the Drowned Sailors encounter at the base of the path.",
+      "environment": {
+        "light": "Bright",
+        "terrain": "Normal (harbor, dock, and coastal path)",
+        "sound": "Gentle surf in the calm harbor, seabirds calling, distant wind around the cliffs, creak of the rickety dock",
+        "notes": "The overcast sky is pierced by rays of sunlight, giving the scene a hopeful, almost sacred feel."
+      },
+      "entities": [
+        {
+          "name": "Sailors",
+          "type": "npc",
+          "ref_slug": "harbor_sailors",
+          "count": 2,
+          "state": "Rowing the characters ashore, then departing after wishing them good luck",
+          "disposition": "friendly",
+          "extra": {}
+        }
+      ],
+      "interactions": [
+        {
+          "trigger": "Introduce characters and discuss reasons for visiting",
+          "mechanic": "No check required; free roleplay.",
+          "success": "Players share names, backgrounds, and motives for coming to Dragon’s Rest, helping establish party dynamics.",
+          "failure": "N/A – if players prefer secrecy, allow them to keep reasons hidden."
+        },
+        {
+          "trigger": "Set marching order and start up the path",
+          "mechanic": "No check required.",
+          "success": "You record who is in front and who is in the rear as they begin climbing toward the cloister, and move to the Drowned Sailors encounter.",
+          "failure": "N/A."
+        }
+      ],
+      "loot": [],
+      "options": [
+        "Introduce characters and discuss reasons for visiting",
+        "Set marching order and start up the path"
+      ],
+      "edges": [
+        {
+          "to": "drowned_sailors_encounter",
+          "weight": 1.0,
+          "label": "Begin the Drowned Sailors encounter",
+          "condition": "The party starts up the path toward Dragon’s Rest with a marching order established."
+        }
+      ],
+      "image_path": null
+    },
+    "drowned_sailors_encounter": {
+      "id": "drowned_sailors_encounter",
+      "title": "Drowned Sailors on the Beach",
+      "type": "encounter",
+      "min_turns": 4,
+      "read_aloud": "As you’re about to leave the beach and start your climb, you hear a ruckus of splashing and a wet, gurgling moan behind you. Three figures are shambling up from the water’s edge, about thirty feet away. They’re dressed as sailors, but their skin is gray and they look drowned. Sea water drools from their slack mouths as they lurch toward you.",
+      "gm_guidance": "This is the first combat-capable encounter of the main adventure, but combat is not mandatory.\nClarify the situation: three drowned-looking sailors (zombies) are about 30 feet behind the party at the water’s edge, shambling toward them. They are slow and clearly undead.\nPresent the choice explicitly: the characters can turn and fight the zombies or continue up the path and leave the slow, shambling zombies behind. Make sure players understand that fleeing is a valid option and that the zombies will not pursue up the path.\nIf the characters choose to fight, move to the combat node and follow standard initiative rules. If they choose to avoid the zombies, narrate their retreat up the path and skip the combat.\nIf the party initially fights but begins to fare poorly, remind them that they can still retreat up the path; the zombies won’t follow. This encounter is a teaching moment about tactical withdrawal.\nKnowledge: If players ask what their characters know about zombies, call for DC 10 Intelligence checks. On success, they recall that radiant damage and particularly powerful blows (critical hits) are effective at finishing zombies and bypassing their resilience.\nIf the zombies somehow defeat the party, Elder Runara intervenes (see combat node guidance) and the characters awaken safely in Dragon’s Rest, preserving the adventure’s continuity.",
+      "environment": {
+        "light": "Bright",
+        "terrain": "Normal (sandy beach and rocky shoreline)",
+        "sound": "Gentle surf, splashing from the shambling figures, wet gurgling moans",
+        "notes": "The beach is open with clear sight lines; the path up to Dragon’s Rest leads away from the water."
+      },
+      "entities": [
+        {
+          "name": "Drowned Sailor Zombies",
+          "type": "monster",
+          "ref_slug": "zombie_drowned_sailor",
+          "count": 3,
+          "state": "Shambling up from the water’s edge toward the party, 30 feet away",
+          "disposition": "hostile",
+          "extra": {
+            "armor_class": 8,
+            "hit_points": 22,
+            "speed": "20 ft.",
+            "abilities": {
+              "STR": 13,
+              "DEX": 6,
+              "CON": 16,
+              "INT": 3,
+              "WIS": 6,
+              "CHA": 5
+            },
+            "traits": [
+              "Undead Fortitude (Con save DC 5 + damage to avoid dropping to 0 hp, unless damage is radiant or a critical hit)",
+              "Unusual Nature (doesn’t require air, food, drink, or sleep)"
+            ],
+            "actions": [
+              "Slam +3 to hit, reach 5 ft., 1d6+1 bludgeoning"
+            ]
+          }
+        }
+      ],
+      "interactions": [
+        {
+          "trigger": "Stand and fight the zombies",
+          "mechanic": "No check required to initiate; roll initiative for all combatants.",
+          "success": "Structured combat begins against the three zombie sailors.",
+          "failure": "N/A – once they commit to fighting, move to the combat node."
+        },
+        {
+          "trigger": "Retreat up the path toward Dragon’s Rest",
+          "mechanic": "No check required; the zombies are slow and do not pursue up the path.",
+          "success": "The party escapes the zombies without combat and continues toward Dragon’s Rest.",
+          "failure": "N/A – unless the party chooses to re-engage, the zombies are left behind on the beach."
+        },
+        {
+          "trigger": "Recall lore about zombies",
+          "mechanic": "DC 10 Intelligence check (any character).",
+          "success": "The character recalls that zombies are hard to kill due to their unnatural resilience, but radiant damage and especially powerful blows (critical hits) can help finish them off and bypass their ability to keep standing.",
+          "failure": "The character doesn’t recall any useful details beyond that zombies are dangerous undead."
+        }
+      ],
+      "loot": [],
+      "options": [
+        "Stand and fight the zombies",
+        "Retreat up the path toward Dragon’s Rest",
+        "Recall lore about zombies"
+      ],
+      "edges": [
+        {
+          "to": "drowned_sailors_combat",
+          "weight": 1.0,
+          "label": "Zombies and characters enter combat",
+          "condition": "The party chooses to stand and fight or otherwise engages the zombies in melee or ranged attacks."
+        },
+        {
+          "to": "post_drowned_sailors_transition",
+          "weight": 1.0,
+          "label": "Party avoids or escapes the zombies",
+          "condition": "The party retreats up the path without being brought down by the zombies."
+        }
+      ],
+      "image_path": null
+    },
+    "drowned_sailors_combat": {
+      "id": "drowned_sailors_combat",
+      "title": "Drowned Sailors – Combat",
+      "type": "combat",
+      "min_turns": 4,
+      "read_aloud": "The drowned sailors lurch closer, arms outstretched, sea water pouring from their mouths as they reach for you with dead, grasping hands.",
+      "gm_guidance": "This node handles structured combat with three zombie sailors.\nInitiative: Use standard initiative rules. Roll for each character and for the group of zombies (or individually if desired). Track initiative order clearly.\nOn the zombies’ turn, they move toward the nearest characters and make Slam attacks if in range. They fight mindlessly until destroyed.\nUndead Fortitude: When a zombie is reduced to 0 hit points, have it make a Constitution saving throw (DC 5 + damage taken) unless the damage was radiant or from a critical hit. On a success, it drops to 1 hit point instead. Describe this vividly: “That should have finished it off, but it refuses to stop moving!”\nRadiant Damage: When a zombie takes radiant damage (e.g., from sacred flame), describe it howling in unusual agony to hint that radiant damage is especially effective.\nKnowledge Checks: If players ask what their characters know about zombies, call for DC 10 Intelligence checks. On success, they recall that radiant damage and critical hits can help finish zombies off and bypass their resilience.\nRetreat Option: At any point, if the characters are faring poorly, remind them that they can retreat up the path. The zombies are slow and will not pursue up the path toward Dragon’s Rest. If they withdraw, end combat and move to the transition node.\nRunara’s Aid (Failure Outcome): If the zombies defeat the adventurers (e.g., all characters drop to 0 hit points), Elder Runara intervenes. Narrate that the characters lose consciousness as the zombies drag them toward the sea, then fade to black. They later wake in a temple in Dragon’s Rest, where Runara explains she heard the sounds of combat and arrived just in time to prevent the zombies from dragging them into the sea. Do not kill the party; this is a safety net to keep the adventure going.\nThe zombies fight until all three are destroyed or the party escapes.",
+      "environment": {
+        "light": "Bright",
+        "terrain": "Normal (sandy beach with some rocks)",
+        "sound": "Crashing surf, wet gurgling moans, thuds of blows, shouts of the characters",
+        "notes": "The path up to Dragon’s Rest is nearby and offers a clear escape route."
+      },
+      "entities": [
+        {
+          "name": "Drowned Sailor Zombies",
+          "type": "monster",
+          "ref_slug": "zombie_drowned_sailor",
+          "count": 3,
+          "state": "Engaged in melee or shambling toward the characters on the beach",
+          "disposition": "hostile",
+          "extra": {
+            "armor_class": 8,
+            "hit_points": 22,
+            "speed": "20 ft.",
+            "abilities": {
+              "STR": 13,
+              "DEX": 6,
+              "CON": 16,
+              "INT": 3,
+              "WIS": 6,
+              "CHA": 5
+            },
+            "traits": [
+              "Undead Fortitude",
+              "Unusual Nature"
+            ],
+            "actions": [
+              "Slam +3 to hit, reach 5 ft., 1d6+1 bludgeoning"
+            ]
+          }
+        },
+        {
+          "name": "Elder Runara",
+          "type": "npc",
+          "ref_slug": "elder_runara",
+          "count": 1,
+          "state": "Off-screen; may intervene if the party is defeated",
+          "disposition": "friendly",
+          "extra": {}
+        }
+      ],
+      "interactions": [
+        {
+          "trigger": "Defeat the zombies",
+          "mechanic": "Standard D&D combat until all three zombies are reduced to 0 hit points and fail any Undead Fortitude saves.",
+          "success": "The zombies are destroyed and lie motionless on the beach, no longer a threat.",
+          "failure": "If the party is overwhelmed before defeating them, Runara’s Aid may trigger instead."
+        },
+        {
+          "trigger": "Retreat up the path",
+          "mechanic": "Characters use movement and possibly the Disengage action to withdraw; no checks required if they simply move away, as the zombies are slow.",
+          "success": "The party escapes up the path toward Dragon’s Rest. The zombies do not pursue and are left behind on the beach.",
+          "failure": "If characters linger within melee range, they may take opportunity attacks before escaping, but the zombies still won’t follow far up the path."
+        },
+        {
+          "trigger": "Fall in battle and be rescued by Runara",
+          "mechanic": "Narrative resolution; no player roll required once all characters are down.",
+          "success": "Elder Runara arrives in time to destroy or drive off the zombies and rescues the unconscious characters, who later awaken safely in a temple in Dragon’s Rest.",
+          "failure": "N/A – this is a fail-safe to prevent a total party kill at this early stage."
+        }
+      ],
+      "loot": [],
+      "options": [
+        "Defeat the zombies",
+        "Retreat up the path",
+        "Fall in battle and be rescued by Runara"
+      ],
+      "edges": [
+        {
+          "to": "post_drowned_sailors_transition",
+          "weight": 1.0,
+          "label": "Zombies no longer a direct threat",
+          "condition": "The zombies are destroyed, the party retreats up the path, or Runara rescues the defeated characters."
+        }
+      ],
+      "image_path": null
+    },
+    "post_drowned_sailors_transition": {
+      "id": "post_drowned_sailors_transition",
+      "title": "Up the Path to Dragon’s Rest",
+      "type": "transition",
+      "min_turns": 2,
+      "read_aloud": "Leaving the drowned sailors behind on the beach, you turn your attention back to the winding path that climbs toward the cliff-top temple of Dragon’s Rest. Whatever dangers await on Stormwreck Isle, your journey to the cloister has truly begun.",
+      "gm_guidance": "This node connects the Drowned Sailors encounter to the broader Dragon’s Rest storyline.\nAdjust the narration slightly based on outcome:\n- If the party defeated the zombies, mention the still forms on the beach and perhaps a sense of grim accomplishment.\n- If they retreated, emphasize the distant, shambling figures left behind at the water’s edge.\n- If Runara rescued them, describe them awakening in a temple chamber in Dragon’s Rest, with Runara explaining she heard the combat and intervened before the zombies could drag them into the sea.\nRegardless of outcome, the key result is the same: the characters are now proceeding toward or already within Dragon’s Rest, ready for the next chapter of the adventure.\nFrom here, transition into the Dragon’s Rest scenes (not included in this text) where they meet Elder Runara and learn about the dangers facing Stormwreck Isle.",
+      "environment": {
+        "light": "Bright",
+        "terrain": "Normal (ascending cliff path or interior of Dragon’s Rest, depending on rescue outcome)",
+        "sound": "Distant surf below, wind along the cliffs, faint sounds from the cloister above",
+        "notes": "Tone shifts from immediate danger to anticipation and mystery about Dragon’s Rest."
+      },
+      "entities": [
+        {
+          "name": "Elder Runara",
+          "type": "npc",
+          "ref_slug": "elder_runara",
+          "count": 1,
+          "state": "Either awaiting the party at Dragon’s Rest or present if she has already rescued them",
+          "disposition": "friendly",
+          "extra": {}
+        }
+      ],
+      "interactions": [
+        {
+          "trigger": "Proceed into the Dragon’s Rest storyline",
+          "mechanic": "No check required.",
+          "success": "The adventure continues with scenes set in Dragon’s Rest, where the characters meet Elder Runara and learn about the island’s dangers.",
+          "failure": "N/A."
+        }
+      ],
+      "loot": [],
+      "options": [
+        "Proceed into the Dragon’s Rest storyline"
+      ],
+      "edges": [],
+      "image_path": null
+    }
+  },
+  "id": "ba20b2e8",
+  "title": "Intro to Stormwreck Isle",
+  "characters": []
+}

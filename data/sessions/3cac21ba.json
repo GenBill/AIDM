@@ -1,0 +1,177 @@
+{
+  "session_id": "3cac21ba",
+  "story_id": "eb94688e",
+  "title": "xx's Journey",
+  "current_node_id": "stormy_seas",
+  "current_node_turns": 0,
+  "players": [
+    {
+      "name": "xx",
+      "character_sheet": {
+        "name": "Unknown",
+        "race": "Hill Dwarf",
+        "class_name": "Cleric",
+        "subclass": null,
+        "level": 1,
+        "background": "Soldier",
+        "alignment": "Lawful Good",
+        "hp_max": 11,
+        "ac": 18,
+        "speed": 25,
+        "initiative": -1,
+        "proficiency_bonus": 2,
+        "abilities": {
+          "strength": 14,
+          "dexterity": 8,
+          "constitution": 15,
+          "intelligence": 10,
+          "wisdom": 16,
+          "charisma": 12
+        },
+        "skill_proficiencies": [
+          "Athletics",
+          "Intimidation"
+        ],
+        "saving_throw_proficiencies": [
+          "Wisdom",
+          "Charisma"
+        ],
+        "attacks": [
+          {
+            "name": "Mace",
+            "bonus": 4,
+            "damage": "1d6+2",
+            "damage_type": "bludgeoning"
+          },
+          {
+            "name": "Handaxe",
+            "bonus": 4,
+            "damage": "1d6+2",
+            "damage_type": "slashing"
+          }
+        ],
+        "spellcasting": {
+          "spell_save_dc": 13,
+          "spell_attack_bonus": 5,
+          "cantrips": [
+            "Light",
+            "Thaumaturgy",
+            "Sacred Flame"
+          ],
+          "level_1_spells": [
+            "Bless",
+            "Command",
+            "Cure Wounds",
+            "Detect Magic (ritual)",
+            "Guiding Bolt",
+            "Healing Word",
+            "Protection from Evil and Good",
+            "Sanctuary",
+            "Shield of Faith"
+          ],
+          "prepared_spells": [
+            "Bless",
+            "Command",
+            "Cure Wounds"
+          ]
+        },
+        "equipment": [
+          "Chain mail",
+          "Shield",
+          "Mace",
+          "Handaxe",
+          "Holy symbol",
+          "Backpack",
+          "Bedroll",
+          "Mess kit",
+          "Tinderbox",
+          "10 torches",
+          "10 days of rations",
+          "Waterskin",
+          "50 feet of hempen rope",
+          "Insignia of rank",
+          "Broken blade as a trophy from a fallen enemy",
+          "Set of bone dice",
+          "Set of common clothes",
+          "Pouch"
+        ],
+        "features": [
+          "Divine Domain: Life",
+          "Ritual Casting",
+          "Disciple of Life",
+          "Darkvision",
+          "Dwarven Resilience",
+          "Stonecunning",
+          "Dwarven Toughness",
+          "Channel Divinity",
+          "Turn Undead",
+          "Preserve Life"
+        ],
+        "background_story": "You trained as a soldier in the land of Mintearn and joined a mercenary company. You traveled to the city of Neverwinter with your company to serve in both the army and the city watch. Over time, you clashed visibly with many of your fellow soldiers. They seemed to enjoy their authority and subjugate the people they’re supposed to protect. Your background shaped your character as a righteous warrior. You learned several languages in the course of your military career (shown in “Languages” on page 1).",
+        "personality_traits": null,
+        "ideals": null,
+        "bonds": null,
+        "flaws": null,
+        "file_path": "/static/data/stories/eb94688e/images/characters/sheet_501e9a_dwarf1.png",
+        "all_files": [
+          "/static/data/stories/eb94688e/images/characters/sheet_501e9a_dwarf1.png",
+          "/static/data/stories/eb94688e/images/characters/sheet_265a59_dwarf2.png"
+        ],
+        "avatar_path": "/static/data/stories/eb94688e/images/avatars/avatar_04461f.png"
+      },
+      "current_hp": 11,
+      "temp_hp": 0,
+      "conditions": [],
+      "inventory": [
+        "Chain mail",
+        "Shield",
+        "Mace",
+        "Handaxe",
+        "Holy symbol",
+        "Backpack",
+        "Bedroll",
+        "Mess kit",
+        "Tinderbox",
+        "10 torches",
+        "10 days of rations",
+        "Waterskin",
+        "50 feet of hempen rope",
+        "Insignia of rank",
+        "Broken blade as a trophy from a fallen enemy",
+        "Set of bone dice",
+        "Set of common clothes",
+        "Pouch"
+      ],
+      "position": "default"
+    }
+  ],
+  "enemy_states": {},
+  "chat_history": [
+    {
+      "role": "user",
+      "content": "where am i"
+    },
+    {
+      "role": "assistant",
+      "content": "Welcome to the world of Dungeons & Dragons! As the Dungeon Master, or DM, it's my role to guide you through exciting adventures where you get to play the hero. Right now, your story is just beginning.\n\nImagine a vast world with roaring dragons, mysterious dungeons, and magical landscapes - that's where you are. You're standing on the cusp of a great adventure, eagerly waiting to step into the unknown.\n\nIf you feel ready, just say the word, and we will embark on this journey together. Otherwise, feel free to ask any more questions or let me know if you need anything clarified before we begin."
+    },
+    {
+      "role": "assistant",
+      "content": "\n\n[Entered: Stormy Seas]\nYour journey has been smooth sailing so far. You left the bustling port of Neverwinter a few days ago, heading for an island with the foreboding name of Stormwreck Isle. But you woke this morning to a blood-red sunrise, and dark clouds overhead threaten a violent storm."
+    },
+    {
+      "role": "user",
+      "content": "I'm ready, let's begin the journy"
+    },
+    {
+      "role": "data",
+      "content": "The player declared readiness to begin the journey."
+    },
+    {
+      "role": "assistant",
+      "content": "As you express your eagerness to begin the journey, the scene shifts and the world around you starts to solidify. The gentle rustling of leaves in a nearby forest can be heard over the distant call of seabirds. You stand on a bustling dockside, with ships gently bobbing in the harbor waters, ready to sail into unknown territories. The salty sea air fills your lungs, and the promise of adventure tingles in the air. You feel both the thrill and the weight of the journey ahead entering your bones.\n\n\"Our journey begins across the stormy seas,\" I say, nodding towards the ship that awaits you. The deckhands are finishing their preparations, and the captain beckons you aboard with a wave.\n\nIt's time to set sail. The adventure truly begins now, with a vast horizon stretching out before you, and the fate of untold stories ready to unfold.\n\nLet's embark on this grand adventure!\"\n\n[Entered: Stormy Seas]\nYour journey has been smooth sailing so far. You left the bustling port of Neverwinter a few days ago, heading for an island with the foreboding name of Stormwreck Isle. But you woke this morning to a blood-red sunrise, and dark clouds overhead threaten a violent storm."
+    }
+  ],
+  "created_at": "2025-11-25T20:31:30.696731",
+  "updated_at": "2025-11-25T20:32:12.814050"
+}

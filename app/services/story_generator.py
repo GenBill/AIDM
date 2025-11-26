@@ -23,7 +23,7 @@ The input text may be narrative and lack explicit structured data. **You must in
 # Data Structure Rules
 
 ## 1. Scene Segmentation
-Break the text into a **JSON List** of Scene Nodes. Do not create duplicated same node!! Important: YOU MUST create a directed acyclic graph, which means you cannot backtrack. Create a new node whenever:
+Break the text into a **JSON List** of Scene Nodes. Do not create duplicated same node and do not create redundent node!! Important: YOU MUST create a directed acyclic graph, which means you cannot backtrack. Create a new node whenever:
 * The location changes.
 * A specific encounter (Combat/Social) begins.
 * The narrative "chapter" shifts.
@@ -31,7 +31,32 @@ Important: YOU MUST create a directed acyclic graph!
 
 ## 2. Field Extraction Guidelines
 * **id**: Snake_case unique identifier (e.g., `merrow_encounter`).
-* **type**: `encounter` (default), `roleplay`, `transition`, or `puzzle`.
+* **type**: `encounter`, `roleplay`, `transition`, `combat`, or `puzzle`.
+
+- "roleplay":
+  Pure social or narrative scenes. Focus on dialogue, characterization, and free-form description. Do NOT start initiative or detailed combat here, even if tensions are high. You may foreshadow danger, but keep it conversational.
+
+- "transition":
+  Short connective scenes that move the party from one situation or location to the next (travel, time skips, scene wrap-ups). Keep these brief and focused on pacing and mood. Usually there is no complex rules interaction here.
+
+- "encounter":
+  A structured scene with a clear situation or opposition (monsters, hazards, NPCs, dilemmas), but combat is NOT guaranteed.
+  - In an encounter node, you describe the situation and then ask what the players do.
+  - The players might negotiate, trick the enemy, retreat, or use creative tactics.
+  - Combat MAY happen, but only if the players choose to attack or clearly escalate the conflict.
+  - If the story graph has a child node of type "combat", you should only move into that combat node when the fiction clearly supports starting a fight (e.g., a character explicitly attacks, or talks clearly break down).
+
+- "combat":
+  Turn-based D&D combat is happening right now.
+  - Treat this as a signal that initiative has already been rolled or must be rolled immediately.
+  - The focus is on rounds, turns, positions, and actions, not long narrative digressions.
+  - In our system, "combat" nodes are handled by the dedicated Combat Agent and the frontend should switch into the fight UI.
+  - When you move the story into a node of type "combat", you should also signal that combat mode is now active so that control can pass to the Combat Agent.
+
+- "puzzle":
+  A scene centered on solving a riddle, trap, or puzzle-like situation.
+  - Emphasize clues, player reasoning, and step-by-step attempts.
+  - Avoid skipping straight to the solution unless the players clearly figure it out or fail repeatedly.
 
 * **min_turns** (Complexity Score): **CRITICAL**. Analyze the content to determine how many turns (interactions) players should spend here before the system suggests moving on.
     * **Use the following RUBRIC to assign `min_turns`**:
@@ -64,55 +89,115 @@ Important: YOU MUST create a directed acyclic graph!
     * Infer `disposition`: "hostile", "friendly", "neutral".
     * `state`: Initial position or activity (e.g., "Emerging from water").
 
+* **options**:
+    * A flat list of high-level choices that are **shown to the player** as buttons or menu options.
+    * Example: `["Negotiate", "Combat", "Creative Trick"]`.
+    * Every string in `options` MUST **exactly match** the `trigger` field of one object in `interactions`.
+    * The engine will use this 1-to-1 mapping: when the player chooses an option, it finds the `interaction` with the same `trigger` and uses its `mechanic` / `success` / `failure`.
+
 * **interactions**:
     * Convert mechanics into structured objects.
-    * Format: `{ "trigger": "Negotiate", "mechanic": "DC 15 Charisma", "success": "Cost reduced by 100gp", "failure": "Merrow gets angry" }`
+    * For **each** entry in `options`, create **one** corresponding `interaction` whose `trigger` is exactly the same text.
+    * Format:  
+      `{ "trigger": "Negotiate", "mechanic": "DC 15 Charisma", "success": "Cost reduced by 100gp", "failure": "Merrow gets angry and combat starts" }`
+    * Do **not** create extra `interaction.trigger` values that are not present in `options` (except for rare special cases you are explicitly instructed to add).
 
-* **loot**: List items or [].
-* **next**: List of transitions.
+
+* **edges**: List of transitions.
 
 # Output Format
 Return **ONLY** a valid JSON List. Do not wrap in markdown blocks if possible.
 Here is an example structure:
 [
-  {
-    "id": "unique_scene_id",
-    "title": "Scene Title",
-    "type": "encounter",
-    "min_turns": 4,
-    "read_aloud": "Flavor text...",
-    "gm_guidance": "DM secrets...",
-    "environment": {
-      "light": "Inferred Light",
-      "terrain": "Inferred Terrain",
-      "sound": "Inferred Sound"
+"merrow_appears_on_deck": {
+  "id": "merrow_appears_on_deck",
+  "title": "The Merrow Boards the Ship",
+  "type": "encounter",
+  "min_turns": 4,
+  "read_aloud": "As lightning flashes across the sky, a monster hauls itself up onto the deck!\n\n“These waters belong to the Scaled Queen. I’m here to collect her tribute.”",
+  "gm_guidance": "Show the illustration of the merrow and adopt an intimidating voice when speaking its lines. Explain to the players that they can choose how to respond: fight, negotiate, trick, or attempt other creative tactics. Explicitly tell them that almost anything they try will involve rolling a d20 and adding a number from their sheet. Let the players take the lead and describe their ideas; encourage them to say what they are thinking and then translate that into actions and checks.\nUse vivid descriptions of the storm, the wet deck, and the looming merrow to keep tension high regardless of approach. This scene can become combat, negotiation, or a mix. The merrow is here to extort tribute for the Scaled Queen, not to immediately slaughter everyone, so it is willing to talk and threaten before fighting.\nIf the players ask about the Scaled Queen, have the merrow boast that she is a huge, two-headed merrow blessed by Demogorgon, the Prince of Demons. Use this to seed future fear and lore.\nIf the characters attack, transition into structured combat (see next scene). If they negotiate or use tricks, resolve via ability checks here. The encounter should be winnable and not overly lethal; the merrow is fearsome but mechanically modest.",
+  "environment": {
+    "light": "Dim",
+    "terrain": "Difficult (Wet ship deck)",
+    "sound": "Thunder, crashing waves, wind whipping sails, creaking rigging, merrow snarls",
+    "notes": null
+  },
+  "entities": [
+    {
+      "name": "Merrow Extortionist",
+      "type": "monster",
+      "ref_slug": "merrow_extortionist",
+      "count": 1,
+      "state": "Hauling itself onto the deck, looming over the characters, demanding tribute",
+      "disposition": "hostile",
+      "extra": {}
     },
-    "entities": [
-      {
-        "name": "Name",
-        "type": "monster",
-        "ref_slug": "slug",
-        "count": 1,
-        "state": "Initial state",
-        "disposition": "hostile"
-      }
-    ],
-    "interactions": [
-      {
-        "trigger": "Action",
-        "mechanic": "DC X Check",
-        "success": "Result"
-      }
-    ],
-    "loot": [],
-    "next": [
-      {
-        "to": "next_scene_id",
-        "label": "Transition trigger",
-        "condition": "Optional condition"
-      }
-    ]
-  }
+    {
+      "name": "Ship Crew",
+      "type": "npc",
+      "ref_slug": "ship_crew_generic",
+      "count": 4,
+      "state": "Nervous and watching, ready to follow the characters’ lead if rallied",
+      "disposition": "neutral",
+      "extra": {}
+    }
+  ],
+
+  "options": [
+    "Negotiate",
+    "Combat",
+    "Creative Tactic",
+    "Ask about the Scaled Queen"
+  ],
+
+  "interactions": [
+    {
+      "trigger": "Negotiate",
+      "mechanic": "DC 15 Charisma (Persuasion, Intimidation, or Deception check, depending on approach)",
+      "success": "The merrow agrees to reduced tribute or accepts an alternative bargain. Tension remains high but full combat may be avoided.",
+      "failure": "The merrow grows impatient and hostile. It demands full tribute and is ready to attack, moving toward the combat scene."
+    },
+    {
+      "trigger": "Combat",
+      "mechanic": "No check required. Players declare attacks and initiative is rolled.",
+      "success": "Structured combat begins against the merrow (transition to the merrow combat node).",
+      "failure": "N/A – once combat is chosen, the scene must enter structured combat."
+    },
+    {
+      "trigger": "Creative Tactic",
+      "mechanic": "One or more ability checks (e.g. Athletics, Acrobatics, Performance, or others) typically DC 13–15, depending on the specific plan.",
+      "success": "The characters’ unusual tactic (rolling barrels, dropping sails, rallying crew, etc.) creates a strong advantage or bypasses tribute on clever terms, usually leading to the creative-resolution node.",
+      "failure": "The plan backfires or only partially works. The merrow becomes angry or feels mocked, and the situation is likely to escalate into combat."
+    },
+    {
+      "trigger": "Ask about the Scaled Queen",
+      "mechanic": "No check required.",
+      "success": "The merrow explains that the Scaled Queen is a huge, two-headed merrow blessed by Demogorgon, the Prince of Demons, seeding future fear and lore.",
+      "failure": "N/A – the merrow is eager to boast about its mistress and will share this information freely."
+    }
+  ],
+  "edges": [
+    {
+      "to": "merrow_negotiation",
+      "weight": 1.0,
+      "label": "Characters attempt to negotiate or pay tribute",
+      "condition": "Players choose to talk, bargain, or intimidate rather than immediately attack"
+    },
+    {
+      "to": "merrow_combat",
+      "weight": 1.0,
+      "label": "Characters attack the merrow",
+      "condition": "Any character declares an attack or hostilities break out"
+    },
+    {
+      "to": "merrow_shenanigans",
+      "weight": 1.0,
+      "label": "Characters attempt a creative nonstandard tactic",
+      "condition": "Players propose unusual tactics like rolling barrels, dropping sails, or rallying crew"
+    }
+  ]
+},
+
 ]
 """
 
@@ -137,7 +222,7 @@ def generate_story_from_text(raw_text: str) -> dict:
     try:
         # A. 调用 LLM
         response = client.chat.completions.create(
-            model="gpt-4o",
+            model="gpt-5.1",
             messages=[
                 {"role": "system", "content": SYSTEM_PROMPT},
                 {"role": "user", "content": f"Please process the following adventure text:\n\n{raw_text}"}
@@ -145,7 +230,11 @@ def generate_story_from_text(raw_text: str) -> dict:
             temperature=0.1, # 保持低温以稳定输出
         )
         llm_output = response.choices[0].message.content
-        
+            # A. 先打印原始 LLM 输出
+        print("=== RAW LLM OUTPUT ===")
+        print(llm_output)
+
+        #json_str = clean_json_text(llm_output)
         # B. 清洗数据
         json_str = clean_json_text(llm_output)
         

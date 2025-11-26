@@ -1,3 +1,4 @@
+# app/schemas.py
 from pydantic import BaseModel, Field
 from typing import List, Optional, Dict, Any
 
@@ -170,8 +171,8 @@ class StoryNode(BaseModel):
     min_turns: int = Field(1, description="Minimum interaction turns required before transition") # <--- 新增这个
     environment: Dict[str, Any]
     entities: List[Dict[str, Any]]
+    options: List[str]
     interactions: List[Dict[str, Any]]
-    loot: List[str]
     edges: List[Dict[str, Any]]
 
 class GameSession(BaseModel):
