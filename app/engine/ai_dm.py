@@ -1,3 +1,4 @@
+# app/engine/ai_dm.py
 import json
 import os
 import uuid
@@ -62,41 +63,17 @@ You are responsible for:
 - Narrative description and roleplay.
 - Scene pacing and node transitions in the story graph.
 - Light, non-combat dice checks (ability checks, skill checks, saving throws, etc.).
-- Controlling the UI mode via `active_mode`:
-  - "action"  : exploration / dialogue / pre-combat tension.
-  - "fight"   : when actual combat begins (initiative is rolled, or attacks are clearly exchanged).
-  - null      : keep the UI mode unchanged.
+
 
 You are **NOT** responsible for:
 - Detailed combat math for each round.
 - Applying damage to HP or tracking exact HP values.
 - Managing initiative order or turn-by-turn combat resolution.
+- Controlling any UI mode or frontend tabs (such as 'action' or 'fight'). The game engine will handle UI modes based on your chosen `transition_to_id` and the node types.
+
 
 All detailed combat (attack rolls, damage, HP updates, enemy HP, etc.)
 is handled by a separate **combat agent** on the `/fight` endpoint.
-
-### MODE CONTROL (VERY IMPORTANT)
-You control the `active_mode` field in your JSON output:
-
-- Use `"action"` for:
-  - Normal exploration and dialogue.
-  - Scenes where enemies appear but combat has NOT yet actually started.
-  - Pre-combat threats, warnings, standoffs, negotiations.
-
-- Use `"fight"` ONLY when:
-  - The player clearly chooses violence (e.g., "I attack the goblin", "I shoot my bow", "I cast Fire Bolt at it"),
-  - OR an enemy clearly initiates combat (e.g., "The goblins charge and attack"),
-  - AND it is appropriate to enter structured combat.
-
-- Use `null` when:
-  - You do NOT want to change the current UI mode.
-  - For example, small intermediate turns inside the same action mode.
-
-When you set `"fight"`, you are signaling:
-> "Switch the UI to combat mode; the combat agent will now handle detailed attacks."
-
-You may still narrate what the start of combat looks like ("They draw steel, blades clash..."),
-but do NOT attempt to resolve every attack and damage yourself.
 
 ### RULES
 1. **Narrative**:
@@ -110,8 +87,9 @@ but do NOT attempt to resolve every attack and damage yourself.
    - Respect pacing instructions: if the scene has not yet met its minimum turns, stay unless the PLAYER clearly insists on leaving or forcing a transition.
 4. **Combat Handoff**:
    - You can describe threats, weapons being drawn, and the first moments of battle.
-   - Set `active_mode` to `"fight"` when combat truly begins.
+   - When you decide that combat should begin, choose a `transition_to_id` that points to a combat node in the story graph.
    - Do NOT apply HP changes yourself; leave `damage_taken` as 0 or only very minor narrative chip damage if absolutely necessary.
+
 
 ### OUTPUT FORMAT (JSON)
 You MUST always return a JSON object matching this schema:
@@ -121,14 +99,10 @@ You MUST always return a JSON object matching this schema:
   "mechanics_log": "Any dice or mechanical notes. Can be empty string if nothing to log.",
   "damage_taken": 0,
   "transition_to_id": "node_id or null",
-  "active_mode": "fight | action | null"
 }
 
 - `damage_taken`: For you, this should normally stay 0. HP changes are mainly the combat agent's job.
-- `active_mode`:
-  - "action": ensure the UI is in exploration/dialogue mode.
-  - "fight" : switch the UI into combat mode.
-  - null    : do not change the current mode.
+- `transition_to_id`: Either null (remain in this node) or a node id from the provided list of possible next node ids.
 """
 
 
@@ -137,9 +111,10 @@ class DungeonMasterAI:
         """
         AIDM 主逻辑：
         - 负责叙事 / 节奏 / 节点跳转 / 遭遇战插画
-        - 可以通过 active_mode = 'action'|'fight' 控制前端 Tab 切换
+        - 不直接控制前端 Tab；active_mode 由后端根据 transition_to_id 是否进入 combat 节点自动设置
         - 不再负责详细战斗结算（attack / damage）
         """
+
         session = session_manager.load_session(session_id)
         player = session.players[0]
 
@@ -151,24 +126,67 @@ class DungeonMasterAI:
 
         # --- 节奏控制：计算当前节点轮数 ---
         session.current_node_turns += 1
-        min_turns = current_node.get("min_turns", 1)
+        min_turns = current_node.get("min_turns", 2)
+        # === 新增：读取 options / interactions / edges，全量提供给 LLM ===
+        options = current_node.get("options", [])
+        interactions = current_node.get("interactions", [])
+        edges = current_node.get("edges", [])
 
-        next_edges = current_node.get("edges", [])
-        next_node_type = "unknown"
-        if next_edges:
-            first_target_id = next_edges[0]["to"]
-            if first_target_id in story_data["nodes"]:
-                next_node_type = story_data["nodes"][first_target_id].get("type", "transition")
+       
+        # 1) 把所有 edges 转成「可转移的节点 ID 列表」
+        edge_ids: list[str] = []
+        for edge in edges:
+            target_id = edge.get("to")
+            # 只考虑 story 中真实存在的节点
+            if target_id and target_id in story_data["nodes"]:
+                edge_ids.append(target_id)
 
+        if edge_ids:
+            # 只给 LLM 看 ID，让它知道合法的 transition_to_id 候选有哪些
+            edges_text = "\n".join(f"- {eid}" for eid in edge_ids)
+        else:
+            edges_text = "No explicit transitions are defined from this node."
+        
+         # 2) 把 options 展开成文本，供 LLM 用来“展示可选行动”
+        if options:
+            options_text = "\n".join(f"- {opt}" for opt in options)
+        else:
+            options_text = "No explicit options are defined. You may still infer reasonable actions from the scene."
+
+        # 3) 把 interactions（triggers）展开，告诉 LLM 每个 trigger 对应的机制
+        if interactions:
+            interaction_lines = []
+            for inter in interactions:
+                trig = inter.get("trigger", "Unknown trigger")
+                mech = inter.get("mechanic", "No mechanic specified.")
+                succ = inter.get("success", "No success effect described.")
+                fail = inter.get("failure", "No failure effect described.")
+                # 用简单缩进，方便 LLM读
+                line = (
+                    f"- Trigger: {trig}\n"
+                    f"  Mechanic: {mech}\n"
+                    f"  On success: {succ}\n"
+                    f"  On failure: {fail}"
+                )
+                interaction_lines.append(line)
+            interactions_text = "\n".join(interaction_lines)
+        else:
+            interactions_text = "No explicit interaction blueprints are defined."
+
+         # 4) pacing instruction：结合 min_turns + transitions 列表
         if session.current_node_turns < min_turns:
             pacing_instruction = (
-                f"[PACING] Player has spent {session.current_node_turns}/{min_turns} turns in this scene. "
-                f"Stay in this node unless the PLAYER clearly asks to move on or leave."
+                f"[PACING] Player has spent {session.current_node_turns}/{min_turns} turns in this scene.\n"
+                f"Stay in this node unless the PLAYER clearly asks to move on or leave.\n"
+                f"When it is time to move on, choose a transition_to_id from the list under "
+                f"'POSSIBLE NEXT NODE IDS'. Do NOT invent new node ids."
             )
         else:
             pacing_instruction = (
-                f"[PACING] Scene complexity requirement met. "
-                f"You MAY transition to the next node ({next_node_type}) if it feels natural for the story."
+                "[PACING] Player has spent enough time in current scene.\n"
+                "You MAY transition to another node if it feels natural for the story.\n"
+                "If you decide to leave this node, set transition_to_id to ONE id from the list under "
+                "'POSSIBLE NEXT NODE IDS'. You MUST NOT invent new node ids."
             )
 
         # --- 构建上下文给 LLM ---
@@ -183,14 +201,30 @@ class DungeonMasterAI:
         GM Secrets: {current_node.get('gm_guidance')}
 
         --- EXITS ---
-        {json.dumps(next_edges, indent=2, ensure_ascii=False)}
+        {json.dumps(edges, indent=2, ensure_ascii=False)}
+
+        --- PLAYER OPTIONS (SUGGESTED, DO NOT RAILROAD) ---
+        The following optional actions you can should offer to the player as possibilities, encourage the players to choose one of them.
+        The player is NOT limited to these; they can describe any reasonable action.
+        {options_text}
+
+        --- INTERACTIONS (TRIGGERS & MECHANICS BLUEPRINTS) ---
+        Use these as concrete mappings from player-described actions to mechanics and outcomes.
+        {interactions_text}
+
+        --- POSSIBLE NEXT NODE IDS ---
+        These are the ONLY valid node ids you may use in `transition_to_id` if you decide to leave this node.
+        {edges_text}
 
         --- INSTRUCTIONS ---
         {pacing_instruction}
 
-        - You may lead into encounters and describe enemies.
-        - When combat truly begins (attacks, initiative), set `active_mode` to "fight" so the combat agent can take over.
+        - Use the options and interactions above as guidance for how to respond to the player.
+        - Translate their declared intent into ability checks, saving throws, or narrative outcomes.
+        - When combat truly begins (attacks, initiative), choose an appropriate combat node id as `transition_to_id`.
+        - The game engine will switch to the combat UI based on the target node's type; you do NOT control any UI mode.
         - Do NOT apply HP changes yourself; combat details are handled elsewhere.
+
 
         Player says: "{player_input}"
         """
@@ -247,13 +281,31 @@ class DungeonMasterAI:
                 break
 
         # --- 解析最终 DM 决策 ---
-        final_completion = client.beta.chat.completions.parse(
+        # --- 解析最终 DM 决策（先拿原始 JSON，再手动装配 DMResponse） ---
+        final_completion = client.chat.completions.create(
             model=MODEL_NAME,
             messages=messages,
-            response_format=DMResponse,
+            response_format={"type": "json_object"},  # 要求返回一个 JSON 对象
         )
-        dm_decision: DMResponse = final_completion.choices[0].message.parsed
 
+        # 有些模型返回 content 是字符串形式的 JSON
+        raw_text = final_completion.choices[0].message.content or "{}"
+        try:
+            raw = json.loads(raw_text)
+        except Exception:
+            # 容错：如果 LLM 不小心返回了非 JSON，我们至少不要崩
+            raw = {}
+
+        # 手动构造 DMResponse，active_mode 先设 None，后面再根据 combat 节点修改
+        dm_decision = DMResponse(
+            narrative=(raw.get("narrative") or "").strip(),
+            mechanics_log=raw.get("mechanics_log"),
+            damage_taken=raw.get("damage_taken") or 0,
+            transition_to_id=raw.get("transition_to_id"),
+            active_mode=None,
+        )
+
+        transitioned_to_combat = False
         # AIDM 不负责扣血，通常保持 damage_taken = 0
         if dm_decision.damage_taken is None:
             dm_decision.damage_taken = 0
@@ -275,9 +327,10 @@ class DungeonMasterAI:
             welcome_text = (
                 f"\n\n[Entered: {new_node.get('title')}]\n" + (new_node.get("read_aloud") or "")
             )
-
+            if new_node.get("type") == "combat":
+                transitioned_to_combat = True
             # 遭遇战节点：生成插画（仍然不处理战斗逻辑）
-            if new_node.get("type") == "encounter" and client_google:
+            if (new_node.get("type") == "encounter" or new_node.get("type") == "combat") and client_google:
                 print(f"🎨 [GenAI] Preparing encounter art for: {new_node.get('title')}")
                 try:
                     from PIL import Image
@@ -403,6 +456,13 @@ class DungeonMasterAI:
             # 把进入新节点的欢迎文本写入历史 & narrative
             session.chat_history.append({"role": "assistant", "content": welcome_text})
             dm_decision.narrative += welcome_text
+
+        # --- 根据本轮是否进入 combat 节点，由代码而不是 LLM 决定 active_mode ---
+        # 彻底忽略 LLM 自己设置的 active_mode（如果有的话）
+        dm_decision.active_mode = None
+        if transitioned_to_combat:
+            # 只有当刚刚跳进一个 type == "combat" 的节点时，才告诉前端切换到战斗路由
+            dm_decision.active_mode = "fight"
 
         # --- 记录本轮对话 ---
         session.chat_history.append({"role": "user", "content": player_input})

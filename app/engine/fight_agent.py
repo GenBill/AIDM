@@ -1,3 +1,4 @@
+# app/engine/fight_agent.py
 import json
 from openai import OpenAI
 from app.engine.session import session_manager
@@ -109,7 +110,7 @@ class FightAgent:
 
         while True:
             completion = client.chat.completions.create(
-                model="gpt-4o-2024-08-06",
+                model="gpt-5.1",
                 messages=messages,
                 tools=ENCOUNTER_TOOLS,
                 tool_choice="auto"
