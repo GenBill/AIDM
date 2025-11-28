@@ -324,11 +324,51 @@ class DungeonMasterAI:
             session.current_node_turns = 0
             new_node = story_data["nodes"][dm_decision.transition_to_id]
 
-            welcome_text = (
-                f"\n\n[Entered: {new_node.get('title')}]\n" + (new_node.get("read_aloud") or "")
-            )
-            if new_node.get("type") == "combat":
+            new_node_type = new_node.get("type")
+            new_node_title = new_node.get("title") or "Unknown Scene"
+            new_node_read_aloud = new_node.get("read_aloud") or ""
+
+            # 默认：非战斗节点，用原来的进入描述
+            welcome_text = f"\n\n[Entered: {new_node_title}]\n{new_node_read_aloud}"
+            # === 新增：如果是 combat 节点，改成战斗开场白 ===
+            if new_node_type == "combat":
                 transitioned_to_combat = True
+
+                # 简单取第一个敌人
+                enemy = (new_node.get("entities") or [{}])[0]
+                enemy_name = enemy.get("name", "敌人")
+                enemy_stats = enemy.get("stats", {})
+                enemy_hp_max = enemy_stats.get("hp_max") or enemy_stats.get("hp") or "unknown"
+
+                # 列举玩家可用攻击（名字 + 伤害骰）
+                attacks = getattr(player.character_sheet, "attacks", []) or []
+                attack_lines = []
+                for atk in attacks:
+                    try:
+                        atk_name = getattr(atk, "name", None) or atk.get("name", "Attack")
+                        atk_damage = getattr(atk, "damage", None) or atk.get("damage", "")
+                    except AttributeError:
+                        # 如果是 pydantic 模型，不支持 dict 访问，就用属性
+                        atk_name = getattr(atk, "name", "Attack")
+                        atk_damage = getattr(atk, "damage", "")
+                    line = f"- {atk_name} ({atk_damage})"
+                    attack_lines.append(line)
+
+                attacks_block = "\n".join(attack_lines) if attack_lines else "（you don't have any registered attacks on your character sheet.）"
+
+                # 战斗开场白（完全由代码生成，不靠 LLM）
+                welcome_text = (
+                    f"\n\n[Combat Begins]\n"
+                    f"{enemy_name} shows dangerous intent!\n"
+                )
+
+                if enemy_hp_max != "unknown":
+                    welcome_text += f"your {enemy_name} (approximately {enemy_hp_max} HP).\n"
+
+                welcome_text += (
+                    f"\nYour main attacks are:\n{attacks_block}\n\n"
+                    "Describe your first combat action (e.g., 'I attack with my longsword' or 'I cast a fireball')."
+                )
             # 遭遇战节点：生成插画（仍然不处理战斗逻辑）
             if (new_node.get("type") == "encounter" or new_node.get("type") == "combat") and client_google:
                 print(f"🎨 [GenAI] Preparing encounter art for: {new_node.get('title')}")

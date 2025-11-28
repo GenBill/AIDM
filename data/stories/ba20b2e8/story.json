@@ -34,7 +34,7 @@
           "condition": "You are ready to begin describing the adventure fiction."
         }
       ],
-      "image_path": null
+      "image_path": "/static/data/stories/ba20b2e8/images/backgrounds/bg_intro_demo_setup_967224.jpg"
     },
     "voyage_to_stormwreck_approach": {
       "id": "voyage_to_stormwreck_approach",
@@ -57,7 +57,54 @@
           "count": 1,
           "state": "Hauling itself up onto the deck, looming over the characters, demanding tribute for the Scaled Queen",
           "disposition": "hostile",
-          "extra": {}
+          "extra": {},
+          "image_path": "/static/data/stories/ba20b2e8/images/enemies/avatar_Merrow_Extortionist_90a03e.png",
+          "stats": {
+            "name": "Merrow Extortionist",
+            "size": "Large",
+            "type": "Monstrosity",
+            "alignment": "Typically Chaotic Evil",
+            "ac": 13,
+            "ac_description": "natural armor",
+            "hp_max": 30,
+            "hp_formula": "4d10 + 8",
+            "speed": "10 ft., swim 40 ft.",
+            "str": 16,
+            "dex": 10,
+            "con": 15,
+            "int": 8,
+            "wis": 10,
+            "cha": 9,
+            "skills": null,
+            "senses": "darkvision 60 ft., passive Perception 10",
+            "languages": "Abyssal, Aquan, Common",
+            "challenge_rating": "1",
+            "xp": 100,
+            "traits": [
+              {
+                "name": "Amphibious",
+                "description": "The merrow can breathe air and water."
+              }
+            ],
+            "actions": [
+              {
+                "name": "Multiattack",
+                "description": "The merrow makes two Rend attacks.",
+                "attack_bonus": null,
+                "damage_dice": null
+              },
+              {
+                "name": "Rend",
+                "description": "Melee Weapon Attack: +5 to hit, reach 10 ft., one target. Hit: 8 (2d4 + 3) piercing damage.",
+                "attack_bonus": 5,
+                "damage_dice": "2d4 + 3"
+              }
+            ],
+            "reactions": [],
+            "legendary_actions": [],
+            "file_path": "/static/data/stories/ba20b2e8/images/enemies/stat_Merrow_Extortionist_391187.png"
+          },
+          "source": "custom_upload"
         },
         {
           "name": "Ship Crew",
@@ -96,7 +143,7 @@
           "condition": "Players indicate any concrete response to the merrow (talking, attacking, or planning a trick)."
         }
       ],
-      "image_path": null
+      "image_path": "/static/data/stories/ba20b2e8/images/backgrounds/bg_voyage_to_stormwreck_approach_2c934c.png"
     },
     "merrow_extortion_encounter": {
       "id": "merrow_extortion_encounter",
@@ -138,7 +185,54 @@
               "Multiattack (two Rend attacks)",
               "Rend +5 to hit, reach 10 ft., 2d4+3 piercing"
             ]
-          }
+          },
+          "image_path": "/static/data/stories/ba20b2e8/images/enemies/avatar_Merrow_Extortionist_90a03e.png",
+          "stats": {
+            "name": "Merrow Extortionist",
+            "size": "Large",
+            "type": "Monstrosity",
+            "alignment": "Typically Chaotic Evil",
+            "ac": 13,
+            "ac_description": "natural armor",
+            "hp_max": 30,
+            "hp_formula": "4d10 + 8",
+            "speed": "10 ft., swim 40 ft.",
+            "str": 16,
+            "dex": 10,
+            "con": 15,
+            "int": 8,
+            "wis": 10,
+            "cha": 9,
+            "skills": null,
+            "senses": "darkvision 60 ft., passive Perception 10",
+            "languages": "Abyssal, Aquan, Common",
+            "challenge_rating": "1",
+            "xp": 100,
+            "traits": [
+              {
+                "name": "Amphibious",
+                "description": "The merrow can breathe air and water."
+              }
+            ],
+            "actions": [
+              {
+                "name": "Multiattack",
+                "description": "The merrow makes two Rend attacks.",
+                "attack_bonus": null,
+                "damage_dice": null
+              },
+              {
+                "name": "Rend",
+                "description": "Melee Weapon Attack: +5 to hit, reach 10 ft., one target. Hit: 8 (2d4 + 3) piercing damage.",
+                "attack_bonus": 5,
+                "damage_dice": "2d4 + 3"
+              }
+            ],
+            "reactions": [],
+            "legendary_actions": [],
+            "file_path": "/static/data/stories/ba20b2e8/images/enemies/stat_Merrow_Extortionist_391187.png"
+          },
+          "source": "custom_upload"
         },
         {
           "name": "Ship Crew",
@@ -246,7 +340,54 @@
               "Multiattack (two Rend attacks)",
               "Rend +5 to hit, reach 10 ft., 2d4+3 piercing"
             ]
-          }
+          },
+          "image_path": "/static/data/stories/ba20b2e8/images/enemies/avatar_Merrow_Extortionist_90a03e.png",
+          "stats": {
+            "name": "Merrow Extortionist",
+            "size": "Large",
+            "type": "Monstrosity",
+            "alignment": "Typically Chaotic Evil",
+            "ac": 13,
+            "ac_description": "natural armor",
+            "hp_max": 30,
+            "hp_formula": "4d10 + 8",
+            "speed": "10 ft., swim 40 ft.",
+            "str": 16,
+            "dex": 10,
+            "con": 15,
+            "int": 8,
+            "wis": 10,
+            "cha": 9,
+            "skills": null,
+            "senses": "darkvision 60 ft., passive Perception 10",
+            "languages": "Abyssal, Aquan, Common",
+            "challenge_rating": "1",
+            "xp": 100,
+            "traits": [
+              {
+                "name": "Amphibious",
+                "description": "The merrow can breathe air and water."
+              }
+            ],
+            "actions": [
+              {
+                "name": "Multiattack",
+                "description": "The merrow makes two Rend attacks.",
+                "attack_bonus": null,
+                "damage_dice": null
+              },
+              {
+                "name": "Rend",
+                "description": "Melee Weapon Attack: +5 to hit, reach 10 ft., one target. Hit: 8 (2d4 + 3) piercing damage.",
+                "attack_bonus": 5,
+                "damage_dice": "2d4 + 3"
+              }
+            ],
+            "reactions": [],
+            "legendary_actions": [],
+            "file_path": "/static/data/stories/ba20b2e8/images/enemies/stat_Merrow_Extortionist_391187.png"
+          },
+          "source": "custom_upload"
         },
         {
           "name": "Ship Crew",
@@ -384,7 +525,7 @@
           "condition": "The party starts up the path toward Dragon’s Rest with a marching order established."
         }
       ],
-      "image_path": null
+      "image_path": "/static/data/stories/ba20b2e8/images/backgrounds/bg_approach_dragons_rest_95447c.png"
     },
     "drowned_sailors_encounter": {
       "id": "drowned_sailors_encounter",
@@ -426,7 +567,52 @@
             "actions": [
               "Slam +3 to hit, reach 5 ft., 1d6+1 bludgeoning"
             ]
-          }
+          },
+          "image_path": "/static/data/stories/ba20b2e8/images/enemies/avatar_Drowned_Sailor_Zombies_493f99.png",
+          "stats": {
+            "name": "Zombie",
+            "size": "Medium",
+            "type": "Undead",
+            "alignment": "Typically Neutral Evil",
+            "ac": 8,
+            "ac_description": null,
+            "hp_max": 22,
+            "hp_formula": "3d8 + 9",
+            "speed": "20 ft.",
+            "str": 13,
+            "dex": 6,
+            "con": 16,
+            "int": 3,
+            "wis": 6,
+            "cha": 5,
+            "skills": null,
+            "senses": "darkvision 60 ft., passive Perception 8",
+            "languages": "understands the languages it knew in life but can’t speak",
+            "challenge_rating": "1/4",
+            "xp": 50,
+            "traits": [
+              {
+                "name": "Undead Fortitude",
+                "description": "If damage reduces the zombie to 0 hit points, it makes a Constitution saving throw with a DC of 5 + the damage taken, unless the damage is radiant or from a critical hit. On a success, the zombie drops to 1 hit point instead."
+              },
+              {
+                "name": "Unusual Nature",
+                "description": "The zombie doesn’t require air, food, drink, or sleep."
+              }
+            ],
+            "actions": [
+              {
+                "name": "Slam",
+                "description": "Melee Weapon Attack: +3 to hit, reach 5 ft., one target.",
+                "attack_bonus": 3,
+                "damage_dice": "1d6 + 1"
+              }
+            ],
+            "reactions": [],
+            "legendary_actions": [],
+            "file_path": "/static/data/stories/ba20b2e8/images/enemies/stat_Drowned_Sailor_Zombies_c58f1c.png"
+          },
+          "source": "custom_upload"
         }
       ],
       "interactions": [
@@ -469,7 +655,7 @@
           "condition": "The party retreats up the path without being brought down by the zombies."
         }
       ],
-      "image_path": null
+      "image_path": "/static/data/stories/ba20b2e8/images/backgrounds/bg_drowned_sailors_encounter_b71da4.png"
     },
     "drowned_sailors_combat": {
       "id": "drowned_sailors_combat",
@@ -511,7 +697,52 @@
             "actions": [
               "Slam +3 to hit, reach 5 ft., 1d6+1 bludgeoning"
             ]
-          }
+          },
+          "image_path": "/static/data/stories/ba20b2e8/images/enemies/avatar_Drowned_Sailor_Zombies_493f99.png",
+          "stats": {
+            "name": "Zombie",
+            "size": "Medium",
+            "type": "Undead",
+            "alignment": "Typically Neutral Evil",
+            "ac": 8,
+            "ac_description": null,
+            "hp_max": 22,
+            "hp_formula": "3d8 + 9",
+            "speed": "20 ft.",
+            "str": 13,
+            "dex": 6,
+            "con": 16,
+            "int": 3,
+            "wis": 6,
+            "cha": 5,
+            "skills": null,
+            "senses": "darkvision 60 ft., passive Perception 8",
+            "languages": "understands the languages it knew in life but can’t speak",
+            "challenge_rating": "1/4",
+            "xp": 50,
+            "traits": [
+              {
+                "name": "Undead Fortitude",
+                "description": "If damage reduces the zombie to 0 hit points, it makes a Constitution saving throw with a DC of 5 + the damage taken, unless the damage is radiant or from a critical hit. On a success, the zombie drops to 1 hit point instead."
+              },
+              {
+                "name": "Unusual Nature",
+                "description": "The zombie doesn’t require air, food, drink, or sleep."
+              }
+            ],
+            "actions": [
+              {
+                "name": "Slam",
+                "description": "Melee Weapon Attack: +3 to hit, reach 5 ft., one target.",
+                "attack_bonus": 3,
+                "damage_dice": "1d6 + 1"
+              }
+            ],
+            "reactions": [],
+            "legendary_actions": [],
+            "file_path": "/static/data/stories/ba20b2e8/images/enemies/stat_Drowned_Sailor_Zombies_c58f1c.png"
+          },
+          "source": "custom_upload"
         },
         {
           "name": "Elder Runara",
@@ -601,5 +832,113 @@
   },
   "id": "ba20b2e8",
   "title": "Intro to Stormwreck Isle",
-  "characters": []
+  "characters": [
+    {
+      "name": "Dwarf Cleric",
+      "race": "Hill Dwarf",
+      "class_name": "Cleric",
+      "subclass": null,
+      "level": 1,
+      "background": "Soldier",
+      "alignment": "Lawful Good",
+      "hp_max": 11,
+      "ac": 18,
+      "speed": 25,
+      "initiative": -1,
+      "proficiency_bonus": 2,
+      "abilities": {
+        "strength": 14,
+        "dexterity": 8,
+        "constitution": 15,
+        "intelligence": 10,
+        "wisdom": 16,
+        "charisma": 12
+      },
+      "skill_proficiencies": [
+        "History",
+        "Insight"
+      ],
+      "saving_throw_proficiencies": [
+        "Wisdom",
+        "Charisma"
+      ],
+      "attacks": [
+        {
+          "name": "Mace",
+          "bonus": 4,
+          "damage": "1d6+2",
+          "damage_type": "bludgeoning"
+        },
+        {
+          "name": "Handaxe",
+          "bonus": 4,
+          "damage": "1d6+2",
+          "damage_type": "slashing"
+        }
+      ],
+      "spellcasting": {
+        "spell_save_dc": 13,
+        "spell_attack_bonus": 5,
+        "cantrips": [
+          "Light",
+          "Thaumaturgy",
+          "Sacred Flame"
+        ],
+        "level_1_spells": [
+          "Command",
+          "Cure Wounds",
+          "Detect Magic (ritual)",
+          "Guiding Bolt",
+          "Healing Word",
+          "Protection from Evil and Good",
+          "Sanctuary",
+          "Shield of Faith"
+        ],
+        "prepared_spells": [
+          "Bless",
+          "Cure Wounds",
+          "Guiding Bolt"
+        ]
+      },
+      "equipment": [
+        "Chain mail",
+        "Shield",
+        "Mace",
+        "Handaxe",
+        "Holy symbol",
+        "Backpack",
+        "Bedroll",
+        "Mess kit",
+        "Tinderbox",
+        "10 torches",
+        "10 days of rations",
+        "Waterskin",
+        "50 feet of hempen rope",
+        "Insignia of rank",
+        "Broken blade",
+        "Set of bone dice",
+        "Set of common clothes",
+        "Pouch"
+      ],
+      "features": [
+        "Darkvision",
+        "Dwarven Resilience",
+        "Stonecunning",
+        "Dwarven Toughness",
+        "Channel Divinity: Turn Undead",
+        "Preserve Life"
+      ],
+      "background_story": "You trained as a soldier in the land of Mintarn and joined a mercenary company. Over time, you earned respect and eventually became a leader among fellow soldiers.",
+      "personality_traits": "I face problems head-on. A simple, direct solution is the best path to success.",
+      "ideals": "Respect. People deserve to be treated with dignity and respect.",
+      "bonds": "My honor is my life.",
+      "flaws": "I obey the law, even if the law causes misery.",
+      "file_path": "/static/data/stories/ba20b2e8/images/characters/sheet_f8ee73_dwarf1.png",
+      "all_files": [
+        "/static/data/stories/ba20b2e8/images/characters/sheet_f8ee73_dwarf1.png",
+        "/static/data/stories/ba20b2e8/images/characters/sheet_2fcb81_dwarf2.png"
+      ],
+      "avatar_path": "/static/data/stories/ba20b2e8/images/avatars/avatar_dacf8d.png"
+    }
+  ]
 }

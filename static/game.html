@@ -485,14 +485,19 @@
       const data = await res.json();
       document.getElementById(loadingId).remove();
 
-      if (data.mechanics_log) addMessage('data', data.mechanics_log);
-      addMessage('dm', data.narrative);
+      const mechanicsLog = data.mechanics_log;
+      const narrative = data.narrative;
 
-      // --- 新增：自动 Tab 切换逻辑 ---
+      // 1. 先根据 active_mode 切换 Tab（如果需要）
       if (data.active_mode) {
-          console.log("Auto-switching to:", data.active_mode);
-          switchMode(data.active_mode);
+        console.log("Auto-switching to:", data.active_mode);
+        switchMode(data.active_mode);   // 👈 这里会更新 currentMode
       }
+
+      // 2. 再把日志和叙述插入“当前”(可能已经切换后的) Tab
+      if (mechanicsLog) addMessage('data', mechanicsLog);
+      if (narrative) addMessage('dm', narrative);
+
       // ----------------------------
 
       // 只有 Action 和 Fight 模式才刷新血条
