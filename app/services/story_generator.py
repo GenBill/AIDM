@@ -31,7 +31,7 @@ Important: YOU MUST create a directed acyclic graph!
 
 ## 2. Field Extraction Guidelines
 * **id**: Snake_case unique identifier (e.g., `merrow_encounter`).
-* **type**: `encounter`, `roleplay`, `transition`, `combat`, or `puzzle`.
+* **type**: `encounter`, `roleplay`, `transition`, `combat`, `puzzle` or `destination`.
 
 - "roleplay":
   Pure social or narrative scenes. Focus on dialogue, characterization, and free-form description. Do NOT start initiative or detailed combat here, even if tensions are high. You may foreshadow danger, but keep it conversational.
@@ -57,6 +57,12 @@ Important: YOU MUST create a directed acyclic graph!
   A scene centered on solving a riddle, trap, or puzzle-like situation.
   - Emphasize clues, player reasoning, and step-by-step attempts.
   - Avoid skipping straight to the solution unless the players clearly figure it out or fail repeatedly.
+
+- "destination":
+  The endpoint of the whole adventure.
+  - This node type signifies the conclusion of the story.
+  - This node should have no outgoing edges.
+  - Provide a satisfying wrap-up, epilogue, or summary of outcomes.
 
 * **min_turns** (Complexity Score): **CRITICAL**. Analyze the content to determine how many turns (interactions) players should spend here before the system suggests moving on.
     * **Use the following RUBRIC to assign `min_turns`**:
@@ -199,6 +205,12 @@ Here is an example structure:
 },
 
 ]
+
+# Important Note:
+At the end of the story you MUST create a final scene node with type="destination". 
+This node must contain an epilogue or closing summary. 
+This node must have no outgoing edges.
+
 """
 
 # ======================================================

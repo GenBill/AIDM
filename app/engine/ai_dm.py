@@ -29,30 +29,55 @@ if GOOGLE_GENAI_AVAILABLE:
         client_google = genai.Client(api_key=api_key)
 
 # --- TOOL DEFINITIONS: 只保留非战斗的 roll_dice ---
+# --- TOOL DEFINITIONS: 只保留“能力鉴定” ---
 TOOLS = [
     {
         "type": "function",
         "function": {
-            "name": "roll_dice",
+            "name": "ability_check",
             "description": (
-                "Roll dice for non-combat checks such as ability checks, "
-                "skill checks, saving throws, or any uncertain narrative outcome. "
-                "Do NOT use this to resolve full attack/damage combat rounds; "
-                "those are handled by a separate combat agent."
+                "Perform a NON-COMBAT ability check for the player.\n"
+                "You MUST choose exactly one ability from: strength, dexterity, constitution, "
+                "intelligence, wisdom, charisma.\n"
+                "The game engine will look up the character's actual ability score, compute the "
+                "modifier, roll 1d20+modifier, and determine success or failure against the DC.\n"
+                "Use this ONLY for things like Perception, Stealth, Persuasion, etc. "
+                "NOT for full combat attack/damage resolution."
             ),
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "expr": {
+                    "ability": {
                         "type": "string",
-                        "description": "Dice expression, e.g. '1d20+5', '2d6+3'."
+                        "enum": [
+                            "strength",
+                            "dexterity",
+                            "constitution",
+                            "intelligence",
+                            "wisdom",
+                            "charisma"
+                        ],
+                        "description": "Which core ability governs this check."
+                    },
+                    "dc": {
+                        "type": "integer",
+                        "description": "The difficulty class (DC) the player must meet or beat."
+                    },
+                    "reason": {
+                        "type": "string",
+                        "description": (
+                            "A short explanation of WHY this check is needed and what the character "
+                            "is trying to do (e.g. 'spot hidden enemies on deck', "
+                            "'convince the merrow to accept a smaller tribute')."
+                        )
                     }
                 },
-                "required": ["expr"]
+                "required": ["ability", "dc", "reason"]
             }
         }
     }
 ]
+
 
 # --- SYSTEM PROMPT ---
 SYSTEM_PROMPT = """
@@ -79,9 +104,22 @@ is handled by a separate **combat agent** on the `/fight` endpoint.
 1. **Narrative**:
    - Be vivid and grounded in the current node's description and GM guidance.
    - When entering a new scene, briefly describe the environment, key NPCs/monsters, and immediate sensory details.
-2. **Dice**:
-   - Use the `roll_dice` tool for uncertain non-combat outcomes (skill checks, saving throws, etc.).
-   - Log these results in `mechanics_log`.
+   - Always provide player with options based on the scene's "PLAYER OPTIONS" section, guide them to choose one.
+
+2. **Dice / Ability Checks**:
+   - For any NON-COMBAT uncertain outcome (spotting details, persuading NPCs, sneaking, recalling lore, etc.),
+     you MUST use the `ability_check` tool.
+   - You may ONLY use the following abilities for checks:
+     strength, dexterity, constitution, intelligence, wisdom, charisma.
+   - Choose ONE ability, an appropriate DC, and a clear `reason` describing what the character is attempting and why
+     this check is required.
+   - The game engine will automatically:
+       * look up the character's actual ability score,
+       * compute the modifier,
+       * roll 1d20 + modifier,
+       * and determine success or failure.
+   - You do NOT need to invent the dice expression or do math yourself.
+
 3. **Transitions**:
    - Use `transition_to_id` only when it logically follows to move to another node.
    - Respect pacing instructions: if the scene has not yet met its minimum turns, stay unless the PLAYER clearly insists on leaving or forcing a transition.
@@ -187,6 +225,7 @@ class DungeonMasterAI:
                 "You MAY transition to another node if it feels natural for the story.\n"
                 "If you decide to leave this node, set transition_to_id to ONE id from the list under "
                 "'POSSIBLE NEXT NODE IDS'. You MUST NOT invent new node ids."
+                "If 'POSSIBLE NEXT NODE IDS'. is empty, it means the end of the story has been reached. And you should inform the player that the adventure concludes here, give them a satisfying ending, and do NOT set transition_to_id."
             )
 
         # --- 构建上下文给 LLM ---
@@ -238,6 +277,7 @@ class DungeonMasterAI:
         mechanics_logs: list[str] = []
 
         # --- 工具循环（只处理 roll_dice） ---
+        # --- 工具循环（只处理 ability_check） ---
         while True:
             completion = client.chat.completions.create(
                 model=MODEL_NAME,
@@ -254,14 +294,52 @@ class DungeonMasterAI:
                     args = json.loads(tool.function.arguments)
                     try:
                         result_content = ""
-                        if tool_name == "roll_dice":
-                            expr = args.get("expr")
-                            result = roll_dice(expr)
-                            total = result["total"]
-                            detail = f"Check: Rolled {expr} => {total}"
-                            mechanics_logs.append(detail)
-                            result_content = json.dumps(result, ensure_ascii=False)
 
+                        if tool_name == "ability_check":
+                            # 1) 从参数读取：哪个属性、DC、为什么要鉴定
+                            ability = (args.get("ability") or "").lower()
+                            dc = int(args.get("dc"))
+                            reason = args.get("reason") or "No reason provided"
+
+                            # 2) 从角色卡读取该属性值
+                            abilities = getattr(player.character_sheet, "abilities", {}) or {}
+                            # abilities 里应该是 {"strength": 14, "dexterity": 8, ...}
+                            score = int(abilities.get(ability, 10))
+
+                            # 3) 计算修正值 & expr
+                            modifier = (score - 10) // 2
+                            expr = f"1d20{modifier:+d}"  # 比如 1d20+3 或 1d20-1
+
+                            # 4) 真正掷骰
+                            roll_result = roll_dice(expr)
+                            total = roll_result["total"]
+                            success = total >= dc
+                            outcome = "SUCCESS" if success else "FAILURE"
+                            mod_str = f"{modifier:+d}"
+
+                            # 5) 写入极其详细的 mechanics_log：为什么鉴定 / 用什么属性 / 属性值 / 结果
+                            detail = (
+                                "Ability Check:\n"
+                                f"- Reason: {reason}\n"
+                                f"- Ability: {ability.capitalize()} (score {score}, modifier {mod_str})\n"
+                                f"- DC: {dc}\n"
+                                f"- Roll: {expr} = {total} → {outcome}"
+                            )
+                            mechanics_logs.append(detail)
+
+                            # 6) 返回给 LLM 的结构化结果（如果它想参考）
+                            tool_payload = {
+                                "ability": ability,
+                                "score": score,
+                                "modifier": modifier,
+                                "dc": dc,
+                                "expr": expr,
+                                "total": total,
+                                "success": success,
+                            }
+                            result_content = json.dumps(tool_payload, ensure_ascii=False)
+
+                        # 把结果回灌给 LLM
                         messages.append(
                             {
                                 "role": "tool",
@@ -269,6 +347,7 @@ class DungeonMasterAI:
                                 "content": result_content,
                             }
                         )
+
                     except Exception as e:
                         messages.append(
                             {
@@ -279,6 +358,7 @@ class DungeonMasterAI:
                         )
             else:
                 break
+
 
         # --- 解析最终 DM 决策 ---
         # --- 解析最终 DM 决策（先拿原始 JSON，再手动装配 DMResponse） ---
@@ -335,9 +415,10 @@ class DungeonMasterAI:
                 transitioned_to_combat = True
 
                 # 简单取第一个敌人
-                enemy = (new_node.get("entities") or [{}])[0]
-                enemy_name = enemy.get("name", "敌人")
-                enemy_stats = enemy.get("stats", {})
+                entities = new_node.get("entities", []) or []
+                enemies = [e for e in entities if e.get("type") == "monster"]
+                enemy_name = enemies[0].get("name", "enemy") if enemies else "enemy"
+                enemy_stats = enemies[0].get("stats", {}) if enemies else {}
                 enemy_hp_max = enemy_stats.get("hp_max") or enemy_stats.get("hp") or "unknown"
 
                 # 列举玩家可用攻击（名字 + 伤害骰）
@@ -403,8 +484,10 @@ class DungeonMasterAI:
                             return None
 
                     # 1. 收集素材
-                    enemy = (new_node.get("entities") or [{}])[0]
-                    enemy_name = enemy.get("name", "Monster")
+                    entities = new_node.get("entities", []) or []
+                    enemies = [e for e in entities if e.get("type") == "monster"]
+                    enemy = enemies[0] if enemies else {}
+                    enemy_name = enemy.get("name", "Monster") if enemies else "Monster"
                     scene_desc = new_node.get("read_aloud") or new_node.get("title") or ""
                     player_desc = f"{player.character_sheet.race} {player.character_sheet.class_name}"
 
@@ -413,12 +496,14 @@ class DungeonMasterAI:
                     bg_img = load_image(current_node.get("image_path"), "Background")
                     player_img = load_image(player.character_sheet.avatar_path, "Player Avatar")
                     enemy_img = load_image(enemy.get("image_path"), "Enemy Avatar")
-
+                    
                     # 3. 构建 Prompt
                     image_prompt = (
                         "Fantasy RPG concept art, high quality, cinematic lighting. "
                         "Dungeons and Dragons style. All reference characters are DnD characters. "
+                        f"It is a : {new_node_type} situation. "
                         f"Scene description: {scene_desc}. "
+                        f"What happens now: {dm_decision.narrative}. "
                         f"Composition: A fierce {enemy_name} (enemy, see reference) is confronting a "
                         f"{player_desc} (player, see reference). "
                         "Make them face each other in a dynamic pose, ready for battle. "
