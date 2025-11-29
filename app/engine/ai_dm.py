@@ -216,8 +216,6 @@ class DungeonMasterAI:
             pacing_instruction = (
                 f"[PACING] Player has spent {session.current_node_turns}/{min_turns} turns in this scene.\n"
                 f"Stay in this node unless the PLAYER clearly asks to move on or leave.\n"
-                f"When it is time to move on, choose a transition_to_id from the list under "
-                f"'POSSIBLE NEXT NODE IDS'. Do NOT invent new node ids."
             )
         else:
             pacing_instruction = (

@@ -1,0 +1,300 @@
+{
+  "session_id": "e828cda5",
+  "story_id": "056ecfef",
+  "title": "xyx's Journey",
+  "current_node_id": "merrow_combat_scene",
+  "current_node_turns": 0,
+  "players": [
+    {
+      "name": "xyx",
+      "character_sheet": {
+        "name": "",
+        "race": "Hill Dwarf",
+        "class_name": "Cleric",
+        "subclass": null,
+        "level": 1,
+        "background": "Soldier",
+        "alignment": "Lawful Good",
+        "hp_max": 11,
+        "ac": 18,
+        "speed": 25,
+        "initiative": -1,
+        "proficiency_bonus": 2,
+        "abilities": {
+          "strength": 14,
+          "dexterity": 8,
+          "constitution": 15,
+          "intelligence": 10,
+          "wisdom": 16,
+          "charisma": 12
+        },
+        "skill_proficiencies": [
+          "Athletics (Str)",
+          "Intimidation (Cha)"
+        ],
+        "saving_throw_proficiencies": [
+          "Wisdom",
+          "Charisma"
+        ],
+        "attacks": [
+          {
+            "name": "Mace",
+            "bonus": 4,
+            "damage": "1d6+2",
+            "damage_type": "bludgeoning"
+          },
+          {
+            "name": "Handaxe",
+            "bonus": 4,
+            "damage": "1d6+2",
+            "damage_type": "slashing"
+          }
+        ],
+        "spellcasting": {
+          "spell_save_dc": 13,
+          "spell_attack_bonus": 5,
+          "cantrips": [
+            "light",
+            "thaumaturgy",
+            "sacred flame"
+          ],
+          "level_1_spells": [
+            "bless",
+            "command",
+            "cure wounds",
+            "detect magic (ritual)",
+            "guiding bolt",
+            "healing word",
+            "protection from evil and good",
+            "sanctuary",
+            "shield of faith"
+          ],
+          "prepared_spells": [
+            "bless",
+            "cure wounds",
+            "guiding bolt",
+            "shield of faith"
+          ]
+        },
+        "equipment": [
+          "Chain mail",
+          "Shield",
+          "Mace",
+          "Handaxe",
+          "Holy symbol",
+          "Backpack",
+          "Bedroll",
+          "Mess kit",
+          "Tinderbox",
+          "10 torches",
+          "10 days of rations",
+          "Waterskin",
+          "50 feet of hempen rope",
+          "Insignia of rank",
+          "Broken blade as a trophy from a fallen enemy",
+          "Set of bone dice",
+          "Set of common clothes",
+          "Pouch"
+        ],
+        "features": [
+          "Divine Domain: Life",
+          "Darkvision",
+          "Dwarven Resilience",
+          "Stonecunning",
+          "Dwarven Toughness",
+          "Armor proficiency: all armor, shields",
+          "Weapon proficiency: simple and martial",
+          "Tool proficiency: none"
+        ],
+        "background_story": "You trained as a soldier and served in a company, experienced adventure, and perhaps even battle.",
+        "personality_traits": null,
+        "ideals": null,
+        "bonds": null,
+        "flaws": null,
+        "file_path": "/static/data/stories/056ecfef/images/characters/sheet_63a466_dwarf1.png",
+        "all_files": [
+          "/static/data/stories/056ecfef/images/characters/sheet_63a466_dwarf1.png",
+          "/static/data/stories/056ecfef/images/characters/sheet_15db55_dwarf2.png"
+        ],
+        "avatar_path": "/static/data/stories/056ecfef/images/avatars/avatar_3aab91.png"
+      },
+      "current_hp": 0,
+      "temp_hp": 0,
+      "conditions": [],
+      "inventory": [
+        "Chain mail",
+        "Shield",
+        "Mace",
+        "Handaxe",
+        "Holy symbol",
+        "Backpack",
+        "Bedroll",
+        "Mess kit",
+        "Tinderbox",
+        "10 torches",
+        "10 days of rations",
+        "Waterskin",
+        "50 feet of hempen rope",
+        "Insignia of rank",
+        "Broken blade as a trophy from a fallen enemy",
+        "Set of bone dice",
+        "Set of common clothes",
+        "Pouch"
+      ],
+      "position": "default"
+    }
+  ],
+  "enemy_states": {},
+  "chat_history": [
+    {
+      "role": "user",
+      "content": "Well, What kinds of adventure do you mean?"
+    },
+    {
+      "role": "assistant",
+      "content": "The deck tilts under your boots as another wave slams the hull. Sailors shout and scramble, but all eyes are drawn to the thing looming over the rail.\n\nThe creature is half-hunched, thick green scales slick with seawater, gills flaring. Its long arms end in webbed claws wrapped around a rusted trident. Yellow eyes gleam in the stormlight as lightning flashes overhead.\n\nIt bares a mouthful of needle teeth and rumbles in a deep, growling voice, clearly trying to sound grand and terrifying:\n\n\"These waters belong to the Scaled Queen. I’m here to collect her tribute.\"\n\nAs your question hangs in the air, I’ll pop out of character for a second: I’m your Dungeon Master. I’ll describe the world, its creatures, and what they do. You describe what your character does or says in response. Whenever the outcome is uncertain—like trying to persuade a monster, leap across a gap, or spot a hidden clue—we’ll usually roll a d20 and add bonuses from your character sheet to see what happens.\n\nThe merrow squints at you, seeming confused by your response, then snorts.\n\n\"Adventure? Hah. Your *adventure* is deciding how you’ll pay the Scaled Queen. Gold. Gems. Cargo. Or…\" It drags a claw across the deck with a slow screech. \"Maybe you pay in blood instead.\"\n\nRain spatters across the planks as the crew edges back, giving you space—no one seems eager to step between you and the monster.\n\nYou have a few obvious ways you could handle this:\n- **Negotiate**: Try to talk it down, stall, bargain, or scare it off.\n- **Attack the merrow**: Go for weapons first and let steel (or spells) answer.\n- **Try a creative tactic**: Use the ship, the crew, spells, or trickery to outsmart or bypass it.\n- **Ask about the Scaled Queen**: Probe for information—who is this ruler it serves, and why are these waters hers?\n\nWhat do you do or say next?"
+    },
+    {
+      "role": "user",
+      "content": "I ask \"If you want something specific, spit it out. Let's start with asking the price\""
+    },
+    {
+      "role": "assistant",
+      "content": "The wind howls through the rigging as you square your shoulders and address the creature.\n\n“If you want something specific, spit it out. Let’s start with the price.”\n\nThe merrow’s gills flare. It was clearly expecting screams, not haggling. For a heartbeat, the only sounds are the slap of waves against the hull and the creak of timbers under strain.\n\nThen it lets out a wet, rumbling chuckle.\n\n“Ha! This one has a spine.” It leans its bulk over the rail, trident casually scraping long grooves into the deck. “The Scaled Queen claims these waters. Her tribute is simple: **four hundred gold** in coin or goods. Pay, and you pass. Refuse…” Its lip curls, revealing rows of needle teeth. “And we paint your deck red instead.”\n\nSeveral sailors glance nervously between you and the creature, clearly looking to you to take the lead.\n\nYou get the sense the merrow expects an answer now.\n\nYou can:\n- **Negotiate**: Try to talk it down from 400 gp, stall for time, or intimidate it.\n- **Attack the merrow**: Draw steel or cast a spell and start the fight.\n- **Try a creative tactic**: Use the ship, the crew, trickery, or magic to outsmart or bypass it.\n- **Ask about the Scaled Queen**: Prod it for more information about its so-called queen.\n\nWhat do you do next?"
+    },
+    {
+      "role": "assistant",
+      "content": "\n\n[Entered: Negotiating with the Merrow]\nThe merrow looms over you on the slick deck, water streaming from its scaled form. Its lip curls in a cruel grin as it eyes the ship’s cargo.\n\n“These waters belong to the Scaled Queen,” it growls. “Her tribute is four hundred gold pieces… or everything in your hold.”"
+    },
+    {
+      "role": "user",
+      "content": "I try to negotiate with it \"well, if you demand 400 gp, you'll have nothing but corpses and rumors left. How about we reduce to 300 gp? That's better for both of us\""
+    },
+    {
+      "role": "data",
+      "content": "Charisma check to negotiate the merrow down from 400 gp failed against DC 15. The merrow refuses the reduced 300 gp offer and grows more impatient, making further failure likely to trigger combat."
+    },
+    {
+      "role": "assistant",
+      "content": "You plant your feet as the ship rocks beneath you and raise your voice over the wind.\n\n“Well, if you demand 400 gold, you’ll have nothing but corpses and rumors left. How about we reduce it to 300? That’s better for both of us.”\n\nThe deckhands nearby go very still. A few exchange quick, hopeful glances.\n\nThe merrow’s trident scrapes a harsh line across the planks as it leans in, yellow eyes narrowing. For a long, tense moment you can hear only the hiss of rain and the creak of the mast.\n\nThen it snorts a wet, derisive laugh.\n\n“Three hundred?” It bares its teeth in a grin. “You think I’m some gullible dolphin to be fed scraps? No. The Scaled Queen set the tribute at four hundred. You’ll pay it… or you’ll sink here and become a story told by drunken sailors.”\n\nIts gills flare as it straightens up to its full height, clearly annoyed that you tried to haggle. It slams the butt of its trident against the deck, hard enough to make several sailors flinch.\n\n“But… I’ll give you one more chance,” it growls. “Pay the full price. Now. Or we stop talking.”\n\nThe mood on deck is getting ugly. The merrow’s patience is thinning, and you can feel the crew tensing, some hands drifting toward weapons.\n\nAt this point, you sense you won’t get it to budge with simple words. You can:\n- Try a **bolder negotiation tactic** (sweeten the deal with something specific, lie, or openly intimidate it).\n- **Attack the merrow**, taking advantage of how close it’s come to the rail.\n- Try a **creative ploy** using the ship, the crew, or any tricks you can think of.\n- **Pay the full tribute** if you actually want to avoid bloodshed at a cost.\n\nWhat do you do next?\n\n[Entered: Negotiating with the Merrow]\nThe merrow looms over you on the slick deck, water streaming from its scaled form. Its lip curls in a cruel grin as it eyes the ship’s cargo.\n\n“These waters belong to the Scaled Queen,” it growls. “Her tribute is four hundred gold pieces… or everything in your hold.”"
+    },
+    {
+      "role": "assistant",
+      "content": "\n\n[Combat Begins]\nMerrow Extortionist shows dangerous intent!\nyour Merrow Extortionist (approximately 30 HP).\n\nYour main attacks are:\n- Mace (1d6+2)\n- Handaxe (1d6+2)\n\nDescribe your first combat action (e.g., 'I attack with my longsword' or 'I cast a fireball')."
+    },
+    {
+      "role": "user",
+      "content": "I say, \"Enough talking! I'll not pay the tribute\""
+    },
+    {
+      "role": "data",
+      "content": "Player explicitly refused to pay any tribute. Per node instructions, negotiations end and the merrow immediately attacks, triggering transition to combat."
+    },
+    {
+      "role": "assistant",
+      "content": "Your words crack across the storm-tossed deck.\n\n“Enough talking! I’ll not pay the tribute.”\n\nEvery sailor on the deck freezes. Hands slip fully to hilts and belaying pins as eyes dart between you and the looming, dripping form at the rail.\n\nThe merrow’s grin dies.\nIts gills flare wide, and the muscles in its arms knot around the haft of its trident.\n\n“Then you pay in blood,” it snarls.\n\nWith a snarl and a surge of water, it hauls itself higher onto the rail, trident lifting to strike. The crew shouts in panic as the first clash is about to erupt around you.\n\nSteel is coming out. There’s no more room for words.\n\nCombat begins as the merrow launches its attack.\n\n[Combat Begins]\nMerrow Extortionist shows dangerous intent!\nyour Merrow Extortionist (approximately 30 HP).\n\nYour main attacks are:\n- Mace (1d6+2)\n- Handaxe (1d6+2)\n\nDescribe your first combat action (e.g., 'I attack with my longsword' or 'I cast a fireball')."
+    },
+    {
+      "role": "user",
+      "content": "[Encounter] I attack the merrow with Mace"
+    },
+    {
+      "role": "assistant",
+      "content": "You swing your mace at the Merrow Extortionist, but your blow cuts only through mist and empty air as the creature twists away. The merrow retaliates with a brutal flurry of strikes, yet each one crashes into stone, water spray, or your hastily raised guard, leaving you completely unharmed. Both of you stand exactly as you were, tension rising as the stalemate stretches on.  \n\nThe creature’s lamp-like eyes fix on you, waiting. What do you do next?"
+    },
+    {
+      "role": "user",
+      "content": "[Encounter] I attack with Handaxe"
+    },
+    {
+      "role": "assistant",
+      "content": "You swing your handaxe at the Merrow Extortionist, but the creature twists just out of reach, your blade cutting only cold, salty air. With a snarling grin, it lunges back in a flurry of attacks, yet each swipe and thrust fails to find purchase as you duck, parry, and twist away unharmed. Both of you stand exactly as you were, tension crackling in the space between. What do you do next?"
+    },
+    {
+      "role": "user",
+      "content": "[Encounter] I attack with Mace"
+    },
+    {
+      "role": "assistant",
+      "content": "You swing your mace at the Merrow Extortionist, but your blow cuts only empty water as the creature jerks back with a mocking, toothy grin. It lunges in response, unleashing a flurry of savage strikes, yet each one glances off your guard or swirls past as you twist away, untouched. Both of you circle warily, neither having drawn blood—yet.\n\nThe tension tightens between you in the dark water. What do you do next?"
+    },
+    {
+      "role": "user",
+      "content": "[Encounter] I attack with handaxe"
+    },
+    {
+      "role": "assistant",
+      "content": "You hurl yourself into the fray, swinging your handaxe at the Merrow Extortionist, but your strike cuts only empty air as the creature twists aside at the last instant. With a gurgling snarl, it lunges back at you in a flurry of attacks, yet each blow glances off your guard or misses outright. Both of you remain unhurt, tension coiling thicker in the space between you as the water churns around your standoff. What do you do next?"
+    },
+    {
+      "role": "user",
+      "content": "[Encounter] I attack with Mace"
+    },
+    {
+      "role": "assistant",
+      "content": "You swing your mace at the Merrow Extortionist, but your blow whistles past as the creature jerks back at the last instant, water-slick scales just out of reach. With a snarling grin, it lunges in turn, thrashing the water around you in a flurry of claws and teeth, but every strike is turned aside or glances off your armor without drawing blood.  \n\nThe two of you circle, uninjured and sizing each other up in the churning water. What do you do next?"
+    },
+    {
+      "role": "user",
+      "content": "[Encounter] I attack with handaxe"
+    },
+    {
+      "role": "assistant",
+      "content": "You swing your handaxe toward the Merrow Extortionist, but your blow cuts only frothing water and empty air. The merrow lunges back with its brutal multiattack, jagged weapons and claws flashing, yet every strike whiffs past you or glances off without harm. Both of you remain uninjured, circling and searching for an opening.  \n\nWhat do you do next?"
+    },
+    {
+      "role": "user",
+      "content": "[Encounter] I attack with Mace"
+    },
+    {
+      "role": "assistant",
+      "content": "You swing your mace at the Merrow Extortionist, but it twists aside and your blow whistles harmlessly through the damp air. With a roar, the merrow lunges back, its vicious multiattack flashing toward you—but every strike falls short or glances off your defenses. When the spray of seawater settles, neither of you has drawn blood, both still standing exactly as you were moments before.  \n\nThe tension only grows thicker between you. What do you do now?"
+    },
+    {
+      "role": "user",
+      "content": "[Encounter] I attack with Mace"
+    },
+    {
+      "role": "assistant",
+      "content": "You swing your mace at the Merrow Extortionist, but the blow goes wide, splashing harmlessly against the water around it. With a snarl, the creature lashes out in a flurry of attacks, yet each strike either glances off your guard or misses entirely, leaving you unharmed. Both of you stand exactly as you were, tense and unbloodied, the stalemate stretching on.  \n\nWhat do you do next?"
+    },
+    {
+      "role": "user",
+      "content": "[Encounter] I attack with Mace"
+    },
+    {
+      "role": "assistant",
+      "content": "You swing your mace at the Merrow Extortionist, but the blow cuts only through briny air as the creature twists away, untouched. With a snarl, it surges back at you, launching into a vicious flurry of strikes, yet every claw and bite either glances off your guard or misses outright. Both of you stand where you began, uninjured but tested, tension thick between you.\n\nWhat do you do next?"
+    },
+    {
+      "role": "user",
+      "content": "[Encounter] I attack with handaxe"
+    },
+    {
+      "role": "assistant",
+      "content": "You swing your handaxe at the Merrow Extortionist, but your blow cuts only through empty air as the creature twists away. In return, it surges forward, lashing out in a flurry of savage strikes, yet none of them manage to break your guard or your skin. Both of you end the exchange unscathed, tension thick between you.  \n\nWhat do you do next?"
+    },
+    {
+      "role": "user",
+      "content": "[Encounter] I attack with handaxe"
+    },
+    {
+      "role": "assistant",
+      "content": "You heft your handaxe and swing for the Merrow Extortionist, but the creature twists aside and your blade cuts only salty air. The merrow lunges back with a flurry of brutal blows, frothing water and muscle surging around you, yet each strike falls wide or glances off without harm. Both of you remain unhurt, circling and searching for an opening.  \n\nWhat do you do next?"
+    },
+    {
+      "role": "user",
+      "content": "[Encounter] I attack with Mace"
+    },
+    {
+      "role": "data",
+      "content": "⚔️ **Merrow Extortionist** attacks **xyx** with *Merrow Extortionist's attack*.\n🎲 To Hit: 1d20(15) + 5 = **20** vs AC 18 -> **HIT**\n🩸 Damage: 2d4+++3 = **11**"
+    },
+    {
+      "role": "assistant",
+      "content": "You swing your mace toward the Merrow Extortionist, but the strike never lands—its massive, scaled form slips just out of reach as you commit to the blow. In a brutal counter, it rakes into you with a savage rend, claws tearing through armor and flesh; pain blooms hot and sharp as 11 points of damage drop you from 11 to 0 HP. The world tilts, sound muffles, and you collapse, consciousness slipping away as you fall unconscious at its feet.\n\nYou’re down, your fate uncertain for the moment. When you next awaken or can act, what do you do?"
+    }
+  ],
+  "created_at": "2025-11-28T22:26:35.157173",
+  "updated_at": "2025-11-28T22:50:23.362955"
+}

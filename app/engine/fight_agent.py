@@ -141,13 +141,14 @@ class FightAgent:
     ) -> Dict[str, Any]:
         """调用第一次 LLM，生成本回合的 player_action / enemy_action / combat_state 计划."""
         # 准备给 LLM 的精简攻击列表（只要名字 + 攻击加值 + 伤害骰）
+        print("=== PLANNER CALLED ===")
         player_attacks_list: List[Dict[str, Any]] = []
         for atk in getattr(player.character_sheet, "attacks", []) or []:
             player_attacks_list.append(
                 {
                     "name": getattr(atk, "name", None),
-                    "attack_bonus": getattr(atk, "attack_bonus", None),
-                    "damage_dice": getattr(atk, "damage_dice", None),
+                    "attack_bonus": getattr(atk, "bonus", None),
+                    "damage_dice": getattr(atk, "damage", None),
                 }
             )
 
@@ -169,7 +170,8 @@ class FightAgent:
             "last_dm_narration": last_dm,
             "player_input": player_input,
         }
-
+        print("=== PLANNER CONTEXT ===")
+        print(json.dumps(context_obj, indent=2))
         messages = [
             {"role": "system", "content": PLANNER_SYSTEM_PROMPT},
             {
@@ -187,6 +189,8 @@ class FightAgent:
         )
         raw_text = completion.choices[0].message.content or "{}"
 
+        print("=== PLANNER RAW RESPONSE ===")
+        print(raw_text)
         try:
             plan = json.loads(raw_text)
         except Exception:
@@ -205,13 +209,24 @@ class FightAgent:
         """
         用 resolve_attack 真实计算一轮攻击，返回 (damage, log_str, result_dict)
         """
+        print("=== DEBUG ATTACK ===")
+        print(f"Attacker: {attacker_name}")
+        print(f"Target: {target_name}")
+        print(f"attack_bonus(raw): {attack_bonus}")
+        print(f"attack_bonus(int): {int(attack_bonus) if attack_bonus is not None else None}")
+        print(f"target_ac(raw): {target_ac}")
+        print(f"target_ac(int): {int(target_ac) if target_ac is not None else None}")
+        print(f"damage_dice(raw): {damage_dice}")
+        print(f"damage_dice(clean): {damage_dice.replace(' ', '')}")
+        print("=====================")
+        clean_dice = damage_dice.replace(" ", "")
         result = resolve_attack(
             attacker_name=attacker_name,
             attack_name=f"{attacker_name}'s attack",
             attack_bonus=int(attack_bonus),
             target_name=target_name,
             target_ac=int(target_ac),
-            damage_dice=damage_dice,
+            damage_dice=clean_dice,
         )
         dmg = result["damage_dealt"] if result.get("is_hit") else 0
         log_str = result.get("log", "")
@@ -326,8 +341,8 @@ class FightAgent:
 
         if pa_kind in ("attack", "cast_spell") and pa_attack_name in player_attack_map:
             atk_obj = player_attack_map[pa_attack_name]
-            atk_bonus = getattr(atk_obj, "attack_bonus", None)
-            dmg_dice = getattr(atk_obj, "damage_dice", None)
+            atk_bonus = getattr(atk_obj, "bonus", None)
+            dmg_dice = getattr(atk_obj, "damage", None)
 
             if atk_bonus is not None and dmg_dice:
                 dmg, log_str, result = self._run_attack_and_log(
@@ -407,15 +422,20 @@ class FightAgent:
         narrative_text = self._call_narrator(round_summary)
 
         # ==== 5. 结束状态 & active_mode ====
+
+        player_dead = player.current_hp <= 0
+        enemy_dead = enemy_current_hp_after <= 0
+
         active_mode = "fight"
-        # 如果敌人死了，或者 planner 说 should_end
-        if enemy_current_hp_after <= 0 or (
+        if enemy_dead or player_dead or (
             combat_state.get("should_end")
-            and combat_state.get("end_reason") in ["enemy_dead", "truce", "escape"]
+            and combat_state.get("end_reason") in ["enemy_dead", "player_dead", "truce", "escape"]
         ):
             active_mode = "action"
-            if enemy_current_hp_after <= 0 and "defeat" not in narrative_text.lower():
+            if enemy_dead and "defeat" not in narrative_text.lower():
                 narrative_text += f"\n\n(System: {enemy_name} has been defeated!)"
+            if player_dead and "unconscious" not in narrative_text.lower():
+                narrative_text += "\n\n(System: You fall to 0 HP and drop unconscious.)"
 
         # 拼 mechanics_log 文本
         mechanics_log_str = "\n".join(mechanics_logs) if mechanics_logs else None
@@ -427,7 +447,8 @@ class FightAgent:
             transition_to_id=None,
             active_mode=active_mode,
         )
-
+        print("=== ACTIVE MODE ===")
+        print(active_mode )
         # ==== 6. 写入 session.chat_history 并保存 ====
         session.chat_history.append({"role": "user", "content": f"[Encounter] {player_input}"})
         if dm_response.mechanics_log:

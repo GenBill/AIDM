@@ -1,0 +1,304 @@
+{
+  "session_id": "6b02165f",
+  "story_id": "056ecfef",
+  "title": "lll's Journey",
+  "current_node_id": "merrow_combat_scene",
+  "current_node_turns": 0,
+  "players": [
+    {
+      "name": "lll",
+      "character_sheet": {
+        "name": "",
+        "race": "Hill Dwarf",
+        "class_name": "Cleric",
+        "subclass": null,
+        "level": 1,
+        "background": "Soldier",
+        "alignment": "Lawful Good",
+        "hp_max": 11,
+        "ac": 18,
+        "speed": 25,
+        "initiative": -1,
+        "proficiency_bonus": 2,
+        "abilities": {
+          "strength": 14,
+          "dexterity": 8,
+          "constitution": 15,
+          "intelligence": 10,
+          "wisdom": 16,
+          "charisma": 12
+        },
+        "skill_proficiencies": [
+          "Athletics (Str)",
+          "Intimidation (Cha)"
+        ],
+        "saving_throw_proficiencies": [
+          "Wisdom",
+          "Charisma"
+        ],
+        "attacks": [
+          {
+            "name": "Mace",
+            "bonus": 4,
+            "damage": "1d6+2",
+            "damage_type": "bludgeoning"
+          },
+          {
+            "name": "Handaxe",
+            "bonus": 4,
+            "damage": "1d6+2",
+            "damage_type": "slashing"
+          }
+        ],
+        "spellcasting": {
+          "spell_save_dc": 13,
+          "spell_attack_bonus": 5,
+          "cantrips": [
+            "light",
+            "thaumaturgy",
+            "sacred flame"
+          ],
+          "level_1_spells": [
+            "bless",
+            "command",
+            "cure wounds",
+            "detect magic (ritual)",
+            "guiding bolt",
+            "healing word",
+            "protection from evil and good",
+            "sanctuary",
+            "shield of faith"
+          ],
+          "prepared_spells": [
+            "bless",
+            "cure wounds",
+            "guiding bolt",
+            "shield of faith"
+          ]
+        },
+        "equipment": [
+          "Chain mail",
+          "Shield",
+          "Mace",
+          "Handaxe",
+          "Holy symbol",
+          "Backpack",
+          "Bedroll",
+          "Mess kit",
+          "Tinderbox",
+          "10 torches",
+          "10 days of rations",
+          "Waterskin",
+          "50 feet of hempen rope",
+          "Insignia of rank",
+          "Broken blade as a trophy from a fallen enemy",
+          "Set of bone dice",
+          "Set of common clothes",
+          "Pouch"
+        ],
+        "features": [
+          "Divine Domain: Life",
+          "Darkvision",
+          "Dwarven Resilience",
+          "Stonecunning",
+          "Dwarven Toughness",
+          "Armor proficiency: all armor, shields",
+          "Weapon proficiency: simple and martial",
+          "Tool proficiency: none"
+        ],
+        "background_story": "You trained as a soldier and served in a company, experienced adventure, and perhaps even battle.",
+        "personality_traits": null,
+        "ideals": null,
+        "bonds": null,
+        "flaws": null,
+        "file_path": "/static/data/stories/056ecfef/images/characters/sheet_63a466_dwarf1.png",
+        "all_files": [
+          "/static/data/stories/056ecfef/images/characters/sheet_63a466_dwarf1.png",
+          "/static/data/stories/056ecfef/images/characters/sheet_15db55_dwarf2.png"
+        ],
+        "avatar_path": "/static/data/stories/056ecfef/images/avatars/avatar_3aab91.png"
+      },
+      "current_hp": 0,
+      "temp_hp": 0,
+      "conditions": [],
+      "inventory": [
+        "Chain mail",
+        "Shield",
+        "Mace",
+        "Handaxe",
+        "Holy symbol",
+        "Backpack",
+        "Bedroll",
+        "Mess kit",
+        "Tinderbox",
+        "10 torches",
+        "10 days of rations",
+        "Waterskin",
+        "50 feet of hempen rope",
+        "Insignia of rank",
+        "Broken blade as a trophy from a fallen enemy",
+        "Set of bone dice",
+        "Set of common clothes",
+        "Pouch"
+      ],
+      "position": "default"
+    }
+  ],
+  "enemy_states": {
+    "Merrow Extortionist": {
+      "damage_taken": 14
+    }
+  },
+  "chat_history": [
+    {
+      "role": "user",
+      "content": "Well, tell me where am i"
+    },
+    {
+      "role": "assistant",
+      "content": "You stand on the main deck of a sturdy merchant ship cutting through choppy, steel‑gray waves. The timbers creak, sails snap overhead, and cold sea spray stings your face. Behind you, a few anxious sailors clutch ropes and belaying pins, eyeing the creature that has just hauled itself over the rail.\n\nI’m your Dungeon Master for this voyage—I describe the world, its dangers, and its people, and you describe what your character does in response. Whenever the outcome of an action is uncertain, we’ll usually roll a d20 and add modifiers from your character sheet to see how well you do.\n\nRight now, you’re a few days out from the city of Neverwinter, on the way to a place called Stormwreck Isle—an island with a grim reputation. A blood‑red sunrise and dark storm clouds surround the ship, and lightning flickers on the horizon.\n\nClinging to the rail is the intruder: a hulking, fish‑fanged humanoid, dripping seawater, with mottled scales and cruel, yellow eyes. It glares across the deck at you and the crew and growls in a low, guttural voice, \n\n“**These waters belong to the Scaled Queen. I’m here to collect her tribute.**”\n\nThe sailors look to you, clearly hoping you’ll take the lead.\n\nYou can respond however you like. Some possibilities:\n- **Negotiate**: try to talk it down, bargain, or stall.\n- **Attack the merrow**: draw steel or cast a spell and strike first.\n- **Try a creative tactic**: use the ship, the crew, or a trick to outsmart or drive it off.\n- **Ask about the Scaled Queen**: try to get more information before you decide.\n\nWhat does lll do or say next?"
+    },
+    {
+      "role": "assistant",
+      "content": "\n\n[Entered: Negotiating with the Merrow]\nThe merrow looms over you on the slick deck, water streaming from its scaled form. Its lip curls in a cruel grin as it eyes the ship’s cargo.\n\n“These waters belong to the Scaled Queen,” it growls. “Her tribute is four hundred gold pieces… or everything in your hold.”"
+    },
+    {
+      "role": "user",
+      "content": "I try to negotiate\"well, how much exactly do you want\""
+    },
+    {
+      "role": "data",
+      "content": "lll initiated negotiation; the merrow states an initial demand of 400 gp in tribute. No ability check resolved yet for changing the demanded amount."
+    },
+    {
+      "role": "assistant",
+      "content": "The merrow’s lip curls back in a wet, toothy grin as you speak up.\n\n“Negotiate, eh?” it rumbles, hauling more of its bulk over the rail. Rain patters on the deck around you, thunder grumbling overhead. A few sailors inch back, giving you space but clearly listening.\n\n“How much do I want?” It jabs a clawed thumb at its chest. “Four hundred gold. Tribute for the Scaled Queen. Pay, and this ship and its soft meat keep breathing.”\n\nIt leans closer, fish‑reeking breath washing over you. “But… if you’ve got a silver tongue, maybe we talk. What do you offer instead, little land‑walker?”\n\nThe crew whisper anxiously. Four hundred gold is far more than this voyage is worth to them.\n\nYou’ve opened negotiations, and the creature is listening—for now.\n\nYou can:\n- Try to **talk him down on the price** (persuade, bluff, or intimidate him into taking less).\n- Offer **something else** as tribute (cargo, a future favor, information, etc.).\n- **Threaten** him, making it clear you won’t be easy prey.\n- Change tack and **attack** or try some **creative trick** using the ship or crew.\n\nWhat exactly does lll say or propose next in this negotiation?\n\n[Entered: Negotiating with the Merrow]\nThe merrow looms over you on the slick deck, water streaming from its scaled form. Its lip curls in a cruel grin as it eyes the ship’s cargo.\n\n“These waters belong to the Scaled Queen,” it growls. “Her tribute is four hundred gold pieces… or everything in your hold.”"
+    },
+    {
+      "role": "user",
+      "content": "\"I'm afraid such a high price would bring your queen bad reputation, If I was you, I'll reduce to 300 gold\""
+    },
+    {
+      "role": "data",
+      "content": "Charisma (Persuasion) check to haggle from 400 gp down to 300 gp: SUCCESS. Merrow’s demanded tribute is now 300 gp."
+    },
+    {
+      "role": "assistant",
+      "content": "You square your shoulders and speak clearly over the wind and creaking timbers.\n\n\"I'm afraid such a high price would bring your queen a bad reputation. If I were you, I'd reduce it to three hundred gold.\"\n\nThe merrow’s yellow eyes narrow. For a long, tense moment, only the slap of waves against the hull and the snap of canvas fill the silence. A few sailors hold their breath.\n\nThen it snorts, a wet, derisive sound, and bares its fangs in a humorless grin.\n\n\"You think the Scaled Queen cares what you land‑rats think of her?\" it growls. \"But… you argue boldly for such soft prey. Three hundred…\" It rolls the number around in its throat like a stone. \"Three hundred it is. Pay it now, and I let this tub float on. Push your luck further, and I’ll decorate the waves with your guts.\"\n\nThe crew murmur nervously—three hundred gold is still a huge sum, but better than losing everything.\n\nRight now, the merrow’s demand is 300 gp in coin or goods. It’s still listening, but its patience is thinner.\n\nYou can:\n- **Agree to pay the 300 gp** in coin or cargo.\n- Try to **haggle further**, aiming to bring it down again.\n- **Threaten or intimidate** it into taking even less—or nothing at all.\n- **Refuse outright**, risking that the merrow attacks.\n\nWhat does lll do?"
+    },
+    {
+      "role": "assistant",
+      "content": "\n\n[Combat Begins]\nMerrow Extortionist shows dangerous intent!\nyour Merrow Extortionist (approximately 30 HP).\n\nYour main attacks are:\n- Mace (1d6+2)\n- Handaxe (1d6+2)\n\nDescribe your first combat action (e.g., 'I attack with my longsword' or 'I cast a fireball')."
+    },
+    {
+      "role": "user",
+      "content": "I try to threaten\"hah, I didn't expected you are a cowered, you made me want to kill you now.\""
+    },
+    {
+      "role": "data",
+      "content": "Player attempted to intimidate the merrow with an insult, but the attempt backfired badly, snapping its patience and ending negotiations. Transitioning to combat."
+    },
+    {
+      "role": "assistant",
+      "content": "Your voice cuts through the rain as you glare up at the hulking merrow.\n\n\"Hah. I didn’t expect you to be such a coward. You’ve made me want to kill you now.\"\n\nFor a heartbeat, the deck goes utterly still. A few sailors audibly gasp. The merrow’s gills flare wide; its eyes bulge with sudden, furious shock.\n\nThen it throws its head back and lets out a roar that rattles the rigging.\n\n\"Coward?\" it bellows, slamming a clawed fist into the rail hard enough to splinter wood. \"You dare insult a champion of the Scaled Queen on her own waters? I’ll drag you down and crack your bones between my teeth!\"\n\nAny hint of negotiation is gone. It hauls itself fully over the rail, muscles bunching, webbed claws flexing as it reaches for its wicked spear. The crew scrambles back, some drawing blades, others ducking behind crates.\n\n\"No more talking,\" it snarls. \"You wanted death, little land‑rat? Come claim it.\"\n\nThe merrow lunges, ready to tear into you. Combat is about to erupt on the storm‑tossed deck.\n\n[Combat Begins]\nMerrow Extortionist shows dangerous intent!\nyour Merrow Extortionist (approximately 30 HP).\n\nYour main attacks are:\n- Mace (1d6+2)\n- Handaxe (1d6+2)\n\nDescribe your first combat action (e.g., 'I attack with my longsword' or 'I cast a fireball')."
+    },
+    {
+      "role": "user",
+      "content": "[Encounter] I attack with mace"
+    },
+    {
+      "role": "data",
+      "content": "⚔️ **lll** attacks **Merrow Extortionist** with *lll's attack*.\n🎲 To Hit: 1d20(9) + 4 = **13** vs AC 13 -> **HIT**\n🩸 Damage: 1d6+2 = **4**\n⚔️ **Merrow Extortionist** attacks **lll** with *Merrow Extortionist's attack*.\n🎲 To Hit: 1d20(1) + 5 = **6** vs AC 18 -> **MISS**\n🛡️ Attack was blocked or dodged."
+    },
+    {
+      "role": "assistant",
+      "content": "You slam your mace into the Merrow Extortionist, the blow cracking into its scaly side and driving a pained snarl from its throat as it loses 4 of its vitality. It whips back with a savage rending strike, but its claws scrape harmlessly off your armor as you hold your ground, still at full strength.  \n\nThe Merrow hangs before you, wounded but dangerous. What do you do next?"
+    },
+    {
+      "role": "user",
+      "content": "[Encounter] I attach again with Handaxe"
+    },
+    {
+      "role": "data",
+      "content": "⚔️ **lll** attacks **Merrow Extortionist** with *lll's attack*.\n🎲 To Hit: 1d20(8) + 4 = **12** vs AC 13 -> **MISS**\n🛡️ Attack was blocked or dodged.\n⚔️ **Merrow Extortionist** attacks **lll** with *Merrow Extortionist's attack*.\n🎲 To Hit: 1d20(1) + 5 = **6** vs AC 18 -> **MISS**\n🛡️ Attack was blocked or dodged."
+    },
+    {
+      "role": "assistant",
+      "content": "Your handaxe whistles through the air, but the Merrow Extortionist twists aside at the last moment, the blade cutting nothing but spray and shadow. With a guttural snarl it lunges back, claws raking toward you, yet you turn its wild swing on your armor and emerge unscathed, both of you still at full strength and locked in a deadly stalemate.  \n\nThe creature glares with hungry, frustrated eyes across the gap. What do you do now?"
+    },
+    {
+      "role": "user",
+      "content": "[Encounter] I attach again with Handaxe"
+    },
+    {
+      "role": "data",
+      "content": "⚔️ **lll** attacks **Merrow Extortionist** with *lll's attack*.\n🎲 To Hit: 1d20(1) + 4 = **5** vs AC 13 -> **MISS**\n🛡️ Attack was blocked or dodged.\n⚔️ **Merrow Extortionist** attacks **lll** with *Merrow Extortionist's attack*.\n🎲 To Hit: 1d20(7) + 5 = **12** vs AC 18 -> **MISS**\n🛡️ Attack was blocked or dodged."
+    },
+    {
+      "role": "assistant",
+      "content": "You swing your handaxe, but your footing slips at the last moment and the Merrow Extortionist easily twists aside, your blade cutting only empty air. The creature lunges back with a vicious rending strike, but you bring your defenses up in time, its claws scraping harmlessly off your armor. Both of you remain unhurt, circling and looking for an opening. What do you do next?"
+    },
+    {
+      "role": "user",
+      "content": "[Encounter] I attach again with Handaxe"
+    },
+    {
+      "role": "data",
+      "content": "⚔️ **lll** attacks **Merrow Extortionist** with *lll's attack*.\n🎲 To Hit: 1d20(5) + 4 = **9** vs AC 13 -> **MISS**\n🛡️ Attack was blocked or dodged.\n⚔️ **Merrow Extortionist** attacks **lll** with *Merrow Extortionist's attack*.\n🎲 To Hit: 1d20(3) + 5 = **8** vs AC 18 -> **MISS**\n🛡️ Attack was blocked or dodged."
+    },
+    {
+      "role": "assistant",
+      "content": "Your handaxe whistles through the dank air, but the Merrow Extortionist twists aside, the blade sparking harmlessly off barnacled armor. With a bubbling snarl it lunges back in, claws slashing, yet your guard holds firm and you turn the blow aside without a scratch.  \n\nYou stand at 11 HP, the merrow still at 26 HP, both of you unbloodied and searching for an opening. What do you do next?"
+    },
+    {
+      "role": "user",
+      "content": "[Encounter] I attach again with Handaxe"
+    },
+    {
+      "role": "data",
+      "content": "⚔️ **lll** attacks **Merrow Extortionist** with *lll's attack*.\n🎲 To Hit: 1d20(2) + 4 = **6** vs AC 13 -> **MISS**\n🛡️ Attack was blocked or dodged.\n⚔️ **Merrow Extortionist** attacks **lll** with *Merrow Extortionist's attack*.\n🎲 To Hit: 1d20(18) + 5 = **23** vs AC 18 -> **HIT**\n🩸 Damage: 2d4+3 = **7**"
+    },
+    {
+      "role": "assistant",
+      "content": "You swing your handaxe at the Merrow Extortionist, but it twists away with a slick, practiced motion, your blade cutting only empty air. The creature lunges in close, its claws raking across your defenses and tearing into you; pain blossoms as 7 points of damage drive you down from 11 to 4 HP. \n\nBlood running and breathing hard, you’re still on your feet. What do you do next?"
+    },
+    {
+      "role": "user",
+      "content": "[Encounter] Huh, I would not fail, I attach again with Handaxe"
+    },
+    {
+      "role": "data",
+      "content": "⚔️ **lll** attacks **Merrow Extortionist** with *lll's attack*.\n🎲 To Hit: 1d20(19) + 4 = **23** vs AC 13 -> **HIT**\n🩸 Damage: 1d6+2 = **6**\n⚔️ **Merrow Extortionist** attacks **lll** with *Merrow Extortionist's attack*.\n🎲 To Hit: 1d20(3) + 5 = **8** vs AC 18 -> **MISS**\n🛡️ Attack was blocked or dodged."
+    },
+    {
+      "role": "assistant",
+      "content": "Your handaxe bites into the Merrow Extortionist with a solid, meaty impact, carving a deep line through its scaled hide and drawing a gush of dark blood as its strength dips to 20 HP. Snarling, it lashes back with rending claws, but you twist just out of reach, its talons scraping harmlessly against your armor as you remain at 4 HP, untouched this exchange.  \n\nThe two of you face each other in the churned-up battleground, both still standing. What do you do next?"
+    },
+    {
+      "role": "user",
+      "content": "[Encounter] I attach again with Handaxe"
+    },
+    {
+      "role": "data",
+      "content": "⚔️ **lll** attacks **Merrow Extortionist** with *lll's attack*.\n🎲 To Hit: 1d20(1) + 4 = **5** vs AC 13 -> **MISS**\n🛡️ Attack was blocked or dodged.\n⚔️ **Merrow Extortionist** attacks **lll** with *Merrow Extortionist's attack*.\n🎲 To Hit: 1d20(4) + 5 = **9** vs AC 18 -> **MISS**\n🛡️ Attack was blocked or dodged."
+    },
+    {
+      "role": "assistant",
+      "content": "Your handaxe whistles through the dank air, but with a clumsy swing it goes wide, the Merrow Extortionist jerking back with a gurgling hiss as the blade finds nothing. The creature lunges in return, claws flashing in a brutal rending strike, but you manage to turn it aside on your armor, feeling only the scrape of talons instead of tearing flesh. You stand at 4 HP, unscathed this exchange, as the Merrow still looms over you, its hide unmarked at 20 HP. What do you do next?"
+    },
+    {
+      "role": "user",
+      "content": "[Encounter] I attach again with Handaxe"
+    },
+    {
+      "role": "data",
+      "content": "⚔️ **lll** attacks **Merrow Extortionist** with *lll's attack*.\n🎲 To Hit: 1d20(16) + 4 = **20** vs AC 13 -> **HIT**\n🩸 Damage: 1d6+2 = **4**\n⚔️ **Merrow Extortionist** attacks **lll** with *Merrow Extortionist's attack*.\n🎲 To Hit: 1d20(18) + 5 = **23** vs AC 18 -> **HIT**\n🩸 Damage: 2d4+3 = **7**"
+    },
+    {
+      "role": "assistant",
+      "content": "Your handaxe bites into the Merrow Extortionist’s scaled hide with a solid chop, drawing a dark ribbon of blood as it staggers back, wounded but still dangerous. Snarling, it lunges in close and its claws rake across your body with brutal force, pain exploding through you as the world tilts and darkness rushes up. Your legs give out and you collapse, unconscious, body slack on the battlefield as the Merrow looms above.\n\nYou’re at 0 HP and making death saves now—if you could act, what would you try to do next?"
+    }
+  ],
+  "created_at": "2025-11-28T23:38:04.790113",
+  "updated_at": "2025-11-28T23:47:41.857792"
+}
