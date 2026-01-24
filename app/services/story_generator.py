@@ -3,9 +3,17 @@ import json
 import os
 import re
 from openai import OpenAI
+from app.api.deepseek import DeepSeek
 from app.engine.story import StoryGraph # 引用你的核心类
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+if os.getenv("OPENAI_API_KEY"):
+    MODEL_NAME = "gpt-5.1"
+    client = OpenAI()
+elif os.getenv("DEEPSEEK_API_KEY"):
+    MODEL_NAME = "deepseek-chat" 
+    client = DeepSeek()
+else:
+    raise ValueError("No API key found for OpenAI or DeepSeek")
 
 # ======================================================
 # 1. 继承自 test_story_gen.py 的 SYSTEM_PROMPT
@@ -234,7 +242,7 @@ def generate_story_from_text(raw_text: str) -> dict:
     try:
         # A. 调用 LLM
         response = client.chat.completions.create(
-            model="gpt-5.1",
+            model=MODEL_NAME,
             messages=[
                 {"role": "system", "content": SYSTEM_PROMPT},
                 {"role": "user", "content": f"Please process the following adventure text:\n\n{raw_text}"}

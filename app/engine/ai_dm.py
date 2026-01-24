@@ -3,6 +3,7 @@ import json
 import os
 import uuid
 from openai import OpenAI
+from app.api.deepseek import DeepSeek
 
 # --- Google GenAI 依赖（用于生成遭遇战插画，可选） ---
 try:
@@ -19,7 +20,14 @@ from app.config import STORIES_DIR
 from app.engine.combat import roll_dice  # ✅ 只保留骰子函数
 from app.engine.agent_workflow import answer_query
 
-client = OpenAI()
+if os.getenv("OPENAI_API_KEY"):
+    MODEL_NAME = "gpt-5.1"
+    client = OpenAI()
+elif os.getenv("DEEPSEEK_API_KEY"):
+    MODEL_NAME = "deepseek-chat" 
+    client = DeepSeek()
+else:
+    raise ValueError("No API key found for OpenAI or DeepSeek")
 
 # --- 初始化 Google Client ---
 client_google = None
@@ -227,7 +235,6 @@ class DungeonMasterAI:
             )
 
         # --- 构建上下文给 LLM ---
-        MODEL_NAME = "gpt-5.1" 
         context = f"""
         --- PLAYER ---
         Name: {player.name} | HP: {player.current_hp}

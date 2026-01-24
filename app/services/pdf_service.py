@@ -1,10 +1,19 @@
 # app/services/pdf_service.py
+import os
 import base64
 from typing import List
 from openai import OpenAI
+from app.api.deepseek import DeepSeek
 from app.schemas import CharacterSheet, MonsterSheet
 
-client = OpenAI()
+if os.getenv("OPENAI_API_KEY"):
+    MODEL_NAME = "gpt-5.1"
+    client = OpenAI()
+elif os.getenv("DEEPSEEK_API_KEY"):
+    MODEL_NAME = "deepseek-chat" 
+    client = DeepSeek()
+else:
+    raise ValueError("No API key found for OpenAI or DeepSeek")
 
 def encode_image(image_bytes: bytes) -> str:
     return base64.b64encode(image_bytes).decode('utf-8')

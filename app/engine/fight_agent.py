@@ -1,16 +1,24 @@
 # app/engine/fight_agent.py
-
+import os
 import json
 from typing import Any, Dict, List, Optional, Tuple
 
 from openai import OpenAI
+from app.api.deepseek import DeepSeek
 
 from app.engine.session import session_manager
 from app.schemas import DMResponse
 from app.config import STORIES_DIR
 from app.engine.combat import resolve_attack, roll_dice
 
-client = OpenAI()
+if os.getenv("OPENAI_API_KEY"):
+    MODEL_NAME = "gpt-5.1"
+    client = OpenAI()
+elif os.getenv("DEEPSEEK_API_KEY"):
+    MODEL_NAME = "deepseek-chat" 
+    client = DeepSeek()
+else:
+    raise ValueError("No API key found for OpenAI or DeepSeek")
 
 # ---- SYSTEM PROMPTS ----
 
@@ -183,7 +191,7 @@ class FightAgent:
         ]
 
         completion = client.chat.completions.create(
-            model="gpt-5.1",
+            model=MODEL_NAME,
             messages=messages,
             response_format={"type": "json_object"},
         )
