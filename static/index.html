@@ -103,6 +103,7 @@
             <button onclick="showTab('scenes')" class="secondary tab-btn" id="btn-scenes">🎬 Scenes</button>
             <button onclick="showTab('enemies')" class="secondary tab-btn" id="btn-enemies">👿 Enemies</button>
             <button onclick="showTab('characters')" class="secondary tab-btn" id="btn-characters">🛡️ PCs</button>
+            <button onclick="showTab('items')" class="secondary tab-btn" id="btn-items">🎒 Items</button>
             <button onclick="showTab('graph')" class="secondary tab-btn" id="btn-graph">🗺️ Graph</button>
         </div>
 
@@ -157,6 +158,11 @@
                 <p id="charStatus" class="loading"></p>
             </div>
             <div id="characterList"></div>
+        </div>
+
+        <div id="tab-items" class="hidden">
+            <h3>Loot & Items Found</h3>
+            <div id="itemList"></div>
         </div>
 
         <div id="tab-graph" class="hidden mermaid">Loading graph...</div>
@@ -241,6 +247,7 @@
         renderScenes(data);
         renderEnemies(data);
         renderCharacters(data);
+        renderItems(data);
         
         // Don't render graph here yet, wait for tab switch
         
@@ -524,6 +531,46 @@
         } catch (e) { status.innerText = "Error: " + e.message; }
     }
 
+    // ================== ITEMS LOGIC ==================
+    function renderItems(data) {
+        const container = document.getElementById('itemList');
+        container.innerHTML = "";
+        
+        const itemsMap = new Map();
+        const nodes = Array.isArray(data.nodes) ? data.nodes : Object.values(data.nodes || {});
+        
+        nodes.forEach(node => {
+            (node.loot || []).forEach(item => {
+                const key = item.item;
+                if (!itemsMap.has(key)) {
+                    itemsMap.set(key, { ...item, scenes: [node.title] });
+                } else {
+                    itemsMap.get(key).quantity += (item.quantity || 1);
+                    if (!itemsMap.get(key).scenes.includes(node.title)) {
+                        itemsMap.get(key).scenes.push(node.title);
+                    }
+                }
+            });
+        });
+
+        if (itemsMap.size === 0) {
+            container.innerHTML = "<p style='color:#666'>No items found in this story.</p>";
+            return;
+        }
+
+        itemsMap.forEach(item => {
+            const html = `
+            <div class="card" style="border-left: 4px solid #fbc02d; background: #fffde7;">
+                <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                    <h4 style="margin:0;">${item.item} <span class="tag tag-orange">x${item.quantity}</span></h4>
+                    <span style="font-size:0.75em; color:#888;">Found in: ${item.scenes.join(', ')}</span>
+                </div>
+                <p style="margin:8px 0 0 0; font-size:0.9em; color:#555;">${item.description || "No description available."}</p>
+            </div>`;
+            container.innerHTML += html;
+        });
+    }
+
     // ================== GRAPH LOGIC ==================
     function renderGraph(data) {
         const container = document.getElementById('tab-graph');
@@ -577,7 +624,7 @@
         document.getElementById(`btn-${tabName}`).classList.add('active');
 
         // Hide all tabs
-        ['scenes', 'enemies', 'characters', 'graph'].forEach(t => {
+        ['scenes', 'enemies', 'characters', 'items', 'graph'].forEach(t => {
             document.getElementById(`tab-${t}`).classList.add('hidden');
         });
 

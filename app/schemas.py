@@ -173,6 +173,7 @@ class StoryNode(BaseModel):
     entities: List[Dict[str, Any]]
     options: List[str]
     interactions: List[Dict[str, Any]]
+    loot: List[Dict[str, Any]] = [] # <--- 新增物品列表
     edges: List[Dict[str, Any]]
 
 class GameSession(BaseModel):

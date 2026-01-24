@@ -116,6 +116,11 @@ Important: YOU MUST create a directed acyclic graph!
       `{ "trigger": "Negotiate", "mechanic": "DC 15 Charisma", "success": "Cost reduced by 100gp", "failure": "Merrow gets angry and combat starts" }`
     * Do **not** create extra `interaction.trigger` values that are not present in `options` (except for rare special cases you are explicitly instructed to add).
 
+* **loot**: 
+    * Extract specific items mentioned in the text.
+    * Format: `[{"item": "Health Potion", "quantity": 1, "description": "Restores 2d4+2 HP"}]`.
+    * If no items are mentioned, return `[]`.
+
 
 * **edges**: List of transitions.
 
