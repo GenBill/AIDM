@@ -8,3 +8,7 @@ python-multipart
 pypdf 
 google-genai
 Pillow
+langchain
+langchain-core
+langchain-openai
+langgraph
