@@ -20,6 +20,7 @@ import random
 import re
 from pathlib import Path
 from typing import Any, Dict, List, Optional
+from app.engine.i18n import get_text # <--- Import i18n
 
 
 # ---------------------------------------------------------------------------
@@ -357,29 +358,17 @@ def resolve_attack(
     attack_bonus: int,
     target_name: str,
     target_ac: int,
-    damage_dice: str
+    damage_dice: str,
+    lang: str = "en"  # <--- Add language param
 ) -> Dict[str, Any]:
     """
     原子化战斗解析工具：处理一次攻击判定 + 伤害计算。
-    
-    Args:
-        attacker_name: 攻击者名字 (e.g., "Thorin", "Merrow")
-        attack_name: 武器/技能名 (e.g., "Mace", "Claw")
-        attack_bonus: 命中加值 (e.g., 4)
-        target_name: 目标名字 (e.g., "Zombie")
-        target_ac: 目标防御等级 (e.g., 13, 18)
-        damage_dice: 伤害公式 (e.g., "1d6+2")
-    
-    Returns:
-        Dict containing result, logs, and damage amount.
     """
     # 1. 命中判定 (To Hit)
     hit_roll = roll_dice(f"1d20+{attack_bonus}")
     total_hit = hit_roll['total']
     
-    # 判定逻辑 (D&D 5e: Roll >= AC is a Hit)
-    # 处理大成功 (Natural 20) 和 大失败 (Natural 1)
-    d20_val = hit_roll['terms'][0]['rolls'][0] # 获取原始 d20 点数
+    d20_val = hit_roll['terms'][0]['rolls'][0]
     is_crit = (d20_val == 20)
     is_fumble = (d20_val == 1)
     
@@ -391,32 +380,34 @@ def resolve_attack(
     else:
         is_hit = (total_hit >= target_ac)
 
-    # 构建日志
+    # 构建日志 - using i18n
     log_parts = []
-    log_parts.append(f"⚔️ **{attacker_name}** 使用 *{attack_name}* 攻击 **{target_name}**。")
     
-    hit_status = "未命中 (MISS)"
-    if is_crit: hit_status = "暴击 (CRITICAL HIT)!"
-    elif is_hit: hit_status = "命中 (HIT)"
+    t_attack = get_text(lang, "combat_log", "attack").format(attacker=attacker_name, target=target_name, weapon=attack_name)
+    log_parts.append(t_attack)
     
-    log_parts.append(f"🎲 命中检定: 1d20({d20_val}) + {attack_bonus} = **{total_hit}** vs AC {target_ac} -> **{hit_status}**")
+    hit_status = get_text(lang, "combat_log", "miss")
+    if is_crit: hit_status = get_text(lang, "combat_log", "crit")
+    elif is_hit: hit_status = get_text(lang, "combat_log", "hit")
+    
+    t_roll = get_text(lang, "combat_log", "roll").format(d20=d20_val, bonus=attack_bonus, total=total_hit, ac=target_ac, result=hit_status)
+    log_parts.append(t_roll)
 
     damage_total = 0
     if is_hit:
-        # 2. 伤害计算 (Damage)
-        # 如果暴击，D&D 5e 规则是骰子数翻倍 (这里简单处理：骰两次伤害或者只翻倍骰子部分)
-        # 为简化实现，我们直接骰普通的，如果是暴击由 DM AI 描述额外效果，或者这里简单翻倍
         dmg_roll = roll_dice(damage_dice)
         damage_total = dmg_roll['total']
         
         if is_crit:
-            # 简单的暴击规则：伤害翻倍 (或者你可以实现更复杂的骰子翻倍)
             damage_total *= 2
-            log_parts.append(f"💥 伤害 (暴击 x2): {dmg_roll['normalized']} = **{damage_total}**")
+            t_dmg = get_text(lang, "combat_log", "damage_crit").format(expr=dmg_roll['normalized'], total=damage_total)
+            log_parts.append(t_dmg)
         else:
-            log_parts.append(f"🩸 伤害: {dmg_roll['normalized']} = **{damage_total}**")
+            t_dmg = get_text(lang, "combat_log", "damage").format(expr=dmg_roll['normalized'], total=damage_total)
+            log_parts.append(t_dmg)
     else:
-        log_parts.append("🛡️ 攻击被格挡或闪避。")
+        t_block = get_text(lang, "combat_log", "block")
+        log_parts.append(t_block)
 
     return {
         "is_hit": is_hit,

@@ -19,6 +19,7 @@ from app.schemas import DMResponse
 from app.config import STORIES_DIR
 from app.engine.combat import roll_dice  # ✅ 只保留骰子函数
 from app.engine.agent_workflow import answer_query
+from app.engine.i18n import get_text # <--- Import i18n
 
 if os.getenv("OPENAI_API_KEY"):
     MODEL_NAME = "gpt-5.1"
@@ -88,73 +89,8 @@ TOOLS = [
 
 
 # --- SYSTEM PROMPT ---
-SYSTEM_PROMPT = """
-You are an expert Dungeon Master running a D&D 5e adventure.
-
-### YOUR RESPONSIBILITY
-You are responsible for:
-- Narrative description and roleplay.
-- Scene pacing and node transitions in the story graph.
-- Light, non-combat dice checks (ability checks, skill checks, saving throws, etc.).
-
-You are **NOT** responsible for:
-- Detailed combat math for each round.
-- Applying damage to HP or tracking exact HP values.
-- Managing initiative order or turn-by-turn combat resolution.
-- Controlling any UI mode or frontend tabs (such as 'action' or 'fight'). The game engine will handle UI modes based on your chosen `transition_to_id` and the node types.
-
-
-All detailed combat (attack rolls, damage, HP updates, enemy HP, etc.)
-is handled by a separate **combat agent** on the `/fight` endpoint.
-
-### LANGUAGE REQUIREMENT
-- **You must ALWAYS reply in Chinese (Simplified Chinese).**
-- Translate any game terms (Ability Check, Saving Throw, etc.) into Chinese where appropriate, but you may keep specific proper nouns (like "Waterdeep" or "Neverwinter") in English if the translation is ambiguous, or provide both.
-- The narrative style should be immersive, like a fantasy novel.
-
-### RULES
-1. **Narrative**:
-   - Be vivid and grounded in the current node's description and GM guidance.
-   - When entering a new scene, briefly describe the environment, key NPCs/monsters, and immediate sensory details.
-   - Always provide player with options based on the scene's "PLAYER OPTIONS" section, guide them to choose one.
-
-2. **Dice / Ability Checks**:
-   - For any NON-COMBAT uncertain outcome (spotting details, persuading NPCs, sneaking, recalling lore, etc.),
-     you MUST use the `ability_check` tool.
-   - You may ONLY use the following abilities for checks:
-     strength, dexterity, constitution, intelligence, wisdom, charisma.
-   - Choose ONE ability, an appropriate DC, and a clear `reason` describing what the character is attempting and why
-     this check is required.
-   - The game engine will automatically:
-       * look up the character's actual ability score,
-       * compute the modifier,
-       * roll 1d20 + modifier,
-       * and determine success or failure.
-   - You do NOT need to invent the dice expression or do math yourself.
-
-3. **Transitions**:
-   - Use `transition_to_id` only when it logically follows to move to another node.
-   - Respect pacing instructions: if the scene has not yet met its minimum turns, stay unless the PLAYER clearly insists on leaving or forcing a transition.
-4. **Combat Handoff**:
-   - You can describe threats, weapons being drawn, and the first moments of battle.
-   - When you decide that combat should begin, choose a `transition_to_id` that points to a combat node in the story graph.
-   - Do NOT apply HP changes yourself; leave `damage_taken` as 0 or only very minor narrative chip damage if absolutely necessary.
-
-
-### OUTPUT FORMAT (JSON)
-You MUST always return a JSON object matching this schema:
-
-{
-  "narrative": "What you say to the player, describing the scene and consequences (in Chinese).",
-  "mechanics_log": "Any dice or mechanical notes. Can be empty string if nothing to log.",
-  "damage_taken": 0,
-  "transition_to_id": "node_id or null",
-}
-
-- `damage_taken`: For you, this should normally stay 0. HP changes are mainly the combat agent's job.
-- `transition_to_id`: Either null (remain in this node) or a node id from the provided list of possible next node ids.
-"""
-
+# REMOVED STATIC SYSTEM_PROMPT
+# We now load it dynamically in process_turn
 
 class DungeonMasterAI:
     def process_turn(self, session_id: str, player_input: str) -> DMResponse:
@@ -167,6 +103,10 @@ class DungeonMasterAI:
 
         session = session_manager.load_session(session_id)
         player = session.players[0]
+        lang = getattr(session, "language", "en") # Load language
+
+        # --- Dynamic System Prompt ---
+        SYSTEM_PROMPT = get_text(lang, "system_dm")
 
         story_path = STORIES_DIR / session.story_id / "story.json"
         with open(story_path, "r", encoding="utf-8") as f:
@@ -326,13 +266,19 @@ class DungeonMasterAI:
                             outcome = "SUCCESS" if success else "FAILURE"
                             mod_str = f"{modifier:+d}"
 
-                            # 5) 写入极其详细的 mechanics_log：为什么鉴定 / 用什么属性 / 属性值 / 结果
+                            # 5) 写入极其详细的 mechanics_log
+                            t_title = get_text(lang, "dm_log", "check_title")
+                            t_reason = get_text(lang, "dm_log", "reason")
+                            t_ability = get_text(lang, "dm_log", "ability")
+                            t_dc = get_text(lang, "dm_log", "dc")
+                            t_res = get_text(lang, "dm_log", "result")
+
                             detail = (
-                                "能力检定 (Ability Check):\n"
-                                f"- 原因: {reason}\n"
-                                f"- 属性: {ability.capitalize()} (值 {score}, 调整值 {mod_str})\n"
-                                f"- DC: {dc}\n"
-                                f"- 结果: {expr} = {total} → {outcome}"
+                                f"{t_title}:\n"
+                                f"- {t_reason}: {reason}\n"
+                                f"- {t_ability}: {ability.capitalize()} (score {score}, mod {mod_str})\n"
+                                f"- {t_dc}: {dc}\n"
+                                f"- {t_res}: {expr} = {total} → {outcome}"
                             )
                             mechanics_logs.append(detail)
 
@@ -444,21 +390,18 @@ class DungeonMasterAI:
                     line = f"- {atk_name} ({atk_damage})"
                     attack_lines.append(line)
 
-                attacks_block = "\n".join(attack_lines) if attack_lines else "（你的角色卡上没有注册任何攻击方式。）"
+                attacks_block = "\n".join(attack_lines) if attack_lines else get_text(lang, "dm_narrative", "no_attacks")
 
                 # 战斗开场白（完全由代码生成，不靠 LLM）
-                welcome_text = (
-                    f"\n\n[战斗开始]\n"
-                    f"{enemy_name} 表现出危险的意图！\n"
-                )
-
+                t_begins = get_text(lang, "dm_narrative", "combat_begins").format(enemy_name=enemy_name)
+                t_hp = ""
                 if enemy_hp_max != "unknown":
-                    welcome_text += f"你的 {enemy_name} (大约 {enemy_hp_max} HP)。\n"
+                    t_hp = get_text(lang, "dm_narrative", "enemy_hp").format(enemy_name=enemy_name, hp=enemy_hp_max)
+                
+                t_attacks = get_text(lang, "dm_narrative", "attacks_header")
+                t_prompt = get_text(lang, "dm_narrative", "combat_prompt")
 
-                welcome_text += (
-                    f"\n你的主要攻击方式有：\n{attacks_block}\n\n"
-                    "请描述你的战斗行动（例如：“我用长剑攻击”或“我施放火球术”）。"
-                )
+                welcome_text = f"{t_begins}{t_hp}{t_attacks}{attacks_block}\n\n{t_prompt}"
             # 遭遇战节点：生成插画（仍然不处理战斗逻辑）
             if (new_node.get("type") == "encounter" or new_node.get("type") == "combat") and client_google:
                 print(f"🎨 [GenAI] Preparing encounter art for: {new_node.get('title')}")
@@ -632,29 +575,18 @@ class DungeonMasterAI:
         """
         session = session_manager.load_session(session_id)
         player = session.players[0]
+        lang = getattr(session, "language", "en") # Load language
 
         story_path = STORIES_DIR / session.story_id / "story.json"
         with open(story_path, "r", encoding="utf-8") as f:
             story_data = json.load(f)
         current_node = story_data["nodes"].get(session.current_node_id, {})
 
-        contextual_query = f"""
-    You are the AIDND rules/lore assistant. The game is PAUSED.
-    Use tools from the local Open5e catalog when needed.
-
-    --- PLAYER ---
-    Name: {player.name}
-
-    --- SCENE ---
-    Title: {current_node.get("title")}
-    Entities: {json.dumps(current_node.get("entities", []), indent=2, ensure_ascii=False)}
-
-    --- QUESTION ---
-    {player_input}
-    """.strip()
-
+        # Use i18n logic here too? For now, we will just inject language instruction
+        # Ideally, we should add `answer_query` a language param
+        
         try:
-            answer_text = answer_query(contextual_query)
+            answer_text = answer_query(player_input, lang=lang) # Pass language
         except Exception as e:
             answer_text = f"Error: {str(e)}"
 

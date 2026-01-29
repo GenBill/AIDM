@@ -183,6 +183,7 @@ class GameSession(BaseModel):
     session_id: str
     story_id: str
     title: str
+    language: str = "en"
     
     # 进度指针
     current_node_id: str
@@ -205,6 +206,7 @@ class SessionCreateRequest(BaseModel):
     story_id: str
     character_idx: int 
     player_name: str
+    language: str = "en"
 
 class DMResponse(BaseModel):
     """LLM 返回给系统的结构化指令"""

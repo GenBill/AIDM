@@ -178,8 +178,16 @@
         <div id="lobbyCharList" class="char-select-grid"></div>
         
         <div class="form-group" style="margin-top:20px;">
-            <label>为你的英雄命名</label>
-            <input type="text" id="lobbyPlayerName" placeholder="例如：索林·橡木盾">
+            <label>Language / 语言</label>
+            <select id="lobbyLanguage" style="width:100%; padding:8px;">
+                <option value="en">English</option>
+                <option value="zh" selected>简体中文</option>
+            </select>
+        </div>
+
+        <div class="form-group" style="margin-top:20px;">
+            <label>Name Your Hero / 英雄名称</label>
+            <input type="text" id="lobbyPlayerName" placeholder="e.g. Thorin / 索林">
         </div>
         
         <button id="btnLaunch" onclick="launchSession()" style="width:100%; font-size:1.1em; margin-top:10px; background:#2e7d32;">🚀 启动游戏</button>
@@ -297,6 +305,8 @@
 
     async function launchSession() {
         const name = document.getElementById('lobbyPlayerName').value;
+        const lang = document.getElementById('lobbyLanguage').value; // Get selected language
+
         if (selectedCharIndex === null) return alert("请选择一个角色职业。");
         if (!name) return alert("请为你的角色命名。");
 
@@ -311,7 +321,8 @@
                 body: JSON.stringify({
                     story_id: currentStoryId,
                     character_idx: selectedCharIndex,
-                    player_name: name
+                    player_name: name,
+                    language: lang // Pass language
                 })
             });
             if (!res.ok) throw new Error(await res.text());
