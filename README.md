@@ -24,31 +24,29 @@ uvicorn app.main:app --reload
 
 ---
 
-## 🧠 核心能力 (Skills)
+## 🧠 核心架构 (Core Architecture)
 
-本项目采用了多 Agent 协作的架构，主要包含以下核心组件：
+本项目采用了 **Modern Agent Architecture (LangGraph)**，实现了状态驱动的 AI 决策流：
 
-### 1. 叙事与扮演 (Narrative DM)
-- **位置**: `app/engine/ai_dm.py`
+### 1. 叙事 Agent (`Narrative Graph`)
+- **位置**: `app/engine/agents/narrative.py`
+- **架构**: `LoadContext -> Decision (LLM) -> ToolExecution -> Response`
 - **功能**: 
   - 负责非战斗场景的剧情推进、NPC 扮演和环境描述。
   - 管理故事流向 (Story Graph) 和节点跳转。
-  - **能力检定 (Ability Checks)**: 处理力量、敏捷、智力等非战斗属性检定 (D20 + 调整值)。
-  - **艺术生成 (GenAI)**: 集成 Google GenAI，根据当前场景动态生成遭遇战插画。
+  - **能力检定**: 独立的 Tool Node 处理力量、敏捷等属性检定 (D20 + 调整值)，实现“思考-行动-观察”循环。
 
-### 2. 战斗系统 (Combat Engine)
-- **位置**: `app/engine/combat.py`, `app/engine/fight_agent.py`
+### 2. 战斗 Agent (`Combat Graph`)
+- **位置**: `app/engine/agents/combat.py`
+- **架构**: `LoadContext -> Planner (LLM) -> Simulator (Code) -> Narrator (LLM)`
 - **功能**:
-  - 提供确定性的骰子系统 (`roll_dice`)，支持复杂的骰子表达式。
-  - **状态管理**: 追踪角色和怪物的 HP、临时 HP 和异常状态 (Conditions)。
-  - **攻击解析**: 原子化的 `resolve_attack` 函数，处理命中判定 (AC vs D20) 和伤害计算。
-  - **战斗状态持久化**: 将战斗快照保存到本地 JSON 数据库。
+  - **Planner**: 分析局势，生成结构化的攻防计划。
+  - **Simulator**: 确定性的 Python 引擎执行攻击判定 (AC vs D20) 和伤害计算，保证规则准确性。
+  - **Narrator**: 根据模拟结果生成生动的战斗解说。
 
-### 3. 规则助手 (Rule Assistant)
-- **位置**: `app/engine/agent_workflow.py`
-- **功能**:
-  - 一个基于 ReACT 架构的智能体，专门回答 D&D 5e 规则和设定问题。
-  - 能够自主调用 RAG 工具查询本地资料库，提供准确的规则解释。
+### 3. 多语言支持 (i18n)
+- **位置**: `app/engine/i18n.py`
+- **功能**: 全面支持中文（简体）和英文。AI 的系统指令 (System Prompts) 和上下文描述会根据 Session 语言设置自动切换，确保沉浸式体验。
 
 ---
 
@@ -61,25 +59,9 @@ uvicorn app.main:app --reload
 
 ### 支持的知识库类型
 系统支持以下 D&D 5e 资源的检索：
-- **Monsters** (怪物)
-- **Spells** (法术)
-- **Equipment** (装备)
+- **Monsters** (怪物) / **Spells** (法术) / **Equipment** (装备)
 - **Classes** (职业) & **Races** (种族)
-- **Backgrounds** (背景) & **Feats** (专长)
 - **Conditions** (状态) & **Planes** (位面)
-- **Documents** (规则文档 SRD)
-
-### 检索工具 (Tools)
-Agent 使用以下工具来获取知识：
-
-1. **`look_table(type, query)`**
-   - 模糊搜索名称。例如：查找名字中包含 "Goblin" 的所有怪物。
-   
-2. **`search_table(type, name_or_slug)`**
-   - 精确解析。在 SQLite 或 JSONL 中定位唯一条目，获取 API URL 或摘要。
-   
-3. **`fetch_and_cache(type, slug)`**
-   - 获取详情。从 Open5e API 拉取完整 JSON 数据并缓存到本地 (`data/dnd_library/cache/`)，避免重复请求。
 
 ---
 
@@ -89,7 +71,12 @@ Agent 使用以下工具来获取知识：
 /workspace/
   ├── app/
   │   ├── main.py            # FastAPI 入口
-  │   ├── engine/            # 核心逻辑 (AI DM, Combat, Catalog)
+  │   ├── engine/            
+  │   │   ├── agents/        # LangGraph Agents (Narrative, Combat)
+  │   │   ├── ai_dm.py       # Wrapper for Narrative Agent
+  │   │   ├── fight_agent.py # Wrapper for Combat Agent
+  │   │   ├── state.py       # Graph State Definitions
+  │   │   └── catalog.py     # RAG Tools
   │   └── services/          # 辅助服务 (PDF解析, 故事生成)
   ├── data/
   │   ├── dnd_library/       # Open5e 规则数据库
@@ -105,14 +92,16 @@ Agent 使用以下工具来获取知识：
 我们将持续迭代项目，拓展 AI DM 的能力边界：
 
 - [x] **多语言支持 (i18n)**
-  - 增加对中文的全面支持（界面与叙事）。
+  - 全面支持中文/英文切换，适配 System Prompt 和战斗日志。
   
+- [x] **重构现代 Agent 范式 (Modern Agent Architecture)**
+  - 迁移至 **LangGraph**。
+  - 实现结构化的 Planning -> Simulation -> Narration 战斗流。
+
 - [ ] **多规则系统适配 (Multi-System Support)**
   - Pathfinder (1e/2e)
   - World of Darkness (nWoD / WoD)
   - 能够根据不同规则集切换底层判定逻辑。
 
-- [ ] **重构现代 Agent 范式 (Modern Agent Architecture)**
-  - 引入更先进的 Planning 能力 (Plan-and-Solve)。
-  - 增强长期记忆 (Long-term Memory) 与上下文管理。
-  - 支持多模态输入/输出（语音交互、实时地图操作）。
+- [ ] **增强长期记忆 (Long-term Memory)**
+  - 引入向量数据库记录长期剧情关键点。
