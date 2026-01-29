@@ -135,13 +135,13 @@ class DungeonMasterAI:
             # 只给 LLM 看 ID，让它知道合法的 transition_to_id 候选有哪些
             edges_text = "\n".join(f"- {eid}" for eid in edge_ids)
         else:
-            edges_text = "No explicit transitions are defined from this node."
+            edges_text = get_text(lang, "dm_context", "edges_default")
         
          # 2) 把 options 展开成文本，供 LLM 用来“展示可选行动”
         if options:
             options_text = "\n".join(f"- {opt}" for opt in options)
         else:
-            options_text = "No explicit options are defined. You may still infer reasonable actions from the scene."
+            options_text = get_text(lang, "dm_context", "options_default")
 
         # 3) 把 interactions（triggers）展开，告诉 LLM 每个 trigger 对应的机制
         if interactions:
@@ -161,22 +161,13 @@ class DungeonMasterAI:
                 interaction_lines.append(line)
             interactions_text = "\n".join(interaction_lines)
         else:
-            interactions_text = "No explicit interaction blueprints are defined."
+            interactions_text = get_text(lang, "dm_context", "interactions_default")
 
          # 4) pacing instruction：结合 min_turns + transitions 列表
         if session.current_node_turns < min_turns:
-            pacing_instruction = (
-                f"[PACING] Player has spent {session.current_node_turns}/{min_turns} turns in this scene.\n"
-                f"Stay in this node unless the PLAYER clearly asks to move on or leave.\n"
-            )
+            pacing_instruction = get_text(lang, "dm_context", "pacing_wait").format(turns=session.current_node_turns, min_turns=min_turns)
         else:
-            pacing_instruction = (
-                "[PACING] Player has spent enough time in current scene.\n"
-                "You MAY transition to another node if it feels natural for the story.\n"
-                "If you decide to leave this node, set transition_to_id to ONE id from the list under "
-                "'POSSIBLE NEXT NODE IDS'. You MUST NOT invent new node ids."
-                "If 'POSSIBLE NEXT NODE IDS'. is empty, it means the end of the story has been reached. And you should inform the player that the adventure concludes here, give them a satisfying ending, and do NOT set transition_to_id."
-            )
+            pacing_instruction = get_text(lang, "dm_context", "pacing_go")
 
         # --- 构建上下文给 LLM ---
         context = f"""
@@ -489,7 +480,7 @@ class DungeonMasterAI:
                                 types.SafetySetting(
                                     category="HARM_CATEGORY_DANGEROUS_CONTENT",
                                     threshold="BLOCK_ONLY_HIGH",
-                                )
+                                ),
                             ],
                         ),
                     )

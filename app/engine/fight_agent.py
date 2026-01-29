@@ -10,6 +10,7 @@ from app.engine.session import session_manager
 from app.schemas import DMResponse
 from app.config import STORIES_DIR
 from app.engine.combat import resolve_attack, roll_dice
+from app.engine.i18n import get_text # <--- Import i18n
 
 if os.getenv("OPENAI_API_KEY"):
     MODEL_NAME = "gpt-5.1"
@@ -79,25 +80,7 @@ Return a SINGLE JSON object with this EXACT SCHEMA:
 If you are unsure, choose the simplest reasonable option. Do NOT invent new objects.
 """
 
-NARRATOR_SYSTEM_PROMPT = """
-You are a vivid but RULE-RESPECTING D&D 5e combat narrator.
-
-You will be given:
-- The structured summary of this combat round.
-- Which attacks were attempted, which hit, and how much damage was dealt.
-- HP of each side before and after the round.
-
-Your job:
-- Describe ONLY what actually happened according to the provided data.
-- Do NOT invent extra attacks, spells, or effects.
-- Do NOT change HP numbers; just describe them.
-- Use 2-5 sentences, 2nd person ("you").
-- Always end by briefly asking the player what they do next.
-
-Example ending:
-"Bloodied but unbroken, you still stand. What do you do now?"
-"""
-
+# NARRATOR_SYSTEM_PROMPT REMOVED - loaded dynamically
 
 class FightAgent:
     def _get_last_dm_message(self, session) -> Optional[str]:
@@ -237,10 +220,15 @@ class FightAgent:
     def _call_narrator(
         self,
         round_summary: Dict[str, Any],
+        lang: str = "en" # <--- Add language param
     ) -> str:
         """第二次 LLM 调用：给出本回合 summary，让 LLM 只负责讲故事。"""
+        
+        # === Dynamic System Prompt ===
+        system_prompt = get_text(lang, "fight_narrator_system")
+        
         messages = [
-            {"role": "system", "content": NARRATOR_SYSTEM_PROMPT},
+            {"role": "system", "content": system_prompt},
             {
                 "role": "user",
                 "content": "Here is the structured summary of this combat round:\n```json\n"
@@ -271,7 +259,7 @@ class FightAgent:
         enemies = [e for e in entities if e.get("type") == "monster"]
 
         if not enemies:
-            narrative = "There are no hostile monsters here. Combat seems to be over."
+            narrative = get_text(lang, "dm_context", "no_hostiles")
             dm = DMResponse(
                 narrative=narrative,
                 mechanics_log=None,
@@ -301,7 +289,7 @@ class FightAgent:
 
         # 如果敌人已经死了但还在 /fight
         if enemy_current_hp <= 0:
-            narrative = f"{enemy_name} already lies defeated. There is nothing left to fight here."
+            narrative = get_text(lang, "dm_context", "defeated_msg").format(enemy_name=enemy_name)
             dm = DMResponse(
                 narrative=narrative,
                 mechanics_log=None,
@@ -424,7 +412,8 @@ class FightAgent:
             "mechanics_log": mechanics_logs,
         }
 
-        narrative_text = self._call_narrator(round_summary)
+        # 调用 _call_narrator 时传入 lang
+        narrative_text = self._call_narrator(round_summary, lang=lang)
 
         # ==== 5. 结束状态 & active_mode ====
 
@@ -438,9 +427,11 @@ class FightAgent:
         ):
             active_mode = "action"
             if enemy_dead and "defeat" not in narrative_text.lower():
-                narrative_text += f"\n\n(System: {enemy_name} has been defeated!)"
+                msg = get_text(lang, "dm_context", "victory_system").format(enemy_name=enemy_name)
+                narrative_text += msg
             if player_dead and "unconscious" not in narrative_text.lower():
-                narrative_text += "\n\n(System: You fall to 0 HP and drop unconscious.)"
+                msg = get_text(lang, "dm_context", "defeat_system")
+                narrative_text += msg
 
         # 拼 mechanics_log 文本
         mechanics_log_str = "\n".join(mechanics_logs) if mechanics_logs else None
