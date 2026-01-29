@@ -213,20 +213,13 @@ class FightAgent:
         damage_dice: str,
         target_name: str,
         target_ac: int,
+        lang: str = "en"  # <--- Add language param
     ) -> Tuple[int, str, Dict[str, Any]]:
         """
         用 resolve_attack 真实计算一轮攻击，返回 (damage, log_str, result_dict)
         """
         print("=== DEBUG ATTACK ===")
-        print(f"Attacker: {attacker_name}")
-        print(f"Target: {target_name}")
-        print(f"attack_bonus(raw): {attack_bonus}")
-        print(f"attack_bonus(int): {int(attack_bonus) if attack_bonus is not None else None}")
-        print(f"target_ac(raw): {target_ac}")
-        print(f"target_ac(int): {int(target_ac) if target_ac is not None else None}")
-        print(f"damage_dice(raw): {damage_dice}")
-        print(f"damage_dice(clean): {damage_dice.replace(' ', '')}")
-        print("=====================")
+        # ... (keep existing print debugs) ...
         clean_dice = damage_dice.replace(" ", "")
         result = resolve_attack(
             attacker_name=attacker_name,
@@ -235,6 +228,7 @@ class FightAgent:
             target_name=target_name,
             target_ac=int(target_ac),
             damage_dice=clean_dice,
+            lang=lang # Pass language
         )
         dmg = result["damage_dealt"] if result.get("is_hit") else 0
         log_str = result.get("log", "")
@@ -264,6 +258,7 @@ class FightAgent:
     def process_fight_round(self, session_id: str, player_input: str) -> DMResponse:
         session = session_manager.load_session(session_id)
         player = session.players[0]
+        lang = getattr(session, "language", "en") # Load language
 
         # ---- 载入当前战斗节点 ----
         story_path = STORIES_DIR / session.story_id / "story.json"
@@ -359,6 +354,7 @@ class FightAgent:
                     damage_dice=dmg_dice,
                     target_name=enemy_name,
                     target_ac=enemy_ac,
+                    lang=lang # Pass language
                 )
                 enemy_damage_taken_this_round += dmg
                 mechanics_logs.append(log_str)
@@ -387,6 +383,7 @@ class FightAgent:
                     damage_dice=dmg_dice,
                     target_name=player.name,
                     target_ac=player.character_sheet.ac,
+                    lang=lang # Pass language
                 )
                 player_damage_taken_this_round += dmg
                 mechanics_logs.append(log_str)

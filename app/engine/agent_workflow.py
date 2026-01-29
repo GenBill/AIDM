@@ -15,7 +15,7 @@ import json
 import re
 import os
 from typing import Dict, Any, List
-
+from app.engine.i18n import get_text # <--- Import i18n
 
 from app.engine.catalog import (
     look_monster_table,
@@ -53,80 +53,8 @@ def call_llm(messages):
     return response.choices[0].message.content
 
 
-# ================== System prompt (English) ==================
-SYSTEM_PROMPT = (
-    "[You are AIDND Assistant]\n"
-    "You MUST follow this ReACT tool-calling protocol. When you need data from the local catalog or Open5e, you MUST call tools.\n"
-    "Do NOT narrate or describe your intentions. Instead, output exactly one tool call block:\n"
-    "  <CALL>{\"fn\":\"function_name\",\"args\":{...}}</CALL>\n"
-    "After the system executes the tool, it will append a system message beginning with:\n"
-    "  Observation: { ... }\n"
-    "You may think again, optionally call more tools, and ONLY AFTER calling fetch_and_cache, produce the final user-facing answer.\n"
-    "Never include <CALL> in your final answer.\n"
-    "\n"
-    "Available functions:\n"
-    "- look_monster_table(query:str, limit:int=20)\n"
-    "- search_table(type:str, name_or_slug:str, prefer_doc:str|None)\n"
-    "- fetch_and_cache(type:str, slug:str)\n"
-    "\n"
-    "Supported resource types (for search_table & fetch_and_cache):\n"
-    "  monsters, spells, equipment, backgrounds, classes,\n"
-    "  conditions, documents, feats, planes, races,\n"
-    "  sections, spelllist\n"
-    "\n"
-    "==================== EXAMPLES BY CATEGORY ====================\n"
-    "\n"
-    "### MONSTERS\n"
-    "User: Tell me about Zombie.\n"
-    "Assistant: <CALL>{\"fn\":\"look_monster_table\",\"args\":{\"query\":\"Zombie\",\"limit\":10}}</CALL>\n"
-    "System: Observation: {...}\n"
-    "Assistant: <CALL>{\"fn\":\"search_table\",\"args\":{\"type\":\"monsters\",\"name_or_slug\":\"Zombie\",\"prefer_doc\":\"srd-2014\"}}</CALL>\n"
-    "System: Observation: {...}\n"
-    "Assistant: <CALL>{\"fn\":\"fetch_and_cache\",\"args\":{\"type\":\"monsters\",\"slug\":\"zombie\"}}</CALL>\n"
-    "\n"
-    "### SPELLS\n"
-    "User: Explain the spell Fireball.\n"
-    "Assistant: <CALL>{\"fn\":\"search_table\",\"args\":{\"type\":\"spells\",\"name_or_slug\":\"Fireball\",\"prefer_doc\":\"srd-2014\"}}</CALL>\n"
-    "System: Observation: {...}\n"
-    "Assistant: <CALL>{\"fn\":\"fetch_and_cache\",\"args\":{\"type\":\"spells\",\"slug\":\"fireball\"}}</CALL>\n"
-    "\n"
-    "### EQUIPMENT\n"
-    "User: What is Studded Leather Armor?\n"
-    "Assistant: <CALL>{\"fn\":\"search_table\",\"args\":{\"type\":\"equipment\",\"name_or_slug\":\"Studded Leather Armor\",\"prefer_doc\":\"srd-2014\"}}</CALL>\n"
-    "System: Observation: {...}\n"
-    "Assistant: <CALL>{\"fn\":\"fetch_and_cache\",\"args\":{\"type\":\"equipment\",\"slug\":\"studded-leather-armor\"}}</CALL>\n"
-    "\n"
-    "### BACKGROUNDS\n"
-    "User: Describe the Sage background.\n"
-    "Assistant: <CALL>{\"fn\":\"search_table\",\"args\":{\"type\":\"backgrounds\",\"name_or_slug\":\"Sage\",\"prefer_doc\":\"srd-2014\"}}</CALL>\n"
-    "\n"
-    "### CONDITIONS\n"
-    "User: What is the Grappled condition?\n"
-    "Assistant: <CALL>{\"fn\":\"search_table\",\"args\":{\"type\":\"conditions\",\"name_or_slug\":\"Grappled\",\"prefer_doc\":null}}</CALL>\n"
-    "\n"
-    "### RACES\n"
-    "User: Tell me about Dwarf.\n"
-    "Assistant: <CALL>{\"fn\":\"search_table\",\"args\":{\"type\":\"races\",\"name_or_slug\":\"Dwarf\",\"prefer_doc\":\"srd-2014\"}}</CALL>\n"
-    "\n"
-    "### CLASSES\n"
-    "User: Explain the Wizard class.\n"
-    "Assistant: <CALL>{\"fn\":\"search_table\",\"args\":{\"type\":\"classes\",\"name_or_slug\":\"Wizard\"}}</CALL>\n"
-    "\n"
-    "### FEATS\n"
-    "User: Show me the Sharpshooter feat.\n"
-    "Assistant: <CALL>{\"fn\":\"search_table\",\"args\":{\"type\":\"feats\",\"name_or_slug\":\"Sharpshooter\"}}</CALL>\n"
-    "\n"
-    "### PLANES\n"
-    "User: What is the Astral Plane?\n"
-    "Assistant: <CALL>{\"fn\":\"search_table\",\"args\":{\"type\":\"planes\",\"name_or_slug\":\"Astral Plane\"}}</CALL>\n"
-    "\n"
-    "### SECTIONS (RULEBOOK CHAPTERS)\n"
-    "User: Show the rules for Two-Weapon Fighting.\n"
-    "Assistant: <CALL>{\"fn\":\"search_table\",\"args\":{\"type\":\"sections\",\"name_or_slug\":\"Two-Weapon Fighting\"}}</CALL>\n"
-    "\n"
-    "==============================================================\n"
-    "Use these examples as templates. ALWAYS follow this exact format.\n"
-)
+# ================== System prompt (Dynamically loaded) ==================
+# REMOVED STATIC SYSTEM_PROMPT
 
 
 
@@ -202,16 +130,14 @@ logging.basicConfig(
     format="%(asctime)s | %(levelname)s | %(message)s",
 )
 
-def answer_query(user_query: str, max_tool_steps: int = 6) -> str:
+def answer_query(user_query: str, lang: str = "en", max_tool_steps: int = 6) -> str:
     """
     ReACT main loop with logging and enforced tool-calling.
-
-    - 日志仍然写入 logs/session_*.log
-    - 在成功调用过一次 fetch_and_cache 之前，如果模型没有输出 <CALL>，
-      会追加一条 system 提示，强制它下次必须输出工具调用，而不是直接回答。
     """
+    system_prompt = get_text(lang, "system_rule_assistant")
+    
     msgs = [
-        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "system", "content": system_prompt},
         {"role": "user", "content": user_query},
     ]
 

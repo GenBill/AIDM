@@ -49,6 +49,7 @@ class SessionManager:
             session_id=session_id,
             story_id=request.story_id,
             title=f"{request.player_name}'s Journey",
+            language=request.language,  # Save language preference
             current_node_id=start_node_id,
             current_node_turns=0,  # <--- 初始化为 0
             players=[player_state],

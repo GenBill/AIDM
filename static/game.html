@@ -175,9 +175,9 @@
 
     <div class="chat-panel">
       <div class="chat-tabs">
-        <div class="chat-tab active" id="tabAction" onclick="switchMode('action')">⚔️ Action</div>
-        <div class="chat-tab" id="tabFight" onclick="switchMode('fight')">🔥 Fight</div>
-        <div class="chat-tab" id="tabQuery" onclick="switchMode('query')">🔍 Query</div>
+        <div class="chat-tab active" id="tabAction" onclick="switchMode('action')">Action</div>
+        <div class="chat-tab" id="tabFight" onclick="switchMode('fight')">Fight</div>
+        <div class="chat-tab" id="tabQuery" onclick="switchMode('query')">Query</div>
       </div>
 
       <div class="chat-history" id="chatBoxAction">
@@ -185,17 +185,17 @@
       </div>
       
       <div class="chat-history hidden" id="chatBoxFight">
-        <div class="msg msg-system" style="color:#ef5350;">COMBAT MODE ENGAGED. strict turn-based rules active.</div>
+        <div class="msg msg-system" style="color:#ef5350;">COMBAT MODE ENGAGED.</div>
       </div>
       
       <div class="chat-history hidden" id="chatBoxQuery">
-        <div class="msg msg-system">Query channel ready. Ask anything about lore/rules.</div>
+        <div class="msg msg-system">Query channel ready.</div>
       </div>
 
       <div class="input-area">
         <textarea id="playerInput" placeholder="Describe your action..."></textarea>
         <div class="btn-group">
-          <span style="font-size:0.8em; color:#666;">Shift+Enter for new line</span>
+          <span id="hintShiftEnter" style="font-size:0.8em; color:#666;">Shift+Enter for new line</span>
           <button id="sendBtn" onclick="sendInput()">Take Action</button>
         </div>
       </div>
@@ -226,17 +226,17 @@
     </div>
 
     <div class="stat-block">
-      <h4>Abilities</h4>
+      <h4 id="lblAbilities">Abilities</h4>
       <div class="abilities-grid" id="abilitiesGrid"></div>
     </div>
 
     <div class="stat-block">
-      <h4>Attacks</h4>
+      <h4 id="lblAttacks">Attacks</h4>
       <ul id="attackList"></ul>
     </div>
 
     <div class="stat-block" id="spellBlock" style="display:none;">
-      <h4>Spellcasting</h4>
+      <h4 id="lblSpellcasting">Spellcasting</h4>
       <div style="font-size:0.8em; margin-bottom:5px; color:#aaa;">
         DC <span id="spellDC" style="color:#fff;">--</span> | Atk <span id="spellAtk" style="color:#fff;">--</span>
       </div>
@@ -244,7 +244,7 @@
     </div>
 
     <div class="stat-block">
-      <h4>Proficiencies</h4>
+      <h4 id="lblProficiencies">Proficiencies</h4>
       <div id="skillList"></div>
     </div>
   </div>
@@ -252,6 +252,53 @@
 <script>
   const params = new URLSearchParams(window.location.search);
   const sessionId = params.get('session_id');
+
+  // --- I18N Data ---
+  const I18N = {
+    "en": {
+      "tabAction": "⚔️ Action",
+      "tabFight": "🔥 Fight",
+      "tabQuery": "🔍 Query",
+      "sysInit": "Session Initialized.",
+      "sysFight": "COMBAT MODE ENGAGED. Strict turn-based rules active.",
+      "sysQuery": "Query channel ready. Ask anything about lore/rules.",
+      "btnAction": "Take Action",
+      "btnFight": "Attack",
+      "btnQuery": "Ask DM",
+      "phAction": "Describe your action...",
+      "phFight": "E.g. 'Use Mace', 'Cast Sacred Flame'",
+      "phQuery": "Ask a question about lore or rules...",
+      "thinking": "<i>Thinking...</i>",
+      "lblLocation": "LOCATION",
+      "lblAbilities": "Abilities",
+      "lblAttacks": "Attacks",
+      "lblSpellcasting": "Spellcasting",
+      "lblProficiencies": "Proficiencies",
+      "hintShiftEnter": "Shift+Enter for new line"
+    },
+    "zh": {
+      "tabAction": "⚔️ 行动 (Action)",
+      "tabFight": "🔥 战斗 (Fight)",
+      "tabQuery": "🔍 查询 (Query)",
+      "sysInit": "会话已初始化。",
+      "sysFight": "战斗模式已启动。严格的回合制规则已激活。",
+      "sysQuery": "查询通道已就绪。询问有关传说或规则的任何问题。",
+      "btnAction": "采取行动",
+      "btnFight": "攻击",
+      "btnQuery": "询问 DM",
+      "phAction": "描述你的行动...",
+      "phFight": "例如：'使用钉头锤', '施放圣火术'",
+      "phQuery": "询问关于传说或规则的问题...",
+      "thinking": "<i>思考中...</i>",
+      "lblLocation": "位置",
+      "lblAbilities": "属性 (Abilities)",
+      "lblAttacks": "攻击 (Attacks)",
+      "lblSpellcasting": "施法 (Spellcasting)",
+      "lblProficiencies": "熟练项 (Proficiencies)",
+      "hintShiftEnter": "Shift+Enter 换行"
+    }
+  };
+  let currentLang = "en"; // Default
 
   const chatBoxAction = document.getElementById('chatBoxAction');
   const chatBoxFight  = document.getElementById('chatBoxFight'); // 新增
@@ -278,6 +325,12 @@
       const res = await fetch(`/sessions/${sessionId}/render`);
       if (!res.ok) throw new Error("Failed to load session");
       const data = await res.json();
+      
+      // 1. Detect language from session data
+      if (data.session && data.session.language) {
+          currentLang = data.session.language;
+      }
+      applyLanguage(currentLang);
 
       renderVisuals(data.scene);
       renderCharacterSheet(data.character);
@@ -289,16 +342,45 @@
     }
   }
 
+  function applyLanguage(lang) {
+      const texts = I18N[lang] || I18N["en"];
+      
+      // Tabs
+      document.getElementById("tabAction").innerText = texts.tabAction;
+      document.getElementById("tabFight").innerText = texts.tabFight;
+      document.getElementById("tabQuery").innerText = texts.tabQuery;
+      
+      // Sidebar Headers
+      document.getElementById("sceneType").innerText = texts.lblLocation;
+      document.getElementById("lblAbilities").innerText = texts.lblAbilities;
+      document.getElementById("lblAttacks").innerText = texts.lblAttacks;
+      document.getElementById("lblSpellcasting").innerText = texts.lblSpellcasting;
+      document.getElementById("lblProficiencies").innerText = texts.lblProficiencies;
+      
+      // Static Hints
+      document.getElementById("hintShiftEnter").innerText = texts.hintShiftEnter;
+
+      // Update current mode inputs immediately
+      switchMode(currentMode, true);
+  }
+
   function seedActionHistory(serverHistory) {
-    chatBoxAction.innerHTML = '<div class="msg msg-system">Session Initialized.</div>';
+    const texts = I18N[currentLang] || I18N["en"];
+    
+    // Clear initial messages before reseeding? 
+    // Actually we keep them if they are static HTML, but we want to localize the "Session Initialized" message.
+    // The easiest way is to overwrite content.
+    chatBoxAction.innerHTML = `<div class="msg msg-system">${texts.sysInit}</div>`;
+    chatBoxFight.innerHTML = `<div class="msg msg-system" style="color:#ef5350;">${texts.sysFight}</div>`;
+    chatBoxQuery.innerHTML = `<div class="msg msg-system">${texts.sysQuery}</div>`;
+
     if (serverHistory && serverHistory.length) {
       for (const msg of serverHistory) {
-        // 简单 heuristic: query 历史放到 query tab, 其他放到 action tab
-        // 但为了简单起见，初始化时所有历史都显示在 Action 框里作为背景
         addMessageToBox(chatBoxAction, msg.role, msg.content);
       }
     } else {
-      addMessageToBox(chatBoxAction, "dm", "The adventure begins...");
+      // addMessageToBox(chatBoxAction, "dm", "The adventure begins..."); 
+      // This is now handled by the backend narrative usually
     }
     chatBoxAction.scrollTop = chatBoxAction.scrollHeight;
   }
@@ -399,9 +481,10 @@
     });
   }
 
-  function switchMode(mode) {
-    if (currentMode === mode) return;
+  function switchMode(mode, forceRefresh=false) {
+    if (currentMode === mode && !forceRefresh) return;
     currentMode = mode;
+    const texts = I18N[currentLang] || I18N["en"];
 
     // 1. 重置 Tab 样式
     ['tabAction', 'tabFight', 'tabQuery'].forEach(id => {
@@ -434,16 +517,16 @@
     btn.className = ''; 
     
     if (mode === 'action') {
-      btn.innerText = "Take Action";
-      input.placeholder = "Describe your action...";
+      btn.innerText = texts.btnAction;
+      input.placeholder = texts.phAction;
     } else if (mode === 'fight') {
-      btn.innerText = "Attack";
+      btn.innerText = texts.btnFight;
       btn.classList.add('fight-mode'); // RED button
-      input.placeholder = "E.g. 'Use Mace', 'Cast Sacred Flame'";
+      input.placeholder = texts.phFight;
     } else {
-      btn.innerText = "Ask DM";
+      btn.innerText = texts.btnQuery;
       btn.classList.add('query-mode');
-      input.placeholder = "Ask a question about lore or rules...";
+      input.placeholder = texts.phQuery;
     }
 
     input.focus();
@@ -461,9 +544,11 @@
     const box = getActiveChatBox();
     const loadingId = 'loading-' + Date.now();
     const loadingDiv = document.createElement('div');
+    const texts = I18N[currentLang] || I18N["en"];
+    
     loadingDiv.id = loadingId;
     loadingDiv.className = 'msg msg-dm';
-    loadingDiv.innerHTML = '<i>Thinking...</i>';
+    loadingDiv.innerHTML = texts.thinking;
     box.appendChild(loadingDiv);
     box.scrollTop = box.scrollHeight;
 
