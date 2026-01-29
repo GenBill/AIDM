@@ -97,7 +97,6 @@ You are responsible for:
 - Scene pacing and node transitions in the story graph.
 - Light, non-combat dice checks (ability checks, skill checks, saving throws, etc.).
 
-
 You are **NOT** responsible for:
 - Detailed combat math for each round.
 - Applying damage to HP or tracking exact HP values.
@@ -107,6 +106,11 @@ You are **NOT** responsible for:
 
 All detailed combat (attack rolls, damage, HP updates, enemy HP, etc.)
 is handled by a separate **combat agent** on the `/fight` endpoint.
+
+### LANGUAGE REQUIREMENT
+- **You must ALWAYS reply in Chinese (Simplified Chinese).**
+- Translate any game terms (Ability Check, Saving Throw, etc.) into Chinese where appropriate, but you may keep specific proper nouns (like "Waterdeep" or "Neverwinter") in English if the translation is ambiguous, or provide both.
+- The narrative style should be immersive, like a fantasy novel.
 
 ### RULES
 1. **Narrative**:
@@ -141,7 +145,7 @@ is handled by a separate **combat agent** on the `/fight` endpoint.
 You MUST always return a JSON object matching this schema:
 
 {
-  "narrative": "What you say to the player, describing the scene and consequences.",
+  "narrative": "What you say to the player, describing the scene and consequences (in Chinese).",
   "mechanics_log": "Any dice or mechanical notes. Can be empty string if nothing to log.",
   "damage_taken": 0,
   "transition_to_id": "node_id or null",
@@ -304,7 +308,7 @@ class DungeonMasterAI:
                             # 1) 从参数读取：哪个属性、DC、为什么要鉴定
                             ability = (args.get("ability") or "").lower()
                             dc = int(args.get("dc"))
-                            reason = args.get("reason") or "No reason provided"
+                            reason = args.get("reason") or "未提供原因"
 
                             # 2) 从角色卡读取该属性值
                             abilities = getattr(player.character_sheet, "abilities", {}) or {}
@@ -324,11 +328,11 @@ class DungeonMasterAI:
 
                             # 5) 写入极其详细的 mechanics_log：为什么鉴定 / 用什么属性 / 属性值 / 结果
                             detail = (
-                                "Ability Check:\n"
-                                f"- Reason: {reason}\n"
-                                f"- Ability: {ability.capitalize()} (score {score}, modifier {mod_str})\n"
+                                "能力检定 (Ability Check):\n"
+                                f"- 原因: {reason}\n"
+                                f"- 属性: {ability.capitalize()} (值 {score}, 调整值 {mod_str})\n"
                                 f"- DC: {dc}\n"
-                                f"- Roll: {expr} = {total} → {outcome}"
+                                f"- 结果: {expr} = {total} → {outcome}"
                             )
                             mechanics_logs.append(detail)
 
@@ -440,20 +444,20 @@ class DungeonMasterAI:
                     line = f"- {atk_name} ({atk_damage})"
                     attack_lines.append(line)
 
-                attacks_block = "\n".join(attack_lines) if attack_lines else "（you don't have any registered attacks on your character sheet.）"
+                attacks_block = "\n".join(attack_lines) if attack_lines else "（你的角色卡上没有注册任何攻击方式。）"
 
                 # 战斗开场白（完全由代码生成，不靠 LLM）
                 welcome_text = (
-                    f"\n\n[Combat Begins]\n"
-                    f"{enemy_name} shows dangerous intent!\n"
+                    f"\n\n[战斗开始]\n"
+                    f"{enemy_name} 表现出危险的意图！\n"
                 )
 
                 if enemy_hp_max != "unknown":
-                    welcome_text += f"your {enemy_name} (approximately {enemy_hp_max} HP).\n"
+                    welcome_text += f"你的 {enemy_name} (大约 {enemy_hp_max} HP)。\n"
 
                 welcome_text += (
-                    f"\nYour main attacks are:\n{attacks_block}\n\n"
-                    "Describe your first combat action (e.g., 'I attack with my longsword' or 'I cast a fireball')."
+                    f"\n你的主要攻击方式有：\n{attacks_block}\n\n"
+                    "请描述你的战斗行动（例如：“我用长剑攻击”或“我施放火球术”）。"
                 )
             # 遭遇战节点：生成插画（仍然不处理战斗逻辑）
             if (new_node.get("type") == "encounter" or new_node.get("type") == "combat") and client_google:

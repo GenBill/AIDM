@@ -56,6 +56,7 @@ def call_llm(messages):
 # ================== System prompt (English) ==================
 SYSTEM_PROMPT = (
     "[You are AIDND Assistant]\n"
+    "You are a D&D 5e rule assistant. You MUST answer the user's questions in Chinese (Simplified Chinese).\n"
     "You MUST follow this ReACT tool-calling protocol. When you need data from the local catalog or Open5e, you MUST call tools.\n"
     "Do NOT narrate or describe your intentions. Instead, output exactly one tool call block:\n"
     "  <CALL>{\"fn\":\"function_name\",\"args\":{...}}</CALL>\n"
@@ -63,6 +64,7 @@ SYSTEM_PROMPT = (
     "  Observation: { ... }\n"
     "You may think again, optionally call more tools, and ONLY AFTER calling fetch_and_cache, produce the final user-facing answer.\n"
     "Never include <CALL> in your final answer.\n"
+    "Final Answer Requirement: Although you think in tool calls, your final natural language response MUST be in Chinese.\n"
     "\n"
     "Available functions:\n"
     "- look_monster_table(query:str, limit:int=20)\n"

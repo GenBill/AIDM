@@ -168,35 +168,35 @@
       <div class="visual-bg-blur" id="bgBlur"></div>
       <img id="sceneImage" class="scene-image" alt="scene"/>
       <div class="visual-overlay">
-        <small id="sceneType" style="color:#ff9800; font-weight:bold;">LOCATION</small>
+        <small id="sceneType" style="color:#ff9800; font-weight:bold;">位置</small>
         <h1 class="scene-title" id="sceneTitle">...</h1>
       </div>
     </div>
 
     <div class="chat-panel">
       <div class="chat-tabs">
-        <div class="chat-tab active" id="tabAction" onclick="switchMode('action')">⚔️ Action</div>
-        <div class="chat-tab" id="tabFight" onclick="switchMode('fight')">🔥 Fight</div>
-        <div class="chat-tab" id="tabQuery" onclick="switchMode('query')">🔍 Query</div>
+        <div class="chat-tab active" id="tabAction" onclick="switchMode('action')">⚔️ 行动 (Action)</div>
+        <div class="chat-tab" id="tabFight" onclick="switchMode('fight')">🔥 战斗 (Fight)</div>
+        <div class="chat-tab" id="tabQuery" onclick="switchMode('query')">🔍 查询 (Query)</div>
       </div>
 
       <div class="chat-history" id="chatBoxAction">
-        <div class="msg msg-system">Session Initialized.</div>
+        <div class="msg msg-system">会话已初始化。</div>
       </div>
       
       <div class="chat-history hidden" id="chatBoxFight">
-        <div class="msg msg-system" style="color:#ef5350;">COMBAT MODE ENGAGED. strict turn-based rules active.</div>
+        <div class="msg msg-system" style="color:#ef5350;">战斗模式已启动。严格的回合制规则已激活。</div>
       </div>
       
       <div class="chat-history hidden" id="chatBoxQuery">
-        <div class="msg msg-system">Query channel ready. Ask anything about lore/rules.</div>
+        <div class="msg msg-system">查询通道已就绪。询问有关传说或规则的任何问题。</div>
       </div>
 
       <div class="input-area">
-        <textarea id="playerInput" placeholder="Describe your action..."></textarea>
+        <textarea id="playerInput" placeholder="描述你的行动..."></textarea>
         <div class="btn-group">
-          <span style="font-size:0.8em; color:#666;">Shift+Enter for new line</span>
-          <button id="sendBtn" onclick="sendInput()">Take Action</button>
+          <span style="font-size:0.8em; color:#666;">Shift+Enter 换行</span>
+          <button id="sendBtn" onclick="sendInput()">采取行动</button>
         </div>
       </div>
     </div>
@@ -226,25 +226,25 @@
     </div>
 
     <div class="stat-block">
-      <h4>Abilities</h4>
+      <h4>属性 (Abilities)</h4>
       <div class="abilities-grid" id="abilitiesGrid"></div>
     </div>
 
     <div class="stat-block">
-      <h4>Attacks</h4>
+      <h4>攻击 (Attacks)</h4>
       <ul id="attackList"></ul>
     </div>
 
     <div class="stat-block" id="spellBlock" style="display:none;">
-      <h4>Spellcasting</h4>
+      <h4>施法 (Spellcasting)</h4>
       <div style="font-size:0.8em; margin-bottom:5px; color:#aaa;">
-        DC <span id="spellDC" style="color:#fff;">--</span> | Atk <span id="spellAtk" style="color:#fff;">--</span>
+        DC <span id="spellDC" style="color:#fff;">--</span> | 攻 <span id="spellAtk" style="color:#fff;">--</span>
       </div>
       <ul id="spellList"></ul>
     </div>
 
     <div class="stat-block">
-      <h4>Proficiencies</h4>
+      <h4>熟练项 (Proficiencies)</h4>
       <div id="skillList"></div>
     </div>
   </div>
@@ -290,7 +290,7 @@
   }
 
   function seedActionHistory(serverHistory) {
-    chatBoxAction.innerHTML = '<div class="msg msg-system">Session Initialized.</div>';
+    chatBoxAction.innerHTML = '<div class="msg msg-system">会话已初始化。</div>';
     if (serverHistory && serverHistory.length) {
       for (const msg of serverHistory) {
         // 简单 heuristic: query 历史放到 query tab, 其他放到 action tab
@@ -298,7 +298,7 @@
         addMessageToBox(chatBoxAction, msg.role, msg.content);
       }
     } else {
-      addMessageToBox(chatBoxAction, "dm", "The adventure begins...");
+      addMessageToBox(chatBoxAction, "dm", "冒险开始了...");
     }
     chatBoxAction.scrollTop = chatBoxAction.scrollHeight;
   }
@@ -434,16 +434,16 @@
     btn.className = ''; 
     
     if (mode === 'action') {
-      btn.innerText = "Take Action";
-      input.placeholder = "Describe your action...";
+      btn.innerText = "采取行动";
+      input.placeholder = "描述你的行动...";
     } else if (mode === 'fight') {
-      btn.innerText = "Attack";
+      btn.innerText = "攻击";
       btn.classList.add('fight-mode'); // RED button
-      input.placeholder = "E.g. 'Use Mace', 'Cast Sacred Flame'";
+      input.placeholder = "例如：'使用钉头锤', '施放圣火术'";
     } else {
-      btn.innerText = "Ask DM";
+      btn.innerText = "询问 DM";
       btn.classList.add('query-mode');
-      input.placeholder = "Ask a question about lore or rules...";
+      input.placeholder = "询问关于传说或规则的问题...";
     }
 
     input.focus();
@@ -463,7 +463,7 @@
     const loadingDiv = document.createElement('div');
     loadingDiv.id = loadingId;
     loadingDiv.className = 'msg msg-dm';
-    loadingDiv.innerHTML = '<i>Thinking...</i>';
+    loadingDiv.innerHTML = '<i>思考中...</i>';
     box.appendChild(loadingDiv);
     box.scrollTop = box.scrollHeight;
 

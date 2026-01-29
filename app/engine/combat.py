@@ -393,13 +393,13 @@ def resolve_attack(
 
     # 构建日志
     log_parts = []
-    log_parts.append(f"⚔️ **{attacker_name}** attacks **{target_name}** with *{attack_name}*.")
+    log_parts.append(f"⚔️ **{attacker_name}** 使用 *{attack_name}* 攻击 **{target_name}**。")
     
-    hit_status = "MISS"
-    if is_crit: hit_status = "CRITICAL HIT!"
-    elif is_hit: hit_status = "HIT"
+    hit_status = "未命中 (MISS)"
+    if is_crit: hit_status = "暴击 (CRITICAL HIT)!"
+    elif is_hit: hit_status = "命中 (HIT)"
     
-    log_parts.append(f"🎲 To Hit: 1d20({d20_val}) + {attack_bonus} = **{total_hit}** vs AC {target_ac} -> **{hit_status}**")
+    log_parts.append(f"🎲 命中检定: 1d20({d20_val}) + {attack_bonus} = **{total_hit}** vs AC {target_ac} -> **{hit_status}**")
 
     damage_total = 0
     if is_hit:
@@ -412,11 +412,11 @@ def resolve_attack(
         if is_crit:
             # 简单的暴击规则：伤害翻倍 (或者你可以实现更复杂的骰子翻倍)
             damage_total *= 2
-            log_parts.append(f"💥 Damage (Crit x2): {dmg_roll['normalized']} = **{damage_total}**")
+            log_parts.append(f"💥 伤害 (暴击 x2): {dmg_roll['normalized']} = **{damage_total}**")
         else:
-            log_parts.append(f"🩸 Damage: {dmg_roll['normalized']} = **{damage_total}**")
+            log_parts.append(f"🩸 伤害: {dmg_roll['normalized']} = **{damage_total}**")
     else:
-        log_parts.append("🛡️ Attack was blocked or dodged.")
+        log_parts.append("🛡️ 攻击被格挡或闪避。")
 
     return {
         "is_hit": is_hit,

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>AI Dungeon Master Dashboard</title>
+    <title>AI 地下城主控制台</title>
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 1200px; margin: 0 auto; padding: 20px; background: #f4f4f9; color: #333; }
@@ -72,117 +72,117 @@
 </head>
 <body>
 
-<h1>🐉 AI Dungeon Master Workshop</h1>
+<h1>🐉 AI 地下城主工坊</h1>
 
 <div class="container">
     <div class="sidebar">
-        <h3>My Stories</h3>
-        <div id="storyList">Loading...</div>
+        <h3>我的剧本</h3>
+        <div id="storyList">加载中...</div>
         <hr>
-        <h3>Create New Story</h3>
+        <h3>创建新剧本</h3>
         <div class="form-group">
-            <label>Title</label>
-            <input type="text" id="newStoryTitle" placeholder="The Dark Cave...">
+            <label>标题</label>
+            <input type="text" id="newStoryTitle" placeholder="黑暗洞穴...">
         </div>
         <div class="form-group">
-            <label>Adventure Script</label>
-            <textarea id="newStoryScript" rows="6" placeholder="Paste your adventure text here..."></textarea>
+            <label>冒险脚本</label>
+            <textarea id="newStoryScript" rows="6" placeholder="在此粘贴你的冒险文本..."></textarea>
         </div>
-        <button onclick="createStory()" style="width: 100%;">Generate Story Graph</button>
+        <button onclick="createStory()" style="width: 100%;">生成故事图谱</button>
         <p id="createStatus" class="loading"></p>
     </div>
 
     <div class="main-content hidden" id="detailPanel">
         
         <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 20px;">
-            <h2 style="margin:0; border:none;" id="currentStoryTitle">Story Details</h2>
-            <button onclick="openLobby()" style="background:#2e7d32; font-weight:bold; padding: 10px 20px; font-size: 1em;">🎮 Play Story</button>
+            <h2 style="margin:0; border:none;" id="currentStoryTitle">剧本详情</h2>
+            <button onclick="openLobby()" style="background:#2e7d32; font-weight:bold; padding: 10px 20px; font-size: 1em;">🎮 开始游戏</button>
         </div>
         
         <div style="margin-bottom: 20px; border-bottom: 1px solid #ddd; padding-bottom: 10px;">
-            <button onclick="showTab('scenes')" class="secondary tab-btn" id="btn-scenes">🎬 Scenes</button>
-            <button onclick="showTab('enemies')" class="secondary tab-btn" id="btn-enemies">👿 Enemies</button>
-            <button onclick="showTab('characters')" class="secondary tab-btn" id="btn-characters">🛡️ PCs</button>
-            <button onclick="showTab('items')" class="secondary tab-btn" id="btn-items">🎒 Items</button>
-            <button onclick="showTab('graph')" class="secondary tab-btn" id="btn-graph">🗺️ Graph</button>
+            <button onclick="showTab('scenes')" class="secondary tab-btn" id="btn-scenes">🎬 场景</button>
+            <button onclick="showTab('enemies')" class="secondary tab-btn" id="btn-enemies">👿 敌人</button>
+            <button onclick="showTab('characters')" class="secondary tab-btn" id="btn-characters">🛡️ 角色</button>
+            <button onclick="showTab('items')" class="secondary tab-btn" id="btn-items">🎒 物品</button>
+            <button onclick="showTab('graph')" class="secondary tab-btn" id="btn-graph">🗺️ 图谱</button>
         </div>
 
         <div id="tab-scenes">
-            <h3>Story Scenes & Backgrounds</h3>
+            <h3>剧情场景与背景</h3>
             <div id="sceneList"></div>
         </div>
 
         <div id="tab-enemies" class="hidden">
-            <h3>Enemies in Story</h3>
+            <h3>剧情敌人</h3>
             <div id="enemyList"></div>
             
             <div class="card" style="background: #fff8e1; border-color: #ffe0b2; margin-top: 20px;">
-                <h4 style="margin-top:0; color:#f57c00;">➕ Register Custom Monster</h4>
+                <h4 style="margin-top:0; color:#f57c00;">➕ 注册自定义怪物</h4>
                 <div class="form-group">
-                    <label>Name</label>
-                    <input type="text" id="customEnemyName" placeholder="e.g. Ancient Red Dragon">
+                    <label>名称</label>
+                    <input type="text" id="customEnemyName" placeholder="例如：远古红龙">
                 </div>
                 <div style="display:flex; gap:10px;">
                     <div style="flex:1">
-                        <label>Avatar</label>
+                        <label>头像</label>
                         <input type="file" id="customEnemyAvatar" accept="image/*">
                     </div>
                     <div style="flex:1">
-                        <label>Stat Block</label>
+                        <label>属性块</label>
                         <input type="file" id="customEnemyStat" accept="image/*">
                     </div>
                 </div>
                 <br>
-                <button onclick="uploadCustomEnemy()" style="background:#f57c00;">Parse & Save</button>
+                <button onclick="uploadCustomEnemy()" style="background:#f57c00;">解析并保存</button>
                 <p id="customEnemyStatus" class="loading"></p>
             </div>
         </div>
 
         <div id="tab-characters" class="hidden">
-            <h3>Party Members</h3>
+            <h3>队伍成员</h3>
             <div class="card" style="background: #e3f2fd; border-color: #bbdefb;">
-                <h4 style="margin-top:0; color:#1976d2;">➕ Add New Character</h4>
+                <h4 style="margin-top:0; color:#1976d2;">➕ 添加新角色</h4>
                 <div class="form-group">
-                    <label>1. Stats Images (PDF/Screenshots)</label>
+                    <label>1. 属性图片 (PDF/截图)</label>
                     <input type="file" id="charPdf" accept="image/*" multiple>
                 </div>
                 <div class="form-group">
-                    <label>2. Avatar (Optional)</label>
+                    <label>2. 头像 (可选)</label>
                     <input type="file" id="charAvatar" accept="image/*">
                 </div>
                 <div class="form-group">
-                    <label>3. Context</label>
-                    <textarea id="charBackground" rows="2" placeholder="Background info..."></textarea>
+                    <label>3. 背景故事</label>
+                    <textarea id="charBackground" rows="2" placeholder="背景信息..."></textarea>
                 </div>
-                <button onclick="uploadCharacter()">Parse & Add Character</button>
+                <button onclick="uploadCharacter()">解析并添加角色</button>
                 <p id="charStatus" class="loading"></p>
             </div>
             <div id="characterList"></div>
         </div>
 
         <div id="tab-items" class="hidden">
-            <h3>Loot & Items Found</h3>
+            <h3>发现的战利品与物品</h3>
             <div id="itemList"></div>
         </div>
 
-        <div id="tab-graph" class="hidden mermaid">Loading graph...</div>
+        <div id="tab-graph" class="hidden mermaid">加载图谱中...</div>
     </div>
 </div>
 
 <div id="lobbyModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeLobby()">&times;</span>
-        <h2 style="margin-top:0; color:#2e7d32; border:none;">🎮 Start Adventure</h2>
-        <p style="color:#666;">Select your origin character to begin the session.</p>
+        <h2 style="margin-top:0; color:#2e7d32; border:none;">🎮 开始冒险</h2>
+        <p style="color:#666;">选择你的初始角色以开始会话。</p>
         
         <div id="lobbyCharList" class="char-select-grid"></div>
         
         <div class="form-group" style="margin-top:20px;">
-            <label>Name Your Hero</label>
-            <input type="text" id="lobbyPlayerName" placeholder="e.g. Thorin Oakenshield">
+            <label>为你的英雄命名</label>
+            <input type="text" id="lobbyPlayerName" placeholder="例如：索林·橡木盾">
         </div>
         
-        <button id="btnLaunch" onclick="launchSession()" style="width:100%; font-size:1.1em; margin-top:10px; background:#2e7d32;">🚀 Launch Game</button>
+        <button id="btnLaunch" onclick="launchSession()" style="width:100%; font-size:1.1em; margin-top:10px; background:#2e7d32;">🚀 启动游戏</button>
     </div>
 </div>
 
@@ -221,17 +221,17 @@
         const title = document.getElementById('newStoryTitle').value;
         const script = document.getElementById('newStoryScript').value;
         const status = document.getElementById('createStatus');
-        if (!title || !script) return alert("Please fill in title and script");
-        status.innerText = "Generating...";
+        if (!title || !script) return alert("请填写标题和脚本");
+        status.innerText = "生成中...";
         try {
             const res = await fetch('/stories/create', {
                 method: 'POST', headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ title: title, raw_script: script })
             });
             if (!res.ok) throw new Error(await res.text());
-            status.innerText = "Done!";
+            status.innerText = "完成！";
             loadStories();
-        } catch (e) { status.innerText = "Error: " + e.message; }
+        } catch (e) { status.innerText = "错误: " + e.message; }
     }
 
     // --- Main Detail Loader ---
@@ -266,7 +266,7 @@
         document.getElementById('btnLaunch').disabled = false;
 
         if (!currentStoryData || !currentStoryData.characters || currentStoryData.characters.length === 0) {
-            list.innerHTML = "<p style='grid-column:span 2; text-align:center;'>No characters found. Please add a character in the 'PCs' tab first.</p>";
+            list.innerHTML = "<p style='grid-column:span 2; text-align:center;'>未找到角色。请先在“角色”标签页添加角色。</p>";
         } else {
             currentStoryData.characters.forEach((char, index) => {
                 const avatar = char.avatar_path || "https://placehold.co/60x60?text=PC";
@@ -297,11 +297,11 @@
 
     async function launchSession() {
         const name = document.getElementById('lobbyPlayerName').value;
-        if (selectedCharIndex === null) return alert("Please select a character class.");
-        if (!name) return alert("Please name your character.");
+        if (selectedCharIndex === null) return alert("请选择一个角色职业。");
+        if (!name) return alert("请为你的角色命名。");
 
         const btn = document.getElementById('btnLaunch');
-        btn.innerText = "Initializing World...";
+        btn.innerText = "正在初始化世界...";
         btn.disabled = true;
 
         try {
@@ -318,8 +318,8 @@
             const session = await res.json();
             window.location.href = `/static/game.html?session_id=${session.session_id}`;
         } catch (e) {
-            alert("Error creating session: " + e.message);
-            btn.innerText = "🚀 Launch Game";
+            alert("创建会话错误: " + e.message);
+            btn.innerText = "🚀 启动游戏";
             btn.disabled = false;
         }
     }
@@ -340,20 +340,20 @@
             const html = `
             <div class="card scene-card" style="display:flex; gap:15px; align-items:flex-start;">
                 <div class="scene-img">
-                    ${imgSrc ? `<img src="${imgSrc}" style="width:100%; height:100%; object-fit:cover;" onclick="window.open('${imgSrc}')">` : '<div style="padding:10px; text-align:center; font-size:0.8em; color:#888; margin-top:25px;">No Bg</div>'}
+                    ${imgSrc ? `<img src="${imgSrc}" style="width:100%; height:100%; object-fit:cover;" onclick="window.open('${imgSrc}')">` : '<div style="padding:10px; text-align:center; font-size:0.8em; color:#888; margin-top:25px;">无背景</div>'}
                 </div>
                 <div style="flex:1;">
                     <h4 style="margin:0;">${node.title} <span class="tag tag-blue">${node.type}</span></h4>
                     <p style="font-size:0.9em; color:#555; margin:5px 0; font-style:italic;">
-                        "${node.read_aloud ? node.read_aloud.substring(0, 100) + '...' : 'No read aloud text.'}"
+                        "${node.read_aloud ? node.read_aloud.substring(0, 100) + '...' : '没有朗读文本。'}"
                     </p>
                     <div style="font-size:0.8em; color:#777;">
-                        Lighting: <b>${node.environment?.light || '-'}</b> | Sound: <b>${node.environment?.sound || '-'}</b>
+                        光照: <b>${node.environment?.light || '-'}</b> | 声音: <b>${node.environment?.sound || '-'}</b>
                     </div>
                 </div>
                 <div>
                     <label class="upload-label" style="border-color:#9ccc65; color:#558b2f;">
-                        🖼️ Background
+                        🖼️ 背景
                         <input type="file" style="display:none" onchange="uploadSceneBg('${node.id}', this)">
                     </label>
                 </div>
@@ -368,13 +368,13 @@
         formData.append('file', input.files[0]);
         const label = input.parentElement;
         const originalText = label.innerText;
-        label.innerText = "Uploading...";
+        label.innerText = "上传中...";
 
         try {
             const res = await fetch(`/stories/${currentStoryId}/scenes/${nodeId}/upload-background`, { method: 'POST', body: formData });
             if (!res.ok) throw new Error("Failed");
             loadStoryDetail(currentStoryId); 
-        } catch (e) { alert("Upload failed: " + e.message); label.innerText = originalText; }
+        } catch (e) { alert("上传失败: " + e.message); label.innerText = originalText; }
     }
 
     // ================== ENEMIES & CHARS ==================
@@ -399,29 +399,29 @@
             });
         }
 
-        if (enemiesMap.size === 0) { container.innerHTML = "<p style='color:#666'>No enemies found.</p>"; return; }
+        if (enemiesMap.size === 0) { container.innerHTML = "<p style='color:#666'>未找到敌人。</p>"; return; }
 
         enemiesMap.forEach(enemy => {
             let imgSrc = enemy.image_path ? enemy.image_path.replace("/static/stories", "/static/data/stories") : "";
-            let statsBadge = enemy.stats ? `<span class="tag tag-green">✅ Stats</span>` : `<span class="tag tag-red">⚠️ No Stats</span>`;
+            let statsBadge = enemy.stats ? `<span class="tag tag-green">✅ 属性</span>` : `<span class="tag tag-red">⚠️ 无属性</span>`;
 
             const html = `
             <div class="card enemy-card">
                 <div class="enemy-img">
-                    ${imgSrc ? `<img src="${imgSrc}" style="width:100%; height:100%; object-fit:cover;">` : '<div style="text-align:center; font-size:0.8em; color:#888; margin-top:20px;">No Avatar</div>'}
+                    ${imgSrc ? `<img src="${imgSrc}" style="width:100%; height:100%; object-fit:cover;">` : '<div style="text-align:center; font-size:0.8em; color:#888; margin-top:20px;">无头像</div>'}
                 </div>
                 <div style="flex:1">
                     <h4 style="margin:0;">${enemy.name}</h4>
-                    <p style="margin:5px 0; font-size:0.9em; color:#555;">Count: ${enemy.count}</p>
+                    <p style="margin:5px 0; font-size:0.9em; color:#555;">数量: ${enemy.count}</p>
                     <div>${statsBadge}</div>
                 </div>
                 <div style="display:flex; flex-direction:column; align-items:flex-end;">
                     <label class="upload-label" style="border-color:#007bff; color:#007bff;">
-                        🖼️ Avatar
+                        🖼️ 头像
                         <input type="file" id="avatar-${enemy.name}" style="display:none" onchange="uploadEnemyFiles('${enemy.name}')">
                     </label>
                     <label class="upload-label" style="border-color:#f57c00; color:#f57c00;">
-                        📊 Stats
+                        📊 属性
                         <input type="file" id="stat-${enemy.name}" style="display:none" onchange="uploadEnemyFiles('${enemy.name}')">
                     </label>
                     <span id="status-${enemy.name}" class="loading" style="font-size:0.7em;"></span>
@@ -439,22 +439,22 @@
 
         const formData = new FormData();
         formData.append('enemy_name', enemyName);
-        let msg = "Uploading...";
-        if (avatarInput.files[0]) { formData.append('avatar', avatarInput.files[0]); msg="Avatar..."; }
-        if (statInput.files[0]) { formData.append('stat_block', statInput.files[0]); msg="Stats..."; }
+        let msg = "上传中...";
+        if (avatarInput.files[0]) { formData.append('avatar', avatarInput.files[0]); msg="头像..."; }
+        if (statInput.files[0]) { formData.append('stat_block', statInput.files[0]); msg="属性..."; }
         statusLabel.innerText = msg;
 
         try {
             const res = await fetch(`/stories/${currentStoryId}/enemies/upload-image`, { method: 'POST', body: formData });
             if (!res.ok) throw new Error("Failed");
-            avatarInput.value = ""; statInput.value = ""; statusLabel.innerText = "Done!";
+            avatarInput.value = ""; statInput.value = ""; statusLabel.innerText = "完成!";
             setTimeout(() => loadStoryDetail(currentStoryId), 800);
-        } catch (e) { alert(e.message); statusLabel.innerText = "Error"; }
+        } catch (e) { alert(e.message); statusLabel.innerText = "错误"; }
     }
 
     async function uploadCustomEnemy() {
         const name = document.getElementById('customEnemyName').value;
-        if(!name) return alert("Name required");
+        if(!name) return alert("需要名称");
         const avatarInput = document.getElementById('customEnemyAvatar');
         const statInput = document.getElementById('customEnemyStat');
         const status = document.getElementById('customEnemyStatus');
@@ -464,26 +464,26 @@
         if(avatarInput.files[0]) formData.append('avatar', avatarInput.files[0]);
         if(statInput.files[0]) formData.append('stat_block', statInput.files[0]);
         
-        status.innerText = "Creating...";
+        status.innerText = "创建中...";
         try {
             const res = await fetch(`/stories/${currentStoryId}/enemies/upload-image`, { method:'POST', body:formData});
             if(!res.ok) throw new Error(await res.text());
-            status.innerText = "Success!"; loadStoryDetail(currentStoryId);
+            status.innerText = "成功!"; loadStoryDetail(currentStoryId);
             document.getElementById('customEnemyName').value = "";
             avatarInput.value = ""; statInput.value = "";
-        } catch(e) { status.innerText = "Error: " + e.message; }
+        } catch(e) { status.innerText = "错误: " + e.message; }
     }
 
     function renderCharacters(data) {
         const list = document.getElementById('characterList');
         list.innerHTML = "";
-        if (!data.characters || data.characters.length === 0) { list.innerHTML = "<p style='color:#666'>No characters added yet.</p>"; return; }
+        if (!data.characters || data.characters.length === 0) { list.innerHTML = "<p style='color:#666'>尚未添加角色。</p>"; return; }
 
         data.characters.forEach(char => {
             const avatarSrc = char.avatar_path || "https://placehold.co/100x100?text=No+Avatar";
             let sheetPath = char.file_path || char.pdf_path;
             if (char.all_files && char.all_files.length > 0) sheetPath = char.all_files[0];
-            const sheetLink = sheetPath ? `<a href="${sheetPath}" target="_blank" style="font-size:0.85em; text-decoration:none; color:#007bff;">📄 View Stats</a>` : "";
+            const sheetLink = sheetPath ? `<a href="${sheetPath}" target="_blank" style="font-size:0.85em; text-decoration:none; color:#007bff;">📄 查看属性</a>` : "";
 
             list.innerHTML += `
             <div class="card" style="display:flex; gap:20px; align-items:flex-start;">
@@ -496,7 +496,7 @@
                         ${sheetLink}
                     </div>
                     <div style="margin-bottom:8px;">
-                        <span class="tag tag-green">Lvl ${char.level} ${char.class}</span>
+                        <span class="tag tag-green">等级 ${char.level} ${char.class}</span>
                         <span class="tag tag-orange">${char.race}</span>
                         <span class="tag" style="border:1px solid #ddd;">HP: ${char.hp_max}</span>
                     </div>
@@ -514,8 +514,8 @@
         const bgInput = document.getElementById('charBackground');
         const status = document.getElementById('charStatus');
 
-        if (fileInput.files.length === 0) return alert("Please select stats image.");
-        status.innerText = `Analyzing...`;
+        if (fileInput.files.length === 0) return alert("请选择属性图片。");
+        status.innerText = `分析中...`;
         const formData = new FormData();
         for (let i = 0; i < fileInput.files.length; i++) formData.append('files', fileInput.files[i]);
         if (avatarInput.files[0]) formData.append('avatar', avatarInput.files[0]);
@@ -525,10 +525,10 @@
             const res = await fetch(`/stories/${currentStoryId}/characters/add`, { method: 'POST', body: formData });
             if (!res.ok) throw new Error(await res.text());
             const result = await res.json();
-            status.innerText = `Success! Added ${result.character_name}`;
+            status.innerText = `成功! 已添加 ${result.character_name}`;
             loadStoryDetail(currentStoryId);
             fileInput.value = ""; avatarInput.value = ""; bgInput.value = "";
-        } catch (e) { status.innerText = "Error: " + e.message; }
+        } catch (e) { status.innerText = "错误: " + e.message; }
     }
 
     // ================== ITEMS LOGIC ==================
@@ -554,7 +554,7 @@
         });
 
         if (itemsMap.size === 0) {
-            container.innerHTML = "<p style='color:#666'>No items found in this story.</p>";
+            container.innerHTML = "<p style='color:#666'>在这个故事中没有找到物品。</p>";
             return;
         }
 
@@ -563,9 +563,9 @@
             <div class="card" style="border-left: 4px solid #fbc02d; background: #fffde7;">
                 <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                     <h4 style="margin:0;">${item.item} <span class="tag tag-orange">x${item.quantity}</span></h4>
-                    <span style="font-size:0.75em; color:#888;">Found in: ${item.scenes.join(', ')}</span>
+                    <span style="font-size:0.75em; color:#888;">发现于: ${item.scenes.join(', ')}</span>
                 </div>
-                <p style="margin:8px 0 0 0; font-size:0.9em; color:#555;">${item.description || "No description available."}</p>
+                <p style="margin:8px 0 0 0; font-size:0.9em; color:#555;">${item.description || "没有可用描述。"}</p>
             </div>`;
             container.innerHTML += html;
         });
